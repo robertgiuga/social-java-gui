@@ -16,8 +16,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import com.example.socialtpygui.tests.Tests;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -33,7 +35,9 @@ public class LogInApplication extends Application {
         logInController.setService(createSuperService());
 
         Scene scene = new Scene(panel, 377, 210);
-        stage.setTitle("Hello!");
+        scene.getStylesheets().add(LogInApplication.class.getResource("log.css").toExternalForm());
+        scene.setFill(Color.TRANSPARENT);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
     }

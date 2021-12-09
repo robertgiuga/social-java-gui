@@ -1,4 +1,80 @@
 package com.example.socialtpygui.controller;
 
+import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
+import com.example.socialtpygui.service.SuperService;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+
+import java.io.IOException;
+
+
 public class FriendsController {
+
+    @FXML
+    private GridPane gridPane;
+
+    private SuperService service;
+
+    private User loggedUser;
+
+    private ObservableList<Node> friends;
+
+    /**
+     * create a custom item of a friend to be displayed
+     * @param user .
+     * @return the Pane item to be displayed
+     * @throws IOException .
+     */
+    private Pane createItem(UserDTO user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("friendItem.fxml"));
+        Pane item = loader.load();
+        FriendItemController friendItemController= loader.getController();
+        friendItemController.setName(user.getFirstName()+" "+user.getLastName());
+        friendItemController.setLoggedUser(loggedUser);
+        friendItemController.setService(service);
+        friendItemController.setEmail(user.getId());
+        friendItemController.setFriendsController(this);
+        return item;
+    }
+
+    public void setService(SuperService service) {
+        this.service = service;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
+
+    /**
+     * loads all the friends of the logged user in the gridPane
+     */
+    public void load() {
+
+        service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {
+            try {
+                Pane item = createItem(friendShipDTO.getUser2());
+                item.getChildren().forEach(node -> {if(node instanceof Button) node.setId(String.valueOf(gridPane.getRowCount()));});
+                gridPane.addRow(gridPane.getRowCount(),item);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        friends=gridPane.getChildren();
+    }
+
+    /**
+     * deletes an friend item view from the gridPane by the row
+     * @param row . the row at is the friend
+     */
+    public void deleteItemFromGridPane(String row){
+        gridPane.getChildren().remove(friends.get(Integer.parseInt(row)));
+    }
 }

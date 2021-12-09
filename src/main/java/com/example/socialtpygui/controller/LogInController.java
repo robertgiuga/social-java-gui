@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -32,9 +33,16 @@ public class LogInController {
         String password= passwordTxt.getText();
         try {
             User user = service.logIn(username, password);
+
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("mainWindow.fxml"));
             Stage manWindowStage= new Stage();
-            Scene scene = new Scene(fxmlLoader.load(), 545, 400);
+            AnchorPane panel= fxmlLoader.load();
+
+            MainWindowController mainWindowController= fxmlLoader.getController();
+            mainWindowController.setService(service);
+            mainWindowController.setLoggedUser(user);
+
+            Scene scene = new Scene(panel, 545, 400);
             manWindowStage.setScene(scene);
             manWindowStage.initModality(Modality.NONE);
             manWindowStage.show();

@@ -181,7 +181,7 @@ public class SuperService {
     /**
      * Gets the friends of a user by his id
      * @param id .
-     * @return the friends of a user
+     * @return an iterable of FriendshipDTO always having first user the one that requested
      */
     public Iterable<FriendShipDTO> getFriends(String id) {
         userValidator.validateEmail(id);
