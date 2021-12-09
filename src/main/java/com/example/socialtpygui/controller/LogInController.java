@@ -34,7 +34,7 @@ public class LogInController {
             User user = service.logIn(username, password);
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("mainWindow.fxml"));
             Stage manWindowStage= new Stage();
-            Scene scene = new Scene(fxmlLoader.load(), 377, 210);
+            Scene scene = new Scene(fxmlLoader.load(), 545, 400);
             manWindowStage.setScene(scene);
             manWindowStage.initModality(Modality.NONE);
             manWindowStage.show();
