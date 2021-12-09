@@ -2,10 +2,14 @@ package com.example.socialtpygui.service.entityservice;
 
 
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class UserService {
     private final UserDb repositoryUser;
@@ -86,6 +90,27 @@ public class UserService {
             throw new ValidationException("Password is incorrect!");
         return user;
     }
+
+    /**
+     * Return a list with UserDto, where first_name and last_name contain s1 or s2 or reverse.
+     * @param completName
+     * @throws SQLException
+     */
+    public List<UserDTO> getUsersByName(String completName) {
+        if (completName.contains(" ")) {
+            String[] splitName = completName.split(" ");
+            String namePart1 = splitName[0];
+            String namePart2 = splitName[1];
+            return repositoryUser.getUsersByName(namePart1, namePart2);
+        }
+        else
+        {
+            return repositoryUser.getUsersByName(completName, "");
+        }
+
+
+    }
+
 
 
 

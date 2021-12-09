@@ -1,11 +1,15 @@
 package com.example.socialtpygui.repository.db;
 
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.repository.Repository;
 import com.example.socialtpygui.service.validators.ValidationException;
 
+import java.net.ConnectException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserDb implements Repository<String,User> {
@@ -116,6 +120,38 @@ public class UserDb implements Repository<String,User> {
             System.out.println(e.getMessage());
         }
         return size;
+    }
+
+    /**
+     * Return a list with UserDto, where first_name and last_name contain string1 or string2 or reverse.
+     * @param string1
+     * @param string2
+     * @throws SQLException
+     */
+    public List<UserDTO> getUsersByName(String string1, String string2){
+        List<UserDTO> listReturn = new ArrayList<>();
+        String s1 = "%" + string1 + "%"; String s2 = "%" + string2 + "%";
+        String sql = "select * from users where (first_name ilike ? and last_name ilike ?) or (first_name ilike ? and last_name ilike ?)";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, s1); preparedStatement.setString(2, s2);
+            preparedStatement.setString(3, s2); preparedStatement.setString(4, s1);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                User user = new User(firstName, lastName, email, password);
+                UserDTO userDTO = new UserDTO(user);
+                listReturn.add(userDTO);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listReturn;
     }
 
 }

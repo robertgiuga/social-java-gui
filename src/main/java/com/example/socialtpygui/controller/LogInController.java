@@ -11,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,6 +28,8 @@ public class LogInController {
     private Button logInBtn;
 
     private SuperService service;
+
+    private MainWindowController mainWindowController;
 
     @FXML
     private void handlerLogIn() throws IOException {
@@ -49,6 +53,8 @@ public class LogInController {
 
             Stage logInStage =(Stage) logInBtn.getScene().getWindow();
             logInStage.close();
+
+
         }catch (ValidationException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(e.getMessage());

@@ -9,6 +9,7 @@ import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
 
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
@@ -291,7 +292,7 @@ public class SuperService {
 
     /**
      * Send a new message.
-     * @throws service.validators.ValidationException if the given entity is null.
+     * @throws com.example.socialtpygui.service.validators.ValidationException if the given entity is null.
      */
     public void sendMessage(Message newMessage)
     {
@@ -302,7 +303,7 @@ public class SuperService {
 
     /**
      * Send a reply message.
-     * @throws service.validators.ValidationException if the given entity is null.
+     * @throws com.example.socialtpygui.service.validators.ValidationException if the given entity is null.
      */
     public void replyMessage(ReplyMessageDTO newReplyMessageDTO)
     {
@@ -418,5 +419,29 @@ public class SuperService {
             throw new ValidationException("Message must not be null!");
         messageService.replayAll(replyMessageDTO);
 
+    }
+
+    /**
+     * @param completName
+     * @return Return a list with UserDto, where first_name and last_name contain completName.
+     * @throws ValidationException if completName is empty
+     */
+    public List<UserDTO> getUsersByName(String completName)
+    {
+        if (completName.length() == 0) throw new ValidationException("Name in searchBar is null!");
+        return userService.getUsersByName(completName);
+    }
+
+    /**
+     * @param email1
+     * @param email2
+     * @return null if the friendship doesn t exist, and Date when the friendship was created if it exists
+     * @throws ValidationException -> emails are invalid
+     */
+    public Date friendshipDate(String email1, String email2)
+    {
+        userValidator.validateEmail(email1);
+        userValidator.validateEmail(email2);
+        return friendshipService.friendshipDate(email1, email2);
     }
 }
