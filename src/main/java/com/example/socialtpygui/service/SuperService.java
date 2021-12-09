@@ -223,7 +223,7 @@ public class SuperService {
      * @return the user if the id and password are correct
      * @throws ValidationException if id or password is incorrect and if the user does not exist
      */
-    public User logIn(String id, String password) {
+    public User logIn(String id, String password) throws ValidationException {
         return userService.logIn(id, password);
     }
 
