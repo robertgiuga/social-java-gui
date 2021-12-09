@@ -9,4 +9,7 @@ module com.example.socialtpygui {
 
     opens com.example.socialtpygui to javafx.fxml;
     exports com.example.socialtpygui;
+
+    exports com.example.socialtpygui.controller;
+    opens com.example.socialtpygui.controller to javafx.fxml;
 }
