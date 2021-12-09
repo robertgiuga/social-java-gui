@@ -5,16 +5,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="545.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-   fx:controller="com.example.socialtpygui.controller.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="545.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MainWindowController">
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="122.0">
          <children>
-            <Button layoutX="14.0" layoutY="90.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="82.0" text="Friends" />
+            <Button fx:id="friendsBtn" layoutX="14.0" layoutY="90.0" mnemonicParsing="false" onAction="#handlerFriendsButton" prefHeight="26.0" prefWidth="82.0" text="Friends" />
          </children>
       </AnchorPane>
-      <BorderPane layoutX="122.0" layoutY="-7.0" prefHeight="414.0" prefWidth="430.0">
+      <BorderPane fx:id="borderPane" layoutX="122.0" layoutY="-7.0" prefHeight="414.0" prefWidth="430.0">
          <top>
             <AnchorPane prefHeight="43.0" prefWidth="226.0">
                <children>
