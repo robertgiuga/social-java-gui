@@ -19,6 +19,7 @@ public class FriendshipRequestDBTest {
         testFindOne();
         testFindAll();
         testSaveRemoveSize();
+        testfriendshipRequestDate();
     }
 
     private static void testFindOne(){
@@ -48,5 +49,16 @@ public class FriendshipRequestDBTest {
         friendshipRequestDb.remove(new TupleOne<String>("snj@gmail.com", "gg@gmail.com"));
         assert (friendshipRequestDb.size() == 3);
         assert (friendshipRequestDb.remove(new TupleOne<String>("user1@mail.com", "user1@mail.com"))==null);
+    }
+
+    /**
+     * Test friendshipRequestDate from FriendshipRequestDb
+     */
+    private static void testfriendshipRequestDate()
+    {
+        assert (friendshipRequestDb.friendshipRequestDate("andr@gamail.com", "snj@gmail.com").toString().equals("2021-10-29"));
+        assert (friendshipRequestDb.friendshipRequestDate("andr@gamail.com", "snj@sadgmail.com") == null);
+        assert (friendshipRequestDb.friendshipRequestDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
+
     }
 }

@@ -56,7 +56,10 @@ public class ServiceTests {
         testDeclineRequest();
         testGetRequests();
         testReplayAll();
-
+        testgetUsersByName();
+        isAdmin();
+        testfriendshipDate();
+        testfriendshipRequestDate();
     }
 
     private static void testAddUser() {
@@ -655,5 +658,42 @@ public class ServiceTests {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    private static void testgetUsersByName()
+    {
+        List<String> list1 = new ArrayList<>();
+        service.getUsersByName("a").forEach(elem-> list1.add(elem.getId()));
+        assert (list1.size() == 4);
+        assert (list1.contains("gc@gmail.com"));
+        assert (list1.contains("gg@gmail.com"));
+        assert (list1.contains("andr@gamail.com"));
+        assert (list1.contains("aand@hotmail.com"));
+        list1.clear();
+        service.getUsersByName("adasda dasda").forEach(elem->list1.add(elem.getId()));
+        assert (list1.size() == 0);
+    }
+
+    private static void isAdmin()
+    {
+        UserDTO userDTO = new UserDTO(new User("Giuga","Robert", "gg@gmail.com", "", true));
+        assert (service.isAdmin(userDTO));
+        userDTO = new UserDTO(new User("","", "gc@gmail.com", "", false));
+        assert (!service.isAdmin(userDTO));
+    }
+
+    private static void testfriendshipRequestDate()
+    {
+        assert (service.friendshipRequestDate("andr@gamail.com", "snj@gmail.com").toString().equals("2021-10-29"));
+        assert (service.friendshipRequestDate("andr@gamail.com", "snj@sadgmail.com") == null);
+        assert (service.friendshipRequestDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
+
+    }
+
+    private static void testfriendshipDate()
+    {
+        assert (service.friendshipDate("snj@gmail.com", "andr@gamail.com").toString().equals("2021-10-29"));
+        assert (service.friendshipDate("snj@gmail.com", "andrrqwe@gamail.com") == null);
+        assert (service.friendshipDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
     }
 }

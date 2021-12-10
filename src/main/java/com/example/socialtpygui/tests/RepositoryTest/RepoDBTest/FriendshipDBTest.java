@@ -23,6 +23,7 @@ public class FriendshipDBTest {
         testSaveRemove();
         testSize();
         testRemoveFriendships();
+        testfriendshipDate();
     }
 
     /**
@@ -91,5 +92,15 @@ public class FriendshipDBTest {
         friendshipRepo.removeFriendships("gc@gmail.com");
         assert(friendshipRepo.size() == 3);
         assert (friendshipRepo.findOne(new TupleOne<>("gc@gmail.com", "gg@gmail.com")) == null);
+    }
+
+    /**
+     * Test friendshipDate from FriendshipDb.
+     */
+    private static void testfriendshipDate()
+    {
+        assert (friendshipRepo.friendshipDate("snj@gmail.com", "andr@gamail.com").toString().equals("2021-10-29"));
+        assert (friendshipRepo.friendshipDate("snj@gmail.com", "andrrqwe@gamail.com") == null);
+        assert (friendshipRepo.friendshipDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
     }
 }
