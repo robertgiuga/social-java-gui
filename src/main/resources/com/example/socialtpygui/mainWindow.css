@@ -1,0 +1,30 @@
+#leftPane{
+    -fx-background-color: #C9E9D8;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+}
+#mainPane{
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-background-color: #242E3D
+}
+#borderPane{
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+
+}
+#topPane{
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+}
+#bottomPane{
+    -fx-background-radius: 0 0 25 0;
+    -fx-border-radius: 0 0 25 0;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: "gray";
+}
+
+.button{
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}

@@ -11,10 +11,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -47,7 +47,10 @@ public class LogInController {
             mainWindowController.setLoggedUser(user);
 
             Scene scene = new Scene(panel, 545, 400);
+            scene.getStylesheets().add(LogInApplication.class.getResource("mainWindow.css").toExternalForm());
+            scene.setFill(Color.TRANSPARENT);
             manWindowStage.setScene(scene);
+            manWindowStage.initStyle(StageStyle.TRANSPARENT);
             manWindowStage.initModality(Modality.NONE);
             manWindowStage.show();
 
