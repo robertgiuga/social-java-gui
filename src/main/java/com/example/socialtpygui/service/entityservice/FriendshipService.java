@@ -209,6 +209,11 @@ public class FriendshipService {
         return repositoryFriendship.friendshipDate(email1, email2);
     }
 
+    /**
+     * @param email1
+     * @param email2
+     * @return null if the friendship request doesn t exist, and Date when the friendship request was created if it exists
+     */
     public Date friendshipRequestDate(String email1, String email2)
     {
         return repositoryFriendshipRequest.friendshipRequestDate(email1, email2);

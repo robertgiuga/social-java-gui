@@ -150,6 +150,11 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
         return emails;
     }
 
+    /**
+     * @param email1
+     * @param email2
+     * @return null if the friendship request doesn t exist, and Date when the friendship request was created if it exists
+     */
     public Date friendshipRequestDate(String email1, String email2)
     {
         String sql = "select request_date from friendship_request where (email1 = ? and email2 = ?) or (email1 = ? and email2 = ?)";

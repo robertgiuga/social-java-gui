@@ -21,6 +21,10 @@ public class SearchController{
     @FXML
     GridPane gridPane;
 
+    /**
+     * Load in gridpane all the item, dinamic
+     * @param completeNameSearch
+     */
     public void load(String completeNameSearch)
     {
         int row = 0;
@@ -52,10 +56,18 @@ public class SearchController{
 
     }
 
+    /**
+     * Set service
+     * @param service
+     */
     public void setService(SuperService service) {
         this.service = service;
     }
 
+    /**
+     * Set logged user
+     * @param loggedUser
+     */
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
     }

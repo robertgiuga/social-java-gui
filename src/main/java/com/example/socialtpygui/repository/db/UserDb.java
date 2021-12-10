@@ -154,6 +154,10 @@ public class UserDb implements Repository<String,User> {
         return listReturn;
     }
 
+    /**
+     * @param userDTO
+     * @return true if the userDto was created with a user which is admin, false if the UserDTO was not created with a user which is admin
+     */
     public boolean isAdmin(UserDTO userDTO)
     {
         String sql = "select admin from users where email = ?";
