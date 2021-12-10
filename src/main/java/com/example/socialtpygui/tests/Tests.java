@@ -11,7 +11,7 @@ public class Tests {
     public static void RunALL() {
         RepositoryTests.runTests();
         DomainTests.runTest();
-        //ServiceTests.runTests();
+        ServiceTests.runTests();
         FriendshipRequestDBTest.runTests();
     }
 }
