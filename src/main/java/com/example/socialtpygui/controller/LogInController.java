@@ -29,6 +29,8 @@ public class LogInController {
 
     private SuperService service;
 
+    private MainWindowController mainWindowController;
+
     @FXML
     private void handlerLogIn() throws IOException {
         String username= usernameTxt.getText();
@@ -54,6 +56,8 @@ public class LogInController {
 
             Stage logInStage =(Stage) logInBtn.getScene().getWindow();
             logInStage.close();
+
+
         }catch (ValidationException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(e.getMessage());

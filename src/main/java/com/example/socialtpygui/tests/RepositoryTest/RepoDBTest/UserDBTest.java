@@ -2,6 +2,7 @@ package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.ValidationException;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class UserDBTest {
         testFindOne();
         testSize();
         testSaveRemove();
+        testgetUsersByName();
+        isAdmin();
     }
 
     /**
@@ -83,7 +86,35 @@ public class UserDBTest {
         assert (userRepo.size() == 7);
         userRepo.remove("gulea@ymail.com");
         assert (userRepo.size() == 6);
+    }
 
+    /**
+     * Test getUsersByName from UserDb.
+     */
+    private static void testgetUsersByName()
+    {
+        List<String> list1 = new ArrayList<>();
+        userRepo.getUsersByName("a", "").forEach(elem-> list1.add(elem.getId()));
+        assert (list1.size() == 4);
+        assert (list1.contains("gc@gmail.com"));
+        assert (list1.contains("gg@gmail.com"));
+        assert (list1.contains("andr@gamail.com"));
+        assert (list1.contains("aand@hotmail.com"));
+        list1.clear();
+        userRepo.getUsersByName("adasda", "dasda").forEach(elem->list1.add(elem.getId()));
+        assert (list1.size() == 0);
+    }
+
+    /**
+     * Test isAdmin from UserDb
+     *
+     */
+    private static void isAdmin()
+    {
+        UserDTO userDTO = new UserDTO(new User("Giuga","Robert", "gg@gmail.com", "", true));
+        assert (userRepo.isAdmin(userDTO));
+        userDTO = new UserDTO(new User("","", "gc@gmail.com", "", false));
+        assert (!userRepo.isAdmin(userDTO));
 
     }
 }

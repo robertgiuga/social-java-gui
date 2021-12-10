@@ -1,6 +1,8 @@
 package com.example.socialtpygui;
 
 import com.example.socialtpygui.controller.LogInController;
+import com.example.socialtpygui.controller.MainWindowController;
+import com.example.socialtpygui.controller.SearchController;
 import com.example.socialtpygui.repository.db.FriendshipDb;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
 import com.example.socialtpygui.repository.db.MessageDb;
@@ -15,6 +17,7 @@ import com.example.socialtpygui.service.validators.UserValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -34,6 +37,7 @@ public class LogInApplication extends Application {
         LogInController logInController= fxmlLoader.getController();
         logInController.setService(createSuperService());
 
+
         Scene scene = new Scene(panel, 377, 210);
         scene.getStylesheets().add(LogInApplication.class.getResource("log.css").toExternalForm());
         scene.setFill(Color.TRANSPARENT);
@@ -41,6 +45,8 @@ public class LogInApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+
 
     private SuperService createSuperService(){
         UserValidator userValidator= new UserValidator();

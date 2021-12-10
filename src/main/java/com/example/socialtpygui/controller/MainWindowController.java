@@ -10,7 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Window;
+
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 
 import java.io.IOException;
 
@@ -18,6 +22,10 @@ public class MainWindowController {
 
     @FXML
     private Button friendsBtn;
+
+    @FXML
+    private TextField searchbar;
+
 
     @FXML
     private BorderPane borderPane;
@@ -45,7 +53,23 @@ public class MainWindowController {
         this.service = service;
     }
 
+
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
     }
+
+    @FXML
+    private void handlerKeyPressed(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        {
+            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("search-view.fxml"));
+            Pane view = fxmlLoader.load();
+            SearchController searchController = fxmlLoader.getController();
+            searchController.setService(service);
+            searchController.setLoggedUser(this.loggedUser);
+            searchController.load(searchbar.getText());
+            borderPane.setCenter(view);
+        }
+    }
+
 }

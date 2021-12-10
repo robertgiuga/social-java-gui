@@ -6,6 +6,7 @@ import com.example.socialtpygui.repository.db.FriendshipDb;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -196,6 +197,26 @@ public class FriendshipService {
             throw new NonExistingException("You don't have friend requests!");
         }
         return emailsRequests;
+    }
+
+    /**
+     * @param email1
+     * @param email2
+     * @return null if the friendship doesn t exist, and Date when the friendship was created if it exists
+     */
+    public Date friendshipDate(String email1, String email2)
+    {
+        return repositoryFriendship.friendshipDate(email1, email2);
+    }
+
+    /**
+     * @param email1
+     * @param email2
+     * @return null if the friendship request doesn t exist, and Date when the friendship request was created if it exists
+     */
+    public Date friendshipRequestDate(String email1, String email2)
+    {
+        return repositoryFriendshipRequest.friendshipRequestDate(email1, email2);
     }
 }
 
