@@ -208,5 +208,10 @@ public class FriendshipService {
     {
         return repositoryFriendship.friendshipDate(email1, email2);
     }
+
+    public Date friendshipRequestDate(String email1, String email2)
+    {
+        return repositoryFriendshipRequest.friendshipRequestDate(email1, email2);
+    }
 }
 

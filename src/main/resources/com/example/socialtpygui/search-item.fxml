@@ -6,7 +6,8 @@
 
 <AnchorPane prefHeight="50.0" prefWidth="319.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchItemController">
    <children>
-      <Button fx:id="addBtn" layoutX="209.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Add" />
+      <Button fx:id="addBtn" layoutX="209.0" layoutY="12.0" mnemonicParsing="false" onAction="#handlerAddBtn" prefHeight="25.0" prefWidth="95.0" text="Add" />
       <Label fx:id="nameLbl" layoutX="14.0" layoutY="16.0" prefHeight="17.0" prefWidth="118.0" text="Nume" />
+      <Button fx:id="cancelBtn" layoutX="209.0" layoutY="12.0" mnemonicParsing="false" onAction="#handlerCloseBtn" prefHeight="25.0" prefWidth="95.0" text="Cancel" />
    </children>
 </AnchorPane>

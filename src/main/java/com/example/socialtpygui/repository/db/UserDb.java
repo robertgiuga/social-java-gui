@@ -154,4 +154,20 @@ public class UserDb implements Repository<String,User> {
         return listReturn;
     }
 
+    public boolean isAdmin(UserDTO userDTO)
+    {
+        String sql = "select admin from users where email = ?";
+        Boolean isAdmin = false;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, userDTO.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            isAdmin = resultSet.getBoolean("admin");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isAdmin;
+    }
 }

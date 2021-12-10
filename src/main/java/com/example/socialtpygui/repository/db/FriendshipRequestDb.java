@@ -149,4 +149,22 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
         }
         return emails;
     }
+
+    public Date friendshipRequestDate(String email1, String email2)
+    {
+        String sql = "select request_date from friendship_request where (email1 = ? and email2 = ?) or (email1 = ? and email2 = ?)";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email1);
+            preparedStatement.setString(2, email2);
+            preparedStatement.setString(3, email2);
+            preparedStatement.setString(4, email1);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getDate("request_date");
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
 }

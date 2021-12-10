@@ -102,16 +102,15 @@ public class UserService {
             String namePart1 = splitName[0];
             String namePart2 = splitName[1];
             return repositoryUser.getUsersByName(namePart1, namePart2);
-        }
-        else
-        {
+        } else {
             return repositoryUser.getUsersByName(completName, "");
         }
-
-
     }
 
 
-
-
+        public boolean isAdmin(UserDTO userDTO)
+        {
+            return repositoryUser.isAdmin(userDTO);
+        }
 }
+

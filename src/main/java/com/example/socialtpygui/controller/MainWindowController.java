@@ -66,10 +66,10 @@ public class MainWindowController {
             Pane view = fxmlLoader.load();
             SearchController searchController = fxmlLoader.getController();
             searchController.setService(service);
+            searchController.setLoggedUser(this.loggedUser);
             searchController.load(searchbar.getText());
             borderPane.setCenter(view);
         }
     }
-
 
 }

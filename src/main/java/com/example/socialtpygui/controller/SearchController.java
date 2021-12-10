@@ -1,15 +1,13 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,11 +15,9 @@ import java.util.List;
 public class SearchController{
 
     List<UserDTO> users;
-
     FXMLLoader fxmlLoader;
-
+    User loggedUser;
     SuperService service;
-
     @FXML
     GridPane gridPane;
 
@@ -36,8 +32,17 @@ public class SearchController{
                 Pane item = fxmlLoader.load();
                 SearchItemController searchItemController = fxmlLoader.getController();
                 searchItemController.setData(user);
-                searchItemController.hideAddBtn();
+                searchItemController.setLoggedUser(this.loggedUser);
+                searchItemController.setService(this.service);
+                if ((service.friendshipDate(this.loggedUser.getId(), user.getId()) != null) || (user.getId().equals(this.loggedUser.getId())) || (service.isAdmin(user))){
+                    searchItemController.hideAddBtn();
+                    searchItemController.hideCancelBtn();
+                }
 
+                if (service.friendshipRequestDate(this.loggedUser.getId(), user.getId()) != null)
+                {searchItemController.hideAddBtn();}
+                else
+                {searchItemController.hideCancelBtn();}
                 gridPane.addRow(row++, item);
 
             }
@@ -49,6 +54,10 @@ public class SearchController{
 
     public void setService(SuperService service) {
         this.service = service;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
     }
 
 

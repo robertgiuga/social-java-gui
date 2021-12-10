@@ -444,4 +444,23 @@ public class SuperService {
         userValidator.validateEmail(email2);
         return friendshipService.friendshipDate(email1, email2);
     }
+
+    public Date friendshipRequestDate(String email1, String email2)
+    {
+        userValidator.validateEmail(email1);
+        userValidator.validateEmail(email2);
+        return friendshipService.friendshipRequestDate(email1, email2);
+    }
+
+    public Friendship friendshipRequestRemove(TupleOne<String> stringTuple)
+    {
+        userValidator.validateEmail(stringTuple.getLeft());
+        userValidator.validateEmail(stringTuple.getRight());
+        return friendshipService.friendshipRequestRemove(stringTuple);
+    }
+
+    public boolean isAdmin(UserDTO userDTO)
+    {
+        return userService.isAdmin(userDTO);
+    }
 }

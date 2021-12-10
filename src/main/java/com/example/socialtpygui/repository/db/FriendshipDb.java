@@ -180,11 +180,13 @@ public class FriendshipDb implements Repository<TupleOne<String>, Friendship> {
      */
     public Date friendshipDate(String email1, String email2)
     {
-        String sql = "select date from friendship where email1 = ? and email2 = ?";
+        String sql = "select date from friendship where (email1 = ? and email2 = ?) or (email1 = ? and email2 = ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email1);
             preparedStatement.setString(2, email2);
+            preparedStatement.setString(3, email2);
+            preparedStatement.setString(4, email1);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getDate("date");

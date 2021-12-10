@@ -9,7 +9,7 @@
    <children>
       <ScrollPane layoutX="7.0" prefHeight="319.0" prefWidth="404.0">
          <content>
-            <GridPane fx:id="gridPane" prefHeight="316.0" prefWidth="401.0">
+            <GridPane fx:id="gridPane" prefHeight="319.0" prefWidth="404.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
