@@ -126,6 +126,11 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
         return size;
     }
 
+    /**
+     *
+     * @param email
+     * @return Iterable<String></String> with users email which send a friend request to user with email 'email'
+     */
     public Iterable<String> getRequests(String email){
         List<String> emails = new ArrayList<>();
         String sql = "select * from friendship_request where email1=? or email2=?";
@@ -171,5 +176,34 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
         catch (SQLException e) {
             return null;
         }
+    }
+
+    /**
+     *
+     * @param email
+     * @return Iterable<Friendsip></String> with email of users which send a friend request to user with email 'email'
+     */
+    public Iterable<Friendship> getFriendRequest(String email) {
+        List<Friendship> requests = new ArrayList<>();
+        String sql = "select * from friendship_request where email1=? or email2=?";
+
+        try(Connection connection = DriverManager.getConnection(url, username, password)){
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+            statement.setString(2, email);
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()){
+                if(resultSet.getString("email1").equals(email)){
+                    requests.add(new Friendship(email, resultSet.getString("email2"), LocalDate.parse(resultSet.getString("request_date"))));
+                }
+                else{
+                    requests.add(new Friendship(email, resultSet.getString("email1"), LocalDate.parse(resultSet.getString("request_date"))));
+                }
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return requests;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
+import com.example.socialtpygui.domain.FriendShipDTO;
 import com.example.socialtpygui.domain.Friendship;
 import com.example.socialtpygui.domain.TupleOne;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
@@ -20,6 +21,7 @@ public class FriendshipRequestDBTest {
         testFindAll();
         testSaveRemoveSize();
         testfriendshipRequestDate();
+        testGetFriendRequest();
     }
 
     private static void testFindOne(){
@@ -60,5 +62,15 @@ public class FriendshipRequestDBTest {
         assert (friendshipRequestDb.friendshipRequestDate("andr@gamail.com", "snj@sadgmail.com") == null);
         assert (friendshipRequestDb.friendshipRequestDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
 
+    }
+
+    private static void testGetFriendRequest(){
+        Iterable<Friendship> friendships = friendshipRequestDb.getFriendRequest("andr@gamail.com");
+        long size = StreamSupport.stream(friendships.spliterator(), false).count();
+        assert (size == 2);
+
+        friendships = friendshipRequestDb.getFriendRequest("an@gamail.com");
+        size = StreamSupport.stream(friendships.spliterator(), false).count();
+        assert (size == 0);
     }
 }

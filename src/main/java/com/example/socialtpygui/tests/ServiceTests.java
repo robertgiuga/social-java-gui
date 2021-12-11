@@ -60,6 +60,7 @@ public class ServiceTests {
         isAdmin();
         testfriendshipDate();
         testfriendshipRequestDate();
+        testfriendRequest();
     }
 
     private static void testAddUser() {
@@ -695,5 +696,32 @@ public class ServiceTests {
         assert (service.friendshipDate("snj@gmail.com", "andr@gamail.com").toString().equals("2021-10-29"));
         assert (service.friendshipDate("snj@gmail.com", "andrrqwe@gamail.com") == null);
         assert (service.friendshipDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
+    }
+
+    private static void testfriendRequest() {
+        try {
+            service.getRequests("");
+            assert false;
+        } catch (ValidationException e) {
+            assert true;
+        }
+
+        try {
+            service.getRequests("dfgh@rwe.");
+            assert false;
+        } catch (ValidationException e) {
+            assert true;
+        }
+
+        Iterable<FriendShipDTO> usersDTO = service.getFriendRequest("andr@gamail.com");
+        long size = StreamSupport.stream(usersDTO.spliterator(), false).count();
+        assert (size == 2);
+
+        try {
+            service.getRequests("gc@gmail.com");
+            assert false;
+        } catch (NonExistingException e) {
+            assert true;
+        }
     }
 }

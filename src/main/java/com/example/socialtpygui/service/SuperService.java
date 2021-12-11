@@ -463,4 +463,23 @@ public class SuperService {
     {
         return userService.isAdmin(userDTO);
     }
+
+    /**
+     * get friend request for an user with the id id
+     * @param id .
+     * @return an Iterable<FriendshipDTO></UserDTO>
+     * @throws NonExistingException if user with the id id has not friend requests
+     */
+    public Iterable<FriendShipDTO> getFriendRequest(String id){
+        userValidator.validateEmail(id);
+        Iterable<Friendship> friendRequests = friendshipService.getFriendRequests(id);
+        List<FriendShipDTO> friendships = new ArrayList<>();
+        for (Friendship request : friendRequests){
+            UserDTO user1 = new UserDTO(userService.findOne(request.getId().getLeft()));
+            UserDTO user2 = new UserDTO(userService.findOne(request.getId().getRight()));
+            LocalDate date = request.getDate();
+            friendships.add(new FriendShipDTO(user1, user2, date));
+        }
+        return friendships;
+    }
 }
