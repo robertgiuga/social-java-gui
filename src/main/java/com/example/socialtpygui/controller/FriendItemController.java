@@ -1,12 +1,11 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 import java.util.Arrays;
 
@@ -28,6 +27,7 @@ public class FriendItemController {
     @FXML
     private void handlerDeleteButton(){
         service.removeFriend(loggedUser.getId(), Arrays.asList(nameLbl.getId()));
+      //  deleteBtn.fireEvent(new UserSelected(UserSelected.USER_DELETE,nameLbl.getId()));
         friendsController.deleteItemFromGridPane(deleteBtn.getId());
     }
 

@@ -9,7 +9,7 @@
       <AnchorPane prefHeight="319.0" prefWidth="127.0">
          <children>
             <TextField fx:id="searchFriendBar" layoutX="8.0" layoutY="14.0" onKeyPressed="#handlerSearchBarKeyPressed" prefHeight="26.0" prefWidth="124.0" />
-            <BorderPane layoutY="49.0" prefHeight="264.0" prefWidth="142.0" />
+            <BorderPane fx:id="convPane" layoutY="49.0" prefHeight="264.0" prefWidth="142.0" />
          </children>
       </AnchorPane>
       <BorderPane layoutX="142.0" layoutY="1.0" prefHeight="319.0" prefWidth="262.0" />

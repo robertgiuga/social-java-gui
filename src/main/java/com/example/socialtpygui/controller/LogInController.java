@@ -43,8 +43,7 @@ public class LogInController {
             AnchorPane panel= fxmlLoader.load();
 
             MainWindowController mainWindowController= fxmlLoader.getController();
-            mainWindowController.setService(service);
-            mainWindowController.setLoggedUser(user);
+            mainWindowController.load(service,user);
 
             Scene scene = new Scene(panel, 545, 400);
             scene.getStylesheets().add(LogInApplication.class.getResource("mainWindow.css").toExternalForm());
