@@ -3,6 +3,7 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
+import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ public class FriendsController {
 
     @FXML
     private GridPane gridPane;
+
 
     private SuperService service;
 
@@ -44,19 +46,15 @@ public class FriendsController {
         return item;
     }
 
-    public void setService(SuperService service) {
-        this.service = service;
-    }
-
-    public void setLoggedUser(User loggedUser) {
-        this.loggedUser = loggedUser;
-    }
 
     /**
      * loads all the friends of the logged user in the gridPane
      */
-    public void load() {
+    public void load(SuperService service, User loggedUser) {
+        this.service= service;
+        this.loggedUser=loggedUser;
 
+     //   gridPane.getParent().addEventFilter(UserSelected.USER_DELETE,this::handlerForSelectedFriend);
         service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {
             try {
                 Pane item = createItem(friendShipDTO.getUser2());
@@ -77,4 +75,13 @@ public class FriendsController {
     public void deleteItemFromGridPane(String row){
         gridPane.getChildren().remove(friends.get(Integer.parseInt(row)));
     }
+
+    /*private void handlerForSelectedFriend(UserSelected e) {
+        if (e.getEventType().equals(UserSelected.USER_DELETE)){
+            System.out.println(e.getSelectedUserId());
+        }
+        if (e.getEventType().equals(UserSelected.USER_SELECTED)){
+            System.out.println(e.getSelectedUserId());
+        }
+    }*/
 }
