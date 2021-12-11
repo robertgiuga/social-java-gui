@@ -482,4 +482,22 @@ public class SuperService {
         }
         return friendships;
     }
+
+    /**
+     * returns a list of a user friends that First or Last name contains "name"
+     * @param name
+     * @return
+     */
+    public List<UserDTO> getFriendsByName(String id, String name){
+        if(name.length()==0){
+            throw new NonExistingException("Cannot contain null values");
+        }
+        Predicate<UserDTO> contains=
+                userDTO -> userDTO.getLastName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)) ||
+                        userDTO.getFirstName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT));
+
+        return  friendshipService.getFriends(id).stream()
+                .map(s -> new UserDTO(userService.findOne(s.getLeft()))).collect(Collectors.toList())
+                .stream().filter(contains).collect(Collectors.toList());
+    }
 }

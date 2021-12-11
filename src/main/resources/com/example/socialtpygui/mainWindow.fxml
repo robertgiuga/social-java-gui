@@ -26,7 +26,7 @@
                   <Button layoutX="20.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Feed" />
                   <Button fx:id="requestsBtn" layoutX="123.0" layoutY="7.0" mnemonicParsing="false" onAction="#handlerRequestsButton" prefHeight="25.0" prefWidth="70.0" text="Requests" />
                   <Button layoutX="225.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Events" />
-                  <Button fx:id="messageBtn" layoutX="325.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Messages" />
+                  <Button fx:id="messageBtn" layoutX="325.0" layoutY="7.0" mnemonicParsing="false" onAction="#handlerMessageBtn" prefHeight="25.0" prefWidth="70.0" text="Messages" />
                </children>
             </AnchorPane>
          </bottom>

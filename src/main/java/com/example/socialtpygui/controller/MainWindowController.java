@@ -5,7 +5,6 @@ import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -32,9 +31,18 @@ public class MainWindowController {
     @FXML
     private BorderPane borderPane;
 
+    @FXML
+    private Button messageBtn;
+
     private SuperService service;
 
     private User loggedUser;
+
+    public void load(SuperService service, User loggedUser){
+        this.service=service;
+        this.loggedUser=loggedUser;
+    }
+
 
     @FXML
     private void handlerFriendsButton() throws IOException {
@@ -42,22 +50,11 @@ public class MainWindowController {
         AnchorPane panel= loader.load();
 
         FriendsController friendsController= loader.getController();
-        friendsController.setService(service);
-        friendsController.setLoggedUser(loggedUser);
-        friendsController.load();
+        friendsController.load(service,loggedUser);
 
         Pane view = new Pane(panel);
 
         borderPane.setCenter(view);
-    }
-
-    public void setService(SuperService service) {
-        this.service = service;
-    }
-
-
-    public void setLoggedUser(User loggedUser) {
-        this.loggedUser = loggedUser;
     }
 
     @FXML
@@ -89,4 +86,12 @@ public class MainWindowController {
         borderPane.setCenter(view);
     }
 
+    @FXML
+    private void handlerMessageBtn() throws IOException {
+        FXMLLoader loader= new FXMLLoader(LogInApplication.class.getResource("messageWindow-view.fxml"));
+        Pane panel= loader.load();
+        MessageController messageController=loader.getController();
+        messageController.load(service,loggedUser);
+        borderPane.setCenter(panel);
+    }
 }

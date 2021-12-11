@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
+<<<<<<< HEAD
 
 <AnchorPane prefHeight="319.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.MessageWindow">
    <children>
@@ -11,6 +12,14 @@
          <children>
             <TextField layoutX="8.0" layoutY="14.0" prefHeight="26.0" prefWidth="124.0" />
             <BorderPane layoutY="49.0" prefHeight="264.0" prefWidth="142.0" />
+=======
+<AnchorPane prefHeight="319.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MessageController">
+   <children>
+      <AnchorPane prefHeight="319.0" prefWidth="127.0">
+         <children>
+            <TextField fx:id="searchFriendBar" layoutX="8.0" layoutY="14.0" onKeyPressed="#handlerSearchBarKeyPressed" prefHeight="26.0" prefWidth="124.0" />
+            <BorderPane fx:id="convPane" layoutY="49.0" prefHeight="264.0" prefWidth="142.0" />
+>>>>>>> 2389685dcb916742b39a4eb5bce30b910ac6f0c2
          </children>
       </AnchorPane>
       <BorderPane layoutX="142.0" layoutY="1.0" prefHeight="319.0" prefWidth="262.0" />

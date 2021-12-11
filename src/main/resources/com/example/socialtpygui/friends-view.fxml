@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 
-
-<AnchorPane prefHeight="319.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.FriendsController">
+<AnchorPane fx:id="anchorPane" prefHeight="319.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.FriendsController">
    <children>
       <ScrollPane prefHeight="319.0" prefWidth="404.0">
          <content>
