@@ -26,6 +26,8 @@ public class MainWindowController {
     @FXML
     private TextField searchbar;
 
+    @FXML
+    private Button requestsBtn;
 
     @FXML
     private BorderPane borderPane;
@@ -70,6 +72,21 @@ public class MainWindowController {
             searchController.load(searchbar.getText());
             borderPane.setCenter(view);
         }
+    }
+
+    @FXML
+    private void handlerRequestsButton() throws IOException{
+        FXMLLoader loader= new FXMLLoader(LogInApplication.class.getResource("request-view.fxml"));
+        AnchorPane panel= loader.load();
+
+        RequestController requestController= loader.getController();
+        requestController.setService(service);
+        requestController.setLoggedUser(loggedUser);
+        requestController.load();
+
+        Pane view = new Pane(panel);
+
+        borderPane.setCenter(view);
     }
 
 }

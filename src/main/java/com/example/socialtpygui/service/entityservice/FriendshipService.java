@@ -218,5 +218,15 @@ public class FriendshipService {
     {
         return repositoryFriendshipRequest.friendshipRequestDate(email1, email2);
     }
+
+    /**
+     * get id request for an user with the id
+     * @param email .
+     * @return an Iterable<Friendship>
+     * @throws NonExistingException if user with the id id has not friend requests
+     */
+    public Iterable<Friendship> getFriendRequests(String email){
+        return repositoryFriendshipRequest.getFriendRequest(email);
+    }
 }
 
