@@ -32,6 +32,9 @@ public class MainWindowController {
     @FXML
     private BorderPane borderPane;
 
+    @FXML
+    private Button messageBtn;
+
     private SuperService service;
 
     private User loggedUser;
@@ -89,4 +92,11 @@ public class MainWindowController {
         borderPane.setCenter(view);
     }
 
+    @FXML
+    private void handlerMessageBtn() throws IOException {
+        FXMLLoader loader= new FXMLLoader(LogInApplication.class.getResource("messageWindow-view.fxml"));
+        Pane panel= loader.load();
+
+        borderPane.setCenter(panel);
+    }
 }
