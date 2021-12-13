@@ -4,12 +4,11 @@ import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -23,7 +22,7 @@ public class LogInController {
     @FXML
     private TextField usernameTxt;
     @FXML
-    private TextField passwordTxt;
+    private PasswordField passwordTxt;
     @FXML
     private Button logInBtn;
 
@@ -67,5 +66,18 @@ public class LogInController {
 
     public void setService(SuperService service) {
         this.service = service;
+    }
+
+
+    public void handlerExitBtn(ActionEvent actionEvent) {
+        ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).close();
+    }
+
+    public void handlerMinimizeBtn(ActionEvent actionEvent) {
+        ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setIconified(true);
+    }
+
+    public void handlerExtindButton(ActionEvent actionEvent) {
+        ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setFullScreen(true);
     }
 }
