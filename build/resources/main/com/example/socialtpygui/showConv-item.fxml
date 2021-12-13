@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="120.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvItemController">
+   <children>
+      <Text fx:id="messageLabel" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="122.0" />
+   </children>
+</Pane>

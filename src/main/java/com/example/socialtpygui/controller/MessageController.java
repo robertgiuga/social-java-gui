@@ -6,10 +6,15 @@ import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
@@ -43,23 +48,32 @@ public class MessageController {
     /**
      * handle the custom UserSelected Event
      * @param e .
+     * @return
      */
-    private void handlerForSelectedFriend(UserSelected e){
-        //here should be load the conv and the messages
+    private void handlerForSelectedFriend(UserSelected e) {
         if (e.getEventType().equals(UserSelected.USER_SELECTED)) {
-            System.out.println(e.getSelectedUserId());
+            try {
+                FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-view.fxml"));
+                Pane item = loader.load();
+                ShowConvController showConvController = loader.getController();
+                showConvController.load(service, loggedUser, e.getSelectedUserId());
+                convPane.setCenter(item);
+            }catch (IOException exception){
+                System.out.println(exception.getMessage());
+            }
         }
     }
+
 
     /**
      * sets the service and loggedUser
      * @param service the SuperService
      * @param loggedUser  the user currently logged in
      */
-    public void load(SuperService service, User loggedUser){
-        convPane.getParent().addEventFilter(UserSelected.ANY,this::handlerForSelectedFriend);
-        this.service=service;
-        this.loggedUser=loggedUser;
+    public void load(SuperService service, User loggedUser) {
+        convPane.getParent().addEventFilter(UserSelected.ANY, this::handlerForSelectedFriend);
+        this.service = service;
+        this.loggedUser = loggedUser;
     }
 
 }
