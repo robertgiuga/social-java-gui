@@ -27,18 +27,28 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class LogInApplication extends Application {
+    private double yCord;
+    private double xCord;
+
     @Override
     public void start(Stage stage) throws IOException {
-        Tests.RunALL();
+        //Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         HBox panel= fxmlLoader.load();
-
+        panel.setOnMousePressed(event->{
+            xCord = event.getSceneX();
+            yCord = event.getSceneY();
+        });
+        panel.setOnMouseDragged(event->{
+            stage.setX(event.getScreenX() - xCord);
+            stage.setY(event.getScreenY() - yCord);
+        });
         LogInController logInController= fxmlLoader.getController();
         logInController.setService(createSuperService());
 
 
-        Scene scene = new Scene(panel, 377, 210);
+        Scene scene = new Scene(panel, 580, 460);
         scene.getStylesheets().add(LogInApplication.class.getResource("log.css").toExternalForm());
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);

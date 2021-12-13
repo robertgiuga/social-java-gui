@@ -15,6 +15,48 @@
 }
 
 #logInBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#exitBtn{
+    -fx-background-color: #FF0000FF;
+    -fx-background-radius: 5em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-max-width: 25px;
+    -fx-max-height: 25px;
+    -fx-background-insets: 0px;
+    -fx-padding: 0px;
+}
+
+#minimizeBtn
+{
+    -fx-background-color: #FFFF00FF;
+    -fx-background-radius: 5em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-max-width: 25px;
+    -fx-max-height: 25px;
+    -fx-background-insets: 0px;
+    -fx-padding: 0px;
+}
+
+#extindBtn{
+    -fx-background-color: #59e50b;
+    -fx-background-radius: 5em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-max-width: 25px;
+    -fx-max-height: 25px;
+    -fx-background-insets: 0px;
+    -fx-padding: 0px;
+}
+
+#createAcountBtn{
+    -fx-border-color: #242E3D;
     -fx-background-radius: 18 18 18 18;
     -fx-border-radius: 18 18 18 18;
     -fx-background-color: #C9E9D8;
