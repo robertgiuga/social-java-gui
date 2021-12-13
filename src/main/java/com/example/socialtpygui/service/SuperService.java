@@ -500,4 +500,16 @@ public class SuperService {
                 .map(s -> new UserDTO(userService.findOne(s.getLeft()))).collect(Collectors.toList())
                 .stream().filter(contains).collect(Collectors.toList());
     }
+
+    /**
+     * Find one user.
+     * @param email searched user's email
+     * @return User, the user with email (email)
+     */
+    public User findOneUser(String email)
+    {
+        userValidator.validateEmail(email);
+        return userService.findOne(email);
+    }
+
 }
