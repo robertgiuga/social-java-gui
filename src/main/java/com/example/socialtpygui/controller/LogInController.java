@@ -44,7 +44,7 @@ public class LogInController {
             MainWindowController mainWindowController= fxmlLoader.getController();
             mainWindowController.load(service,user);
 
-            Scene scene = new Scene(panel, 545, 400);
+            Scene scene = new Scene(panel, 700, 520);
             scene.getStylesheets().add(LogInApplication.class.getResource("mainWindow.css").toExternalForm());
             scene.setFill(Color.TRANSPARENT);
             manWindowStage.setScene(scene);
