@@ -275,8 +275,6 @@ public class SuperService {
 
             if (userService.findOne(s) == null)
                 er.append("User ").append(s).append(" does not exist!\n");
-            if (userService.findOne(s).isAdmin())
-                er.append("User ").append(s).append(" is ADMIN!\n");
             boolean sem = false;
             for (Tuple<String, LocalDate> t : friendshipService.getFriends(message.getFrom()))
                 if (t.getLeft().equals(s)) {
@@ -331,8 +329,6 @@ public class SuperService {
             throw new NonExistingException("This friendship already  exist!");
         }
 
-        if(userService.findOne(id2).isAdmin())
-            throw new ValidationException("You can't send friend request to system admin!");
 
         friendshipService.sendRequest(id1, id2);
     }
@@ -457,11 +453,6 @@ public class SuperService {
         userValidator.validateEmail(stringTuple.getLeft());
         userValidator.validateEmail(stringTuple.getRight());
         return friendshipService.friendshipRequestRemove(stringTuple);
-    }
-
-    public boolean isAdmin(UserDTO userDTO)
-    {
-        return userService.isAdmin(userDTO);
     }
 
     /**

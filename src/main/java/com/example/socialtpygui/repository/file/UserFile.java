@@ -12,7 +12,7 @@ public class UserFile extends AbstractFileRepository<String, User> {
 
     @Override
     protected User extractEntity(List<String> atributes) {
-        User user= new User(atributes.get(1),atributes.get(2), atributes.get(0),atributes.get(3),Boolean.getBoolean(atributes.get(4)));
+        User user= new User(atributes.get(1),atributes.get(2), atributes.get(0),atributes.get(3));
         return user;
     }
 

@@ -2,7 +2,6 @@ package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
 import com.example.socialtpygui.domain.User;
-import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.ValidationException;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ public class UserDBTest {
         testSize();
         testSaveRemove();
         testgetUsersByName();
-        isAdmin();
     }
 
     /**
@@ -33,7 +31,7 @@ public class UserDBTest {
     private static void testFindOne()
     {
         User user1 = userRepo.findOne("gg@gmail.com");
-        User correctUser = new User("Robert", "Giuga", "gg@gmail.com","parola5",false);
+        User correctUser = new User("Robert", "Giuga", "gg@gmail.com","parola5");
         assert(user1.equals(correctUser));
         User user2 = userRepo.findOne("cristiang@gmail.com");
         assert (user2 == null);
@@ -64,7 +62,7 @@ public class UserDBTest {
         }catch(ValidationException e){
             assert true;
         }
-        userRepo.save(new User("Cristian", "Gulea", "gulea@ymail.com","parola6",false));
+        userRepo.save(new User("Cristian", "Gulea", "gulea@ymail.com","parola6"));
         List<User> result = new ArrayList<User>();
         userRepo.findAll().forEach(result::add);
         assert (result.size() == 7);
@@ -82,7 +80,7 @@ public class UserDBTest {
     private static void testSize()
     {
         assert (userRepo.size() == 6);
-        userRepo.save(new User("Cristian", "Gulea", "gulea@ymail.com","parola6",false));
+        userRepo.save(new User("Cristian", "Gulea", "gulea@ymail.com","parola6"));
         assert (userRepo.size() == 7);
         userRepo.remove("gulea@ymail.com");
         assert (userRepo.size() == 6);
@@ -105,16 +103,5 @@ public class UserDBTest {
         assert (list1.size() == 0);
     }
 
-    /**
-     * Test isAdmin from UserDb
-     *
-     */
-    private static void isAdmin()
-    {
-        UserDTO userDTO = new UserDTO(new User("Giuga","Robert", "gg@gmail.com", "", true));
-        assert (userRepo.isAdmin(userDTO));
-        userDTO = new UserDTO(new User("","", "gc@gmail.com", "", false));
-        assert (!userRepo.isAdmin(userDTO));
 
-    }
 }

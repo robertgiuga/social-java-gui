@@ -107,13 +107,5 @@ public class UserService {
         }
     }
 
-    /**
-     * @param userDTO
-     * @return true if the userDto was created with a user which is admin, false if the UserDTO was not created with a user which is admin
-     */
-    public boolean isAdmin(UserDTO userDTO)
-    {
-        return repositoryUser.isAdmin(userDTO);
-    }
 }
 

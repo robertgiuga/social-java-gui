@@ -24,19 +24,16 @@ public class UserTest {
      * test if the get and set methods are working well
      */
     private static void testSetGet(){
-        User user= new User("a","b","c","d",false);
+        User user= new User("a","b","c","d");
 
         assert user.getFirstName().equals("a");
         assert user.getLastName().equals("b");
         assert user.getId().equals("c");
         assert user.getPassword().equals("d");
-        assert !user.isAdmin();
         user.setId("c1");
         user.setPassword("d1");
-        user.setAdmin(true);
         assert user.getId().equals("c1");
         assert user.getPassword().equals("d1");
-        assert user.isAdmin();
 
     }
     /**
@@ -59,9 +56,9 @@ public class UserTest {
      * test if the add and remove friends methods does what needed
      */
     private static void  testAddRemoveFriend(){
-        User user= new User("a","b","c","d1",false);
-        User user1= new User("a1","b","c1","d1",false);
-        User user2= new User("a2","b","c2","d1",false);
+        User user= new User("a","b","c","d1");
+        User user1= new User("a1","b","c1","d1");
+        User user2= new User("a2","b","c2","d1");
         user.addFriend(user1);
         assert user.friendList.get(0)==user1;
 
