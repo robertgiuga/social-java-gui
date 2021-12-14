@@ -44,9 +44,13 @@ public class MessageController {
      * handle the custom UserSelected Event
      * @param e .
      */
-    private void handlerForSelectedFriend(UserSelected e){
+    private void handlerForSelectedFriend(UserSelected e) {
         //here should be load the conv and the messages
         if (e.getEventType().equals(UserSelected.USER_SELECTED)) {
+            System.out.println(e.getSelectedUserId());
+        }
+        else if (e.getEventType().equals(UserSelected.USER_LOAD_MSJ))
+        {
             System.out.println(e.getSelectedUserId());
         }
     }
@@ -56,10 +60,29 @@ public class MessageController {
      * @param service the SuperService
      * @param loggedUser  the user currently logged in
      */
-    public void load(SuperService service, User loggedUser){
+    public void load(SuperService service, User loggedUser) throws IOException {
         convPane.getParent().addEventFilter(UserSelected.ANY,this::handlerForSelectedFriend);
         this.service=service;
         this.loggedUser=loggedUser;
+        loadAllFriendsWithConv();
     }
 
+    /**
+     * Load all friends with conversation in BorderPane (convPane).
+     */
+    private void loadAllFriendsWithConv()
+    {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("conversation-view.fxml"));
+        Pane item = null;
+        try {
+            item = loader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        ConversationController conversationController = loader.getController();
+        conversationController.setLoggedUser(loggedUser);
+        conversationController.setService(service);
+        conversationController.load();
+        convPane.setCenter(item);
+    }
 }
