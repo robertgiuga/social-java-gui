@@ -7,25 +7,14 @@ import java.util.List;
 
 public class User extends Entity<String>{
     private String firstName, lastName, password;
-    private boolean admin= false;
     public List<User> friendList;
 
-    public User(String firstName, String lastName, String email,String password, boolean admin) {
+    public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         setId(email);
         friendList= new ArrayList<>();
         this.password= password;
-        this.admin= admin;
-    }
-
-    public User(String firstName, String lastName, String email,String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        setId(email);
-        friendList= new ArrayList<>();
-        this.password= password;
-        this.admin= false;
     }
     @Override
     public String toString() {
@@ -67,11 +56,4 @@ public class User extends Entity<String>{
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
 }

@@ -38,7 +38,7 @@ public class SearchController{
                 searchItemController.setData(user);
                 searchItemController.setLoggedUser(this.loggedUser);
                 searchItemController.setService(this.service);
-                if ((service.friendshipDate(this.loggedUser.getId(), user.getId()) != null) || (user.getId().equals(this.loggedUser.getId())) || (service.isAdmin(user))){
+                if ((service.friendshipDate(this.loggedUser.getId(), user.getId()) != null) || (user.getId().equals(this.loggedUser.getId()))){
                     searchItemController.hideAddBtn();
                     searchItemController.hideCancelBtn();
                 }

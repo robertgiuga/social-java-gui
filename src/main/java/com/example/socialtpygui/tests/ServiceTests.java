@@ -57,7 +57,6 @@ public class ServiceTests {
         testGetRequests();
         testReplayAll();
         testgetUsersByName();
-        isAdmin();
         testfriendshipDate();
         testfriendshipRequestDate();
         testfriendRequest();
@@ -675,13 +674,6 @@ public class ServiceTests {
         assert (list1.size() == 0);
     }
 
-    private static void isAdmin()
-    {
-        UserDTO userDTO = new UserDTO(new User("Giuga","Robert", "gg@gmail.com", "", true));
-        assert (service.isAdmin(userDTO));
-        userDTO = new UserDTO(new User("","", "gc@gmail.com", "", false));
-        assert (!service.isAdmin(userDTO));
-    }
 
     private static void testfriendshipRequestDate()
     {

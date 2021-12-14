@@ -18,9 +18,9 @@ public class MessageTests {
     private static void testSetGet()
     {
 
-        User user = new User("Gulea", "Cristian","gulea@gmail.com","a",false);
-        User user1 = new User("Paul", "Marian","marian@gmail.com","a2",false);
-        User user2 = new User("George", "Mihai","mihai@gmail.com","a3",false);
+        User user = new User("Gulea", "Cristian","gulea@gmail.com","a");
+        User user1 = new User("Paul", "Marian","marian@gmail.com","a2");
+        User user2 = new User("George", "Mihai","mihai@gmail.com","a3");
         List<String> list = new ArrayList<>(); list.add("marian@gmail.com"); list.add("mihai@gmail.com");
         List<String> list1 = new ArrayList<>(); list1.add("marian@gmail.com"); list1.add("mihai@gmail.com"); list1.add("gulea@gmail.com");
         LocalDate date = LocalDate.of(2020, 1, 8);
