@@ -2,7 +2,6 @@ package com.example.socialtpygui.tests.DomainTests;
 
 
 import com.example.socialtpygui.domain.FriendShipDTO;
-import com.example.socialtpygui.domain.Friendship;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 
@@ -18,8 +17,8 @@ public class FriendshipDTOTests {
 
     private static void testGetSet(){
         LocalDate date = LocalDate.now();
-        User user= new User("a","b","c","d",false);
-        User user1= new User("d","e","f","g",false);
+        User user= new User("a","b","c","d");
+        User user1= new User("d","e","f","g");
         UserDTO userDTO= new UserDTO(user);
         UserDTO userDTO1= new UserDTO(user1);
         FriendShipDTO friendShipDTO= new FriendShipDTO(userDTO,userDTO1,date);

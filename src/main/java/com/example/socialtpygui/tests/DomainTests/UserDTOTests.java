@@ -12,7 +12,7 @@ public class UserDTOTests {
     }
 
     private static void testGetSet(){
-        User user= new User("a","b","c","d",false);
+        User user= new User("a","b","c","d");
 
         UserDTO userDTO= new UserDTO(user);
 
@@ -24,7 +24,7 @@ public class UserDTOTests {
     }
 
     private static void testToString(){
-        User user= new User("a","b","c","d",false);
+        User user= new User("a","b","c","d");
 
         UserDTO userDTO= new UserDTO(user);
 

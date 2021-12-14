@@ -5,7 +5,6 @@ import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.repository.Repository;
 import com.example.socialtpygui.service.validators.ValidationException;
 
-import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +32,7 @@ public class UserDb implements Repository<String,User> {
             while (resultSet.next())
                 user = new User(resultSet.getString("first_name")
                         ,resultSet.getString("last_name")
-                        ,s,resultSet.getString("password"),resultSet.getBoolean("admin"));
+                        ,s,resultSet.getString("password"));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -54,7 +53,7 @@ public class UserDb implements Repository<String,User> {
                 String password = resultSet.getString("password");
                 Boolean admin = resultSet.getBoolean("admin");
 
-                User user = new User(firstName,lastName,email,password,admin);
+                User user = new User(firstName,lastName,email,password);
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -71,7 +70,7 @@ public class UserDb implements Repository<String,User> {
         User a = this.findOne(entity.getId());
         if(a != null) return a;
 
-        String sql = "insert into users (email,first_name, last_name,password,admin ) values (?, ?, ?,?,?)";
+        String sql = "insert into users (email,first_name, last_name,password ) values (?, ?, ?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -80,7 +79,6 @@ public class UserDb implements Repository<String,User> {
             ps.setString(2, entity.getFirstName());
             ps.setString(3,entity.getLastName());
             ps.setString(4,entity.getPassword());
-            ps.setBoolean(5,entity.isAdmin());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -154,24 +152,4 @@ public class UserDb implements Repository<String,User> {
         return listReturn;
     }
 
-    /**
-     * @param userDTO
-     * @return true if the userDto was created with a user which is admin, false if the UserDTO was not created with a user which is admin
-     */
-    public boolean isAdmin(UserDTO userDTO)
-    {
-        String sql = "select admin from users where email = ?";
-        Boolean isAdmin = false;
-        try(Connection connection = DriverManager.getConnection(url, username, password);
-        PreparedStatement preparedStatement = connection.prepareStatement(sql))
-        {
-            preparedStatement.setString(1, userDTO.getId());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            isAdmin = resultSet.getBoolean("admin");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return isAdmin;
-    }
 }
