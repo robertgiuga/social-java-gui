@@ -3,6 +3,7 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -13,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 
 import java.io.IOException;
@@ -33,6 +35,16 @@ public class MainWindowController {
 
     @FXML
     private Button messageBtn;
+
+    @FXML
+    private Button exitBtnMW;
+
+    @FXML
+    private Button minimizeBtnMW;
+
+    @FXML
+    private Button extindBtnMW;
+
 
     private SuperService service;
 
@@ -93,5 +105,17 @@ public class MainWindowController {
         MessageController messageController=loader.getController();
         messageController.load(service,loggedUser);
         borderPane.setCenter(panel);
+    }
+
+    public void handlerExitBtnMW(ActionEvent actionEvent) {
+        ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).close();
+    }
+
+    public void handlerMinimizeBtnMW(ActionEvent actionEvent) {
+        ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setIconified(true);
+    }
+
+    public void handlerExtindButtonMW(ActionEvent actionEvent) {
+        ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setFullScreen(true);
     }
 }
