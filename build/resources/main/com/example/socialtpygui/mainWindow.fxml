@@ -18,9 +18,12 @@
       </AnchorPane>
       <BorderPane fx:id="borderPane" layoutX="205.0" prefHeight="520.0" prefWidth="495.0">
          <top>
-            <AnchorPane fx:id="topPane" prefHeight="64.0" prefWidth="226.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="topPane" prefHeight="64.0" prefWidth="495.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="searchbar" layoutX="14.0" layoutY="16.0" onKeyPressed="#handlerKeyPressed" prefHeight="32.0" prefWidth="177.0" />
+                  <TextField fx:id="searchbar" layoutX="14.0" layoutY="16.0" onKeyPressed="#handlerKeyPressed" prefHeight="32.0" prefWidth="205.0" />
+                  <Button fx:id="extindBtnMW" layoutX="390.0" layoutY="15.0" mnemonicParsing="false" onAction="#handlerExtindButtonMW" opacity="0.5" />
+                  <Button fx:id="minimizeBtnMW" layoutX="421.0" layoutY="15.0" mnemonicParsing="false" onAction="#handlerMinimizeBtnMW" opacity="0.5" />
+                  <Button fx:id="exitBtnMW" layoutX="452.0" layoutY="15.0" mnemonicParsing="false" onAction="#handlerExitBtnMW" opacity="0.5" />
                </children>
             </AnchorPane>
          </top>
