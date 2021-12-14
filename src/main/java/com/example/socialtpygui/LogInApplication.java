@@ -35,7 +35,7 @@ public class LogInApplication extends Application {
         //Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
-        HBox panel= fxmlLoader.load();
+        AnchorPane panel= fxmlLoader.load();
         panel.setOnMousePressed(event->{
             xCord = event.getSceneX();
             yCord = event.getSceneY();
