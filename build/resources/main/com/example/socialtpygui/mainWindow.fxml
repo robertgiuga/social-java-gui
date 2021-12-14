@@ -10,11 +10,11 @@
    <children>
       <AnchorPane fx:id="leftPane" prefHeight="520.0" prefWidth="205.0">
          <children>
-            <Button fx:id="friendsBtn" layoutX="35.0" layoutY="292.0" mnemonicParsing="false" onAction="#handlerFriendsButton" prefHeight="32.0" prefWidth="136.0" text="Friends" textFill="#242e3d">
+            <Button fx:id="friendsBtn" layoutX="35.0" layoutY="325.0" mnemonicParsing="false" onAction="#handlerFriendsButton" prefHeight="32.0" prefWidth="136.0" text="Friends" textFill="#242e3d">
                <font>
                   <Font size="15.0" />
                </font></Button>
-            <Button fx:id="statisticsBtn" layoutX="35.0" layoutY="350.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="136.0" text="Statistics" textFill="#242e3d">
+            <Button fx:id="statisticsBtn" layoutX="35.0" layoutY="372.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="136.0" text="Statistics" textFill="#242e3d">
                <font>
                   <Font size="15.0" />
                </font>
@@ -24,16 +24,16 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="settingBtn" layoutX="35.0" layoutY="408.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="136.0" text="Settings" textFill="#242e3d">
+            <Button fx:id="settingBtn" layoutX="35.0" layoutY="419.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="136.0" text="Settings" textFill="#242e3d">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
          </children>
       </AnchorPane>
-      <BorderPane fx:id="borderPane" layoutX="213.0" prefHeight="520.0" prefWidth="495.0">
+      <BorderPane fx:id="borderPane" layoutX="209.0" prefHeight="520.0" prefWidth="491.0">
          <top>
-            <AnchorPane fx:id="topPane" prefHeight="64.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="topPane" prefHeight="57.0" prefWidth="491.0" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="searchbar" layoutX="14.0" layoutY="16.0" onKeyPressed="#handlerKeyPressed" prefHeight="32.0" prefWidth="205.0" />
                   <Button fx:id="extindBtnMW" layoutX="390.0" layoutY="15.0" mnemonicParsing="false" onAction="#handlerExtindButtonMW" opacity="0.5" />

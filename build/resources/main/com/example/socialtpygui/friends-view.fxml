@@ -7,9 +7,9 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="319.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.FriendsController">
    <children>
-      <ScrollPane prefHeight="319.0" prefWidth="404.0">
+      <ScrollPane fx:id="scrollPaneFriendsView" prefHeight="393.0" prefWidth="494.0">
          <content>
-            <GridPane fx:id="gridPane" prefHeight="319.0" prefWidth="404.0">
+            <GridPane fx:id="gridPane" prefHeight="392.0" prefWidth="494.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>

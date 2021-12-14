@@ -134,3 +134,90 @@
     -fx-border-radius: 18 18 18 18;
     -fx-background-color: #C9E9D8;
 }
+
+#scrollPaneSearchView{
+    -fx-background: #242E3D;
+    -fx-background-color: #242E3D;
+}
+
+.thumb{
+    -fx-opacity: 0;
+}
+
+.track{
+    -fx-opacity: 0;
+}
+
+.decrement-button{
+    -fx-opacity: 0;
+}
+
+.corner{
+    -fx-opacity: 0;
+}
+
+:vertical{
+    -fx-opacity: 0;
+}
+
+:horizontal{
+    -fx-opacity: 0;
+}
+
+#addBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#cancelBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#scrollPaneFriendsView{
+    -fx-background: #242E3D;
+    -fx-background-color: #242E3D;
+}
+
+#anchorPaneShowConvView{
+    -fx-background-color: #242E3D;
+}
+
+#scrollPaneShowConv{
+    -fx-background: #242E3D;
+    -fx-background-color: #242E3D;
+}
+
+#buttonSend{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+
+
+#messageText{
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#scrollPaneSearchFriendConvView{
+    -fx-background: #242E3D;
+    -fx-background-color: #242E3D;
+}
+
+#scrollPaneConversationView{
+    -fx-background: #242E3D;
+    -fx-background-color: #242E3D;
+}
+
+#scrollPaneRequestView{
+    -fx-background: #242E3D;
+    -fx-background-color: #242E3D;
+}
+
