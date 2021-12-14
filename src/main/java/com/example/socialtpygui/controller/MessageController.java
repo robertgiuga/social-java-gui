@@ -52,19 +52,11 @@ public class MessageController {
      */
     private void handlerForSelectedFriend(UserSelected e) {
         if (e.getEventType().equals(UserSelected.USER_SELECTED)) {
-            try {
-                FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-view.fxml"));
-                Pane item = loader.load();
-                ShowConvController showConvController = loader.getController();
-                showConvController.load(service, loggedUser, e.getSelectedUserId());
-                convPane.setCenter(item);
-            }catch (IOException exception){
-                System.out.println(exception.getMessage());
-            }
+            loadShowConv(e);
         }
         else if (e.getEventType().equals(UserSelected.USER_LOAD_MSJ))
         {
-            System.out.println(e.getSelectedUserId());
+            loadShowConv(e);
         }
     }
 
@@ -98,5 +90,22 @@ public class MessageController {
         conversationController.setService(service);
         conversationController.load();
         convPane.setCenter(item);
+    }
+
+    /**
+     * load all messages between 2 users(logged user and other user)
+     * @param e
+     */
+    private void loadShowConv(UserSelected e)
+    {
+        try {
+            FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-view.fxml"));
+            Pane item = loader.load();
+            ShowConvController showConvController = loader.getController();
+            showConvController.load(service, loggedUser, e.getSelectedUserId());
+            convPane.setCenter(item);
+        }catch (IOException exception){
+            System.out.println(exception.getMessage());
+        }
     }
 }
