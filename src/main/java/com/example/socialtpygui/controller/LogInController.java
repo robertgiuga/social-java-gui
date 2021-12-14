@@ -27,7 +27,8 @@ public class LogInController {
     private Button logInBtn;
 
     private SuperService service;
-
+    private double yCord;
+    private double xCord;
     private MainWindowController mainWindowController;
 
     @FXML
@@ -45,6 +46,16 @@ public class LogInController {
             mainWindowController.load(service,user);
 
             Scene scene = new Scene(panel, 700, 520);
+
+            panel.setOnMousePressed(event->{
+                xCord = event.getSceneX();
+                yCord = event.getSceneY();
+            });
+            panel.setOnMouseDragged(event->{
+                manWindowStage.setX(event.getScreenX() - xCord);
+                manWindowStage.setY(event.getScreenY() - yCord);
+            });
+
             scene.getStylesheets().add(LogInApplication.class.getResource("mainWindow.css").toExternalForm());
             scene.setFill(Color.TRANSPARENT);
             manWindowStage.setScene(scene);
