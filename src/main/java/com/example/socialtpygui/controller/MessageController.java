@@ -93,7 +93,8 @@ public class MessageController {
     }
 
     /**
-     * load all messages between 2 users(logged user and other user)
+     * load all messages between 2 users(logged user and other user,which is the user selected in GUI and contained
+     * by the UserSelected Event)
      * @param e
      */
     private void loadShowConv(UserSelected e)
