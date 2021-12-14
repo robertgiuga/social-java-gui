@@ -113,3 +113,24 @@
     -fx-border-radius: 18 18 18 18;
     -fx-background-color: #C9E9D8;
 }
+
+#logoutBtn{
+    -fx-border-color: #242E3D;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #C9E9D8;
+}
+
+#settingBtn{
+    -fx-border-color: #242E3D;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #C9E9D8;
+}
+
+#statisticsBtn{
+    -fx-border-color: #242E3D;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #C9E9D8;
+}
