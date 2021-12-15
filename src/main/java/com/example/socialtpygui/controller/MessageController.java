@@ -26,6 +26,7 @@ public class MessageController {
     @FXML
     private BorderPane convPane;
 
+
     private SuperService service;
     private User loggedUser;
 
@@ -41,6 +42,7 @@ public class MessageController {
             Pane item = loader.load();
             SearchFriendConvController searchFriendConvController= loader.getController();
             searchFriendConvController.load(service,loggedUser,searchFriendBar.getText());
+
             convPane.setCenter(item);
         }
     }
@@ -50,7 +52,8 @@ public class MessageController {
      * @param e .
      * @return
      */
-    private void handlerForSelectedFriend(UserSelected e) {
+    private void handlerForSelectedFriend(UserSelected e){
+        System.out.println(e.getSelectedUserId());
         if (e.getEventType().equals(UserSelected.USER_SELECTED)) {
             loadShowConv(e);
         }
@@ -97,16 +100,16 @@ public class MessageController {
      * by the UserSelected Event)
      * @param e
      */
-    private void loadShowConv(UserSelected e)
-    {
+    private void loadShowConv(UserSelected e) {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-view.fxml"));
+        Pane item = null;
         try {
-            FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-view.fxml"));
-            Pane item = loader.load();
-            ShowConvController showConvController = loader.getController();
-            showConvController.load(service, loggedUser, e.getSelectedUserId());
-            convPane.setCenter(item);
-        }catch (IOException exception){
-            System.out.println(exception.getMessage());
+            item = loader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+        ShowConvController showConvController = loader.getController();
+        showConvController.load(service, loggedUser, e.getSelectedUserId());
+        convPane.setCenter(item);
     }
 }

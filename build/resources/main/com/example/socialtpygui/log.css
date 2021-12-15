@@ -1,17 +1,13 @@
-#mainHbox{
+#mainPane{
     -fx-background-color:#242E3D ;
     -fx-background-radius: 25;
     -fx-border-radius: 25;
 
 }
-#leftAnchorPane{
+#leftPane{
     -fx-background-radius: 25;
     -fx-border-radius: 25;
-    -fx-background-color: #242E3D;
-}
-#rightPane{
-    -fx-background-radius: 25;
-    -fx-border-radius: 25;
+    -fx-background-color: #C9E9D8;
 }
 
 #logInBtn{
@@ -60,16 +56,4 @@
     -fx-background-radius: 18 18 18 18;
     -fx-border-radius: 18 18 18 18;
     -fx-background-color: #C9E9D8;
-}
-
-#passwordTxt{
-    -fx-border-color: #C9E9D8;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-}
-
-#usernameTxt{
-    -fx-border-color: #C9E9D8;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
 }

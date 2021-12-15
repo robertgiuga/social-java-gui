@@ -4,14 +4,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane prefHeight="319.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MessageController">
+<AnchorPane prefHeight="389.0" prefWidth="490.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MessageController">
    <children>
-      <AnchorPane prefHeight="319.0" prefWidth="127.0">
-         <children>
-            <TextField fx:id="searchFriendBar" layoutX="11.0" layoutY="14.0" onKeyPressed="#handlerSearchBarKeyPressed" prefHeight="26.0" prefWidth="147.0" />
-            <BorderPane fx:id="convPane" layoutX="10.0" layoutY="49.0" prefHeight="351.0" prefWidth="169.0" />
-         </children>
-      </AnchorPane>
-      <BorderPane layoutX="169.0" layoutY="1.0" prefHeight="400.0" prefWidth="388.0" />
+      <TextField fx:id="searchFriendBar" layoutX="25.0" layoutY="14.0" maxWidth="-Infinity" onKeyPressed="#handlerSearchBarKeyPressed" prefHeight="26.0" prefWidth="147.0" />
+      <BorderPane fx:id="convPane" layoutX="7.0" layoutY="41.0" prefHeight="266.0" prefWidth="490.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
    </children>
 </AnchorPane>
