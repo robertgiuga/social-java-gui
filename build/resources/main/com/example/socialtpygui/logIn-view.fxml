@@ -5,7 +5,6 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -48,19 +47,12 @@
                 </Button>
             </children>
         </VBox>
-        <HBox fx:id="upperRightPane" alignment="BASELINE_RIGHT" layoutX="201.0" prefHeight="54.0" prefWidth="378.0" spacing="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <Button fx:id="extindBtn" mnemonicParsing="false" onAction="#handlerExtindButton" opacity="0.5" prefHeight="6.0" prefWidth="16.0" />
-                <Button fx:id="minimizeBtn" mnemonicParsing="false" onAction="#handlerMinimizeBtn" opacity="0.5" prefHeight="6.0" prefWidth="16.0" />
-                <Button fx:id="exitBtn" mnemonicParsing="false" onAction="#handlerExitBtn" opacity="0.5" prefHeight="6.0" prefWidth="16.0">
-                    <HBox.margin>
-                        <Insets />
-                    </HBox.margin>
-                </Button>
-            </children>
-            <padding>
-                <Insets right="10.0" top="5.0" />
-            </padding>
-        </HBox>
+      <AnchorPane layoutX="199.0" layoutY="8.0" prefHeight="52.0" prefWidth="380.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+                <Button fx:id="exitBtn" layoutX="350.0" layoutY="1.0" mnemonicParsing="false" onAction="#handlerExitBtn" opacity="0.5" prefHeight="6.0" prefWidth="16.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="15.0" />
+                <Button fx:id="minimizeBtn" layoutX="113.0" layoutY="28.0" mnemonicParsing="false" onAction="#handlerMinimizeBtn" opacity="0.5" prefHeight="6.0" prefWidth="16.0" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="15.0" />
+                <Button fx:id="extindBtn" layoutX="77.0" layoutY="27.0" mnemonicParsing="false" onAction="#handlerExtindButton" opacity="0.5" prefHeight="6.0" prefWidth="16.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="15.0" />
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>
