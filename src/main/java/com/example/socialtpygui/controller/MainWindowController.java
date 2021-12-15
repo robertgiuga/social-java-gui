@@ -3,6 +3,7 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
+import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,7 +79,7 @@ public class MainWindowController {
             SearchController searchController = fxmlLoader.getController();
             searchController.setService(service);
             searchController.setLoggedUser(this.loggedUser);
-            searchController.load(searchbar.getText());
+            try{searchController.load(searchbar.getText());} catch (ValidationException ignored){}
             borderPane.setCenter(view);
         }
     }
