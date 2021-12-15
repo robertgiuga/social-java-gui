@@ -51,6 +51,10 @@ public class ShowConvController {
 
     private DragMessage dragMessage=null;
 
+    /**
+     * send a message to user from conversation
+     * @throws IOException
+     */
     private void sendMessage() throws IOException {
         List<String> to = new ArrayList<>();
         to.add(email);
@@ -136,6 +140,11 @@ public class ShowConvController {
             }
     }
 
+    /**
+     * handle press Send Button sending a message in current conversation
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handlerKeyPressed(KeyEvent event) throws IOException {
         if(!messageText.getText().equals(""))
@@ -144,7 +153,10 @@ public class ShowConvController {
             }
     }
 
-
+    /**
+     * set text in label messageToReply as message text from dragged message from conversation
+     * @param m
+     */
     private void DragMessageHandler(DragMessage m) {
         if(m != null) {
             messageToReply.setText("replying to: "+m.getMessage().getMessage());

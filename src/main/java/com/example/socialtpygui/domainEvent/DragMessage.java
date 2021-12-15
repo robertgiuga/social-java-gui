@@ -15,12 +15,19 @@ public class DragMessage extends Event {
     public static final EventType<DragMessage> MESSAGE_REPLY = new EventType<>(DragMessage.ANY,"MESSAGE_REPLY");
     public static final EventType<DragMessage> MESSAGE_SELECTED = new EventType<>(DragMessage.ANY,"MESSAGE_SELECTED");
 
+    /**
+     * Constructor for Event DragMessage
+     * @param eventType
+     * @param message
+     */
     public DragMessage(EventType<? extends Event> eventType, Message message){
         super(eventType);
         this.message = message;
     }
 
-
+    /**
+     * @return field message
+     */
     public Message getMessage() {
         return message;
     }
