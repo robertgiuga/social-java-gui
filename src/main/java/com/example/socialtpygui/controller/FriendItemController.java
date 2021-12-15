@@ -15,6 +15,8 @@ public class FriendItemController {
     private Button deleteBtn;
     @FXML
     private Label nameLbl;
+    @FXML
+    private Label dateLbl;
 
     private FriendsController friendsController;
     private SuperService service;
@@ -37,6 +39,14 @@ public class FriendItemController {
      */
     public void setName(String name){
         nameLbl.setText(name);
+    }
+
+    /**
+     * sets the date since they are friends to be displayed
+     * @param date .
+     */
+    public void setDate(String date){
+        dateLbl.setText("friends since: "+ date);
     }
 
     /**

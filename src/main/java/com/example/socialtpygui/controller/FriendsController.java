@@ -1,6 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.FriendShipDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domainEvent.UserSelected;
@@ -30,15 +31,16 @@ public class FriendsController {
 
     /**
      * create a custom item of a friend to be displayed
-     * @param user .
      * @return the Pane item to be displayed
      * @throws IOException .
      */
-    private Pane createItem(UserDTO user) throws IOException {
+    private Pane createItem(FriendShipDTO friendShipDTO) throws IOException {
+        UserDTO user = friendShipDTO.getUser2();
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("friendItem.fxml"));
         Pane item = loader.load();
         FriendItemController friendItemController= loader.getController();
         friendItemController.setName(user.getFirstName()+" "+user.getLastName());
+        friendItemController.setDate(friendShipDTO.getDate().toString());
         friendItemController.setLoggedUser(loggedUser);
         friendItemController.setService(service);
         friendItemController.setEmail(user.getId());
@@ -57,7 +59,7 @@ public class FriendsController {
      //   gridPane.getParent().addEventFilter(UserSelected.USER_DELETE,this::handlerForSelectedFriend);
         service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {
             try {
-                Pane item = createItem(friendShipDTO.getUser2());
+                Pane item = createItem(friendShipDTO);
                 item.getChildren().forEach(node -> {if(node instanceof Button) node.setId(String.valueOf(gridPane.getRowCount()));});
                 gridPane.addRow(gridPane.getRowCount(),item);
 
