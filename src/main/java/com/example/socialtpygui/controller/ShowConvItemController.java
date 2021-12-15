@@ -29,7 +29,7 @@ public class ShowConvItemController {
             paneShowConvItem.setPrefHeight(30);
         }
         else{
-            messageToReply.setText("replying to: "+replyMessage.getOriginal().getMessage());
+            messageToReply.setText("replied to: "+replyMessage.getOriginal().getMessage());
         }
         messageLabel.setText(replyMessage.getMessage());
     }
