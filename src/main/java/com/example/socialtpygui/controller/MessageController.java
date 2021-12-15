@@ -4,6 +4,7 @@ import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
+import com.example.socialtpygui.service.validators.NonExistingException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -41,7 +42,7 @@ public class MessageController {
             FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("searchFriendConv-view.fxml"));
             Pane item = loader.load();
             SearchFriendConvController searchFriendConvController= loader.getController();
-            searchFriendConvController.load(service,loggedUser,searchFriendBar.getText());
+            try{searchFriendConvController.load(service,loggedUser,searchFriendBar.getText());} catch (NonExistingException ignored){}
 
             convPane.setCenter(item);
         }
