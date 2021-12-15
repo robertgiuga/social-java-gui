@@ -58,28 +58,30 @@ public class ShowConvController {
     private void sendMessage() throws IOException {
         List<String> to = new ArrayList<>();
         to.add(email);
-        Pane item = null;
+        //Pane item = null;
         if(dragMessage == null) {
             service.sendMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
-            item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), null));
-            item.getChildren().forEach(node -> {
-                if (node instanceof Label)
-                    node.setId(String.valueOf(messageText.getText()));
-            });
+            //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), null));
+            //item.getChildren().forEach(node -> {
+            //    if (node instanceof Label)
+            //        node.setId(String.valueOf(messageText.getText()));
+            //});
         }
         else{
             service.replyMessage(new ReplyMessageDTO(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
-            item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage()));
-            item.getChildren().forEach(node -> {
-                if (node instanceof Label)
-                    node.setId(String.valueOf(messageText.getText()));
-            });
+            //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage()));
+            //item.getChildren().forEach(node -> {
+            //    if (node instanceof Label)
+            //        node.setId(String.valueOf(messageText.getText()));
+            //});
             messageToReply.setText("");
             dragMessage = null;
         }
 
-        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        //gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
         messageText.clear();
+        gridShowMessages.getChildren().clear();
+        this.load(service, loggedUser, email);
     }
 
     /**
