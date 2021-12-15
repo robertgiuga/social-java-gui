@@ -2,7 +2,10 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.Message;
+import com.example.socialtpygui.domain.ReplyMessage;
+import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +15,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -27,7 +31,7 @@ public class ShowConvController {
     private GridPane gridShowMessages;
 
     @FXML
-    private ScrollPane scrollShowMessages;
+    private ScrollPane scrollPaneShowConv;
 
     @FXML
     private TextField messageText;
@@ -35,21 +39,55 @@ public class ShowConvController {
     @FXML
     private Button buttonSend;
 
+    @FXML
+    private Label messageToReply;
+
+    @FXML
+    private AnchorPane anchorPaneShowConvView;
+
     private User loggedUser;
 
     private String email;
 
+    private DragMessage dragMessage=null;
+
+    private void sendMessage() throws IOException {
+        List<String> to = new ArrayList<>();
+        to.add(email);
+        Pane item = null;
+        if(dragMessage == null) {
+            service.sendMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
+            item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), null));
+            item.getChildren().forEach(node -> {
+                if (node instanceof Label)
+                    node.setId(String.valueOf(messageText.getText()));
+            });
+        }
+        else{
+            service.replyMessage(new ReplyMessageDTO(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
+            item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage()));
+            item.getChildren().forEach(node -> {
+                if (node instanceof Label)
+                    node.setId(String.valueOf(messageText.getText()));
+            });
+            messageToReply.setText("");
+            dragMessage = null;
+        }
+
+        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        messageText.clear();
+    }
+
     /**
      * create a new view of a Message
-     * @param message
      * @return a Pane
      * @throws IOException
      */
-    private Pane createItem(String message) throws IOException{
+    private Pane createItem(ReplyMessage replyMessage) throws IOException{
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-item.fxml"));
         Pane item = loader.load();
         ShowConvItemController controller = loader.getController();
-        controller.setMessage(message);
+        controller.setMessage(replyMessage);
         return item;
     }
 
@@ -61,12 +99,13 @@ public class ShowConvController {
      * @param email
      */
     public void load(SuperService service, User loggedUser, String email){
+        anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
         this.loggedUser = loggedUser;
         this.service = service;
         this.email = email;
         service.getMessages(loggedUser.getId(), email).forEach(replyMessage->{
             try{
-                Pane item = createItem(replyMessage.getMessage());
+                Pane item = createItem(replyMessage);
                 item.getChildren().forEach(node->{
                     if (node instanceof Label)
                         node.setId(String.valueOf(replyMessage.getId()));
@@ -85,25 +124,31 @@ public class ShowConvController {
         gridShowMessages.autosize();
     }
 
+
     /**
      * handle press ok 'ENTER' key sending a Message with text from textField
-     * @param event
      * @throws IOException
      */
+    @FXML
+    private void pressedSendButton() throws IOException {
+        if(!messageText.getText().equals("")){
+                sendMessage();
+            }
+    }
+
     @FXML
     private void handlerKeyPressed(KeyEvent event) throws IOException {
         if(!messageText.getText().equals(""))
             if(event.getCode().equals(KeyCode.ENTER)) {
-                List<String> to = new ArrayList<>();
-                to.add(email);
-                service.sendMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
-                Pane item = createItem(messageText.getText());
-                item.getChildren().forEach(node->{
-                    if (node instanceof Label)
-                        node.setId(String.valueOf(messageText.getText()));
-                });
-                gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
-                messageText.clear();
+                sendMessage();
             }
+    }
+
+
+    private void DragMessageHandler(DragMessage m) {
+        if(m != null) {
+            messageToReply.setText("replying to: "+m.getMessage().getMessage());
+            this.dragMessage = m;
+        }
     }
 }
