@@ -30,7 +30,7 @@ public class SuperService implements Observable {
     protected MessageService messageService;
     protected MessageValidator messageValidator;
 
-    private List<Observer> observers=new ArrayList<>();
+    private Observer observer;
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
@@ -147,7 +147,7 @@ public class SuperService implements Observable {
      * @throws ValidationException .
      */
     public void removeFriend(String id, List<String> ids) {
-      /*  userValidator.validateEmail(id);
+        userValidator.validateEmail(id);
         User toremoveto;
         if((toremoveto= userService.findOne(id))==null)
             throw new ValidationException("User "+ id+ " does not exist!");
@@ -169,7 +169,7 @@ public class SuperService implements Observable {
         }
         if (!er.toString().equals(""))
             throw new NonExistingException(er.toString());
-*/
+
         //------------
         User toremove=userService.findOne(ids.get(0));
         notifyObservers(new ViewItemEvent(ChangeEventType.DELETE,new UserDTO(toremove)));
@@ -385,6 +385,7 @@ public class SuperService implements Observable {
     public void acceptRequest(String id1, String id2){
         validateRequest(id1, id2);
         friendshipService.acceptRequest(id1, id2);
+        notifyObservers(new ViewItemEvent(ChangeEventType.REMOVE,new UserDTO(userService.findOne(id2))));
     }
 
     /**
@@ -397,6 +398,7 @@ public class SuperService implements Observable {
     public void declineRequest(String id1, String id2){
         validateRequest(id1, id2);
         friendshipService.declineRequest(id1, id2);
+        notifyObservers(new ViewItemEvent(ChangeEventType.REMOVE,new UserDTO(userService.findOne(id2))));
     }
 
     /**
@@ -517,21 +519,11 @@ public class SuperService implements Observable {
 
     @Override
     public void addObserver(Observer e) {
-        observers.add(e);
-    }
-
-    @Override
-    public void removeObserver(Observer e) {
-        observers.remove(e);
+        observer=e;
     }
 
     @Override
     public void notifyObservers(Event t) {
-        System.out.println("*");
-        observers.forEach(observer -> observer.update(t));
-    }
-
-    public void deleteObservers(){
-        observers.clear();
+        observer.update(t);
     }
 }

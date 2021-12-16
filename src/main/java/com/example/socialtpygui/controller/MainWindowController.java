@@ -65,15 +65,11 @@ public class MainWindowController {
 
     @FXML
     private void handlerFriendsButton() throws IOException {
-        if(friendsView==null) {
-            FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("friends-view.fxml"));
-            friendsView = loader.load();
-            FriendsController friendsController= loader.getController();
-            friendsController.load(service,loggedUser);
-        }else {
-            borderPane.fireEvent(new UserSelected(UserSelected.USER,"1"));
-        }
-        borderPane.setCenter(friendsView);
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("friends-view.fxml"));
+        Pane pane = loader.load();
+        FriendsController friendsController= loader.getController();
+        friendsController.load(service,loggedUser);
+        borderPane.setCenter(pane);
     }
 
     @FXML

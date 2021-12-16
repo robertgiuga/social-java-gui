@@ -28,13 +28,11 @@ public class RequestItemController {
     @FXML
     private void handlerDeclineButton(){
         service.declineRequest(loggedUser.getId(), requestLabel.getId());
-        requestController.deleteItemFromGridPane(declineBtn.getId());
     }
 
     @FXML
     private void handlerAcceptButton(){
         service.acceptRequest(loggedUser.getId(), requestLabel.getId());
-        requestController.deleteItemFromGridPane(acceptBtn.getId());
     }
 
     public void setName(String name){
@@ -47,10 +45,6 @@ public class RequestItemController {
 
     public void setDate(LocalDate date){
         dateLabel.setText(String.valueOf(date));
-    }
-
-    public void setRequestController(RequestController requestController){
-        this.requestController = requestController;
     }
 
     public void setService(SuperService service){

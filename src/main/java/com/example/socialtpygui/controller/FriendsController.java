@@ -28,8 +28,7 @@ public class FriendsController implements Observer<ViewItemEvent> {
 
     private SuperService service;
     private User loggedUser;
-    private ObservableList<Node> friends;
-    private List<UserDTO> frnd;
+    private List<UserDTO> friends;
 
     /**
      * create a custom item of a friend to be displayed
@@ -57,32 +56,26 @@ public class FriendsController implements Observer<ViewItemEvent> {
         this.service= service;
         this.loggedUser=loggedUser;
         service.addObserver(this);
-        gridPane.addEventFilter(UserSelected.USER,this::handlerReload);
-        frnd= new ArrayList<>();
+
+        loadFriends();
+    }
+
+    private void loadFriends(){
+        friends=new ArrayList<>();
         service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {
             try {
                 Pane item= createItem(friendShipDTO);
                 gridPane.addRow(gridPane.getRowCount(),item);
-                frnd.add(friendShipDTO.getUser2());
+                friends.add(friendShipDTO.getUser2());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        friends=gridPane.getChildren();
     }
-
-    private void handlerReload(UserSelected t) {
-        if (t.getEventType().equals(UserSelected.USER)){
-            System.out.println("ai dat sa se dea reload");
-        }
-    }
-
 
     @Override
     public void update(ViewItemEvent viewItemEvent) {
-        System.out.println(gridPane.getChildren().size());
-        System.out.println(friends.size());
-        gridPane.getChildren().remove(friends.get(friends.size()-1));
-
+        gridPane.getChildren().remove(friends.indexOf(viewItemEvent.getUserDTO()));
+        friends.remove(viewItemEvent.getUserDTO());
     }
 }
