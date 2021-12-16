@@ -7,6 +7,11 @@ import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
+import com.example.socialtpygui.utils.events.ChangeEventType;
+import com.example.socialtpygui.utils.events.Event;
+import com.example.socialtpygui.utils.events.ViewItemEvent;
+import com.example.socialtpygui.utils.observer.Observable;
+import com.example.socialtpygui.utils.observer.Observer;
 
 
 import java.sql.Date;
@@ -17,13 +22,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
-public class SuperService {
+public class SuperService implements Observable {
     protected UserValidator userValidator;
     protected UserService userService;
     protected FriendshipService friendshipService;
     protected NetworkService networkService;
     protected MessageService messageService;
     protected MessageValidator messageValidator;
+
+    private List<Observer> observers=new ArrayList<>();
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
@@ -140,7 +147,7 @@ public class SuperService {
      * @throws ValidationException .
      */
     public void removeFriend(String id, List<String> ids) {
-        userValidator.validateEmail(id);
+      /*  userValidator.validateEmail(id);
         User toremoveto;
         if((toremoveto= userService.findOne(id))==null)
             throw new ValidationException("User "+ id+ " does not exist!");
@@ -162,6 +169,11 @@ public class SuperService {
         }
         if (!er.toString().equals(""))
             throw new NonExistingException(er.toString());
+*/
+        //------------
+        User toremove=userService.findOne(ids.get(0));
+        notifyObservers(new ViewItemEvent(ChangeEventType.DELETE,new UserDTO(toremove)));
+
     }
 
     /**
@@ -503,4 +515,23 @@ public class SuperService {
         return userService.findOne(email);
     }
 
+    @Override
+    public void addObserver(Observer e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer e) {
+        observers.remove(e);
+    }
+
+    @Override
+    public void notifyObservers(Event t) {
+        System.out.println("*");
+        observers.forEach(observer -> observer.update(t));
+    }
+
+    public void deleteObservers(){
+        observers.clear();
+    }
 }

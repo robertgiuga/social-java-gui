@@ -15,6 +15,7 @@ import com.example.socialtpygui.service.entityservice.UserService;
 import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -55,7 +56,6 @@ public class LogInApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
 
 
     private SuperService createSuperService(){

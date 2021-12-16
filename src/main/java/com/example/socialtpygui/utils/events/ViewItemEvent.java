@@ -1,19 +1,21 @@
 package com.example.socialtpygui.utils.events;
 
+import com.example.socialtpygui.domain.UserDTO;
+
 public class ViewItemEvent implements Event {
     private ChangeEventType type;
-    private int index;
+    private UserDTO userDTO;
 
-    public ViewItemEvent(ChangeEventType type, int index) {
+    public ViewItemEvent(ChangeEventType type, UserDTO userDTO) {
         this.type = type;
-        this.index = index;
+        this.userDTO = userDTO;
     }
 
     public ChangeEventType getType() {
         return type;
     }
 
-    public int getIndex() {
-        return index;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 }
