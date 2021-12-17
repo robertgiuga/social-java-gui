@@ -567,4 +567,6 @@ public class SuperService {
         messageService.removeGroup(id);
     }
 
+    public int sizeGroup() {return messageService.sizeGroup();}
+
 }

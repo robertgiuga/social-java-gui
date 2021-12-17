@@ -147,4 +147,6 @@ public class MessageService {
     public void removeGroup(int id){
         messageRepository.removeGroup(id);
     }
+
+    public int sizeGroup() {return messageRepository.sizeGroup();}
 }

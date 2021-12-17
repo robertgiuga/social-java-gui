@@ -423,5 +423,24 @@ public class MessageDb implements Repository<Integer, Message> {
         }
 
     }
+
+    public int sizeGroup() {
+        int size = 0;
+        String sqlCount = "select Count(*) from social_group";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCount))
+        {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {
+                size = resultSet.getInt(1);
+
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return size;
+    }
 }
 

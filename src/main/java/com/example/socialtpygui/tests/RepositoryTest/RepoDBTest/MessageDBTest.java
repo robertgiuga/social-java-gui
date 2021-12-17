@@ -1,13 +1,15 @@
 package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
-import com.example.socialtpygui.domain.Message;
-import com.example.socialtpygui.domain.ReplyMessage;
+import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.repository.db.MessageDb;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class MessageDBTest {
@@ -22,6 +24,10 @@ public class MessageDBTest {
         testFindAllMessageBetweenTwoUsers();
         testRemoveAndSaveSize();
         testGetAllEmailsFromExistingConversation();
+        testGetUserGroups();
+        testGetGroup();
+        testAddRemoveUserToGroup();
+        testAddRemoveGroup();
     }
 
     private static void testFindOne()
@@ -72,4 +78,58 @@ public class MessageDBTest {
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gdsmail.com");
         assert (list.size() == 0);
     }
+
+    private static void testGetUserGroups()
+    {
+        List<GroupDTO> list = messageDBTest.getUserGroups("gg@gmail.com");
+        assert (list.size() == 2);
+        List<String> nameGroups = new ArrayList<>();
+        list.forEach(groupDTO -> {nameGroups.add(groupDTO.getNameGroup());});
+        assert (nameGroups.contains("Grupa223"));
+        assert (nameGroups.contains("CabanaMunte"));
+        List<Integer> numberOfUsers = new ArrayList<>();
+        list.forEach(groupDTO -> {numberOfUsers.add(groupDTO.getMembersEmail().size());});
+        assert (numberOfUsers.contains(4));
+        assert (numberOfUsers.contains(3));
+    }
+
+    private static void testGetGroup()
+    {
+        assert (messageDBTest.getGroup(1).getNameGroup().equals("Grupa223"));
+        assert (messageDBTest.getGroup(2).getNameGroup().equals("CabanaMunte"));
+    }
+
+    private static void testAddRemoveUserToGroup()
+    {
+        User user = new User("Snow", "John", "snj@gmail.com", "parola2");
+        List<String> list = new ArrayList<>(messageDBTest.getGroup(2).getMembersEmail());
+        assert (! list.contains(user.getId()));
+        messageDBTest.addUserToGroup(user, 2);
+        assert (list.contains(user.getId()));
+        messageDBTest.removeUserFromGroup("snj@gmail.com", 2);
+        assert (! list.contains(user.getId()));
+    }
+
+
+    private static void testAddRemoveGroup()
+    {
+        List<User> listMembers = new ArrayList<>();
+        listMembers.add(new User("a", "b", "snj@gmail.com", "p")); listMembers.add(new User("a", "b", "gg@gmail.com", "p"));
+        assert (messageDBTest.sizeGroup() == 2);
+        messageDBTest.addGroup(new Group("Grup224", listMembers));
+        assert (messageDBTest.sizeGroup() == 3);
+        String sql = "select id from social_group order by id desc limit 1";
+        try(Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt("id");
+            assert (messageDBTest.sizeGroup() == 2);
+            messageDBTest.removeGroup(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } ;
+    }
+
+
 }
