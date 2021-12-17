@@ -506,11 +506,13 @@ public class SuperService {
     /**
      * @param email String
      * @return a list with GroupDTO, only the groups where the user with email "email" is in
+     * @throws NonExistingException, if the user with email "email" does not exist
      */
     public List<GroupDTO> getUserGroups(String email)
     {
         userValidator.validateEmail(email);
-        return messageService.getUserGroups(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        else{return messageService.getUserGroups(email);}
     }
 
     /**
@@ -527,28 +529,32 @@ public class SuperService {
      * @param email String
      * @param groupId Integer
      * @return null, if the user was not added and the user, if the user was added
+     * @throws NonExistingException, if the user with email "email" does not exist
      */
     public User addUserToGroup(String email, int groupId)
     {
         userValidator.validateEmail(email);
         User user = userService.findOne(email);
-        return messageService.addUserToGroup(user, groupId);
+        if (user == null){throw new NonExistingException("User does not exist!");}
+        else{return messageService.addUserToGroup(user, groupId);}
     }
 
     /**
-     * Remove a user from a group.
+     * Remove a user from a groupe, remove from group_user table.
      * @param email String
-     * @param groupId Integer
+     * @param groupId Intege
+     * @throws NonExistingException, if the user with email "email" does not exist
      */
     public void removeUserFromGroup(String email, int groupId)
     {
         userValidator.validateEmail(email);
-        messageService.removeUserFromGroup(email, groupId);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        else{messageService.removeUserFromGroup(email, groupId);}
     }
 
     /**
-     * Add a group.
-     * @param groupDTO Group
+     * Add a group, add in table social_group and in table group_user.
+     * @param groupDTO GroupDTO
      * @return null, if the group was not added and the group, if the group was added
      */
     public Group addGroup(GroupDTO groupDTO)
@@ -560,13 +566,18 @@ public class SuperService {
     }
 
     /**
-     * Remove a group, with a specify id.
+     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
+     * the group from social_group
      * @param id Integer
      */
     public void removeGroup(int id){
         messageService.removeGroup(id);
     }
 
+    /**
+     * @return the number of groups
+     */
     public int sizeGroup() {return messageService.sizeGroup();}
 
 }

@@ -4,6 +4,7 @@ import com.example.socialtpygui.controller.LogInController;
 import com.example.socialtpygui.controller.MainWindowController;
 import com.example.socialtpygui.controller.SearchController;
 import com.example.socialtpygui.domain.Group;
+import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.repository.db.FriendshipDb;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
 import com.example.socialtpygui.repository.db.MessageDb;
@@ -28,6 +29,7 @@ import javafx.stage.StageStyle;
 import javax.xml.transform.Source;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LogInApplication extends Application {
     private double yCord;
@@ -73,7 +75,6 @@ public class LogInApplication extends Application {
         MessageService messageService = new MessageService(messageDb);
         MessageValidator messageValidator= new MessageValidator(userValidator);
         SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator);
-        messageService.removeGroup(1);
         return service;
     }
 

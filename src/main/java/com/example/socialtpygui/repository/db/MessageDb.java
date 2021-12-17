@@ -345,7 +345,7 @@ public class MessageDb implements Repository<Integer, Message> {
     }
 
     /**
-     * Remove a user from a group.
+     * Remove a user from a groupe, remove from group_user table.
      * @param email String
      * @param groupId Integer
      */
@@ -363,25 +363,22 @@ public class MessageDb implements Repository<Integer, Message> {
     }
 
     /**
-     * Add a group.
+     * Add a group, add in table social_group and in table group_user.
      * @param group Group
      * @return null, if the group was not added and the group, if the group was added
      */
     public Group addGroup(Group group)
     {
-        String sql = "insert into social_group(name) values (?)";
-        String sqlSelectId = "select id from social_group order by id desc limit 1";
+        String sql = "insert into social_group(name) values (?) returning id";
         String sqlInsertInGroupUser = "insert into group_user(group_id, email) values (?, ?)";
 
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlSelectId);
             PreparedStatement preparedStatement2 = connection.prepareStatement(sqlInsertInGroupUser)) {
             preparedStatement.setString(1, group.getNameGroup());
-            preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement1.executeQuery();
-            resultSet.next();
-            int id = resultSet.getInt("id");
+            ResultSet resultSet1 = preparedStatement.executeQuery();
+            resultSet1.next();
+            int id = resultSet1.getInt("id");
             group.setId(id);
             for (User user : group.getMembersList()){
                 preparedStatement2.setInt(1, id);
@@ -396,24 +393,21 @@ public class MessageDb implements Repository<Integer, Message> {
     }
 
     /**
-     * Remove a group, with a specify id.
+     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
+     * the group from social_group
      * @param id Integer
      */
     public void removeGroup(int id){
-        String sqlSelectAllMessages = "select message from message_recipient where group_id = ?";
         String sqlRemoveGroup = "delete from social_group where id = ?";
         String sqlRemoveGroupUser = "delete from group_user where group_id = ?";
+        String sqlRemoveMessageAndMessageRecipient = "with t1 as (delete from message_recipient where group_id = ? returning message) delete from message where id in (select distinct * from t1)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectAllMessages);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlRemoveMessageAndMessageRecipient);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlRemoveGroup);
             PreparedStatement preparedStatement2 = connection.prepareStatement(sqlRemoveGroupUser)) {
             preparedStatement.setInt(1,id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next())
-            {
-                int messageId = resultSet.getInt("message");
-                remove(messageId);
-            }
+            preparedStatement.executeUpdate();
             preparedStatement1.setInt(1, id);
             preparedStatement2.setInt(1, id);
             preparedStatement2.executeUpdate();
@@ -424,6 +418,9 @@ public class MessageDb implements Repository<Integer, Message> {
 
     }
 
+    /**
+     * @return the number of groups
+     */
     public int sizeGroup() {
         int size = 0;
         String sqlCount = "select Count(*) from social_group";

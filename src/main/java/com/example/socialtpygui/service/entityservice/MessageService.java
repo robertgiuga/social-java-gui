@@ -121,7 +121,7 @@ public class MessageService {
     }
 
     /**
-     * Remove a user from a group.
+     * Remove a user from a groupe, remove from group_user table.
      * @param email String
      * @param groupId Integer
      */
@@ -131,7 +131,7 @@ public class MessageService {
     }
 
     /**
-     * Add a group.
+     * Add a group, add in table social_group and in table group_user.
      * @param group Group
      * @return null, if the group was not added and the group, if the group was added
      */
@@ -141,12 +141,17 @@ public class MessageService {
     }
 
     /**
-     * Remove a group, with a specify id.
+     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
+     * the group from social_group
      * @param id Integer
      */
     public void removeGroup(int id){
         messageRepository.removeGroup(id);
     }
 
+    /**
+     * @return the number of groups
+     */
     public int sizeGroup() {return messageRepository.sizeGroup();}
 }

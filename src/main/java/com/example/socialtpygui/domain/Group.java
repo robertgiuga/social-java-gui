@@ -20,7 +20,7 @@ public class Group extends Entity<Integer>{
     }
 
     /**
-     * @return list of users, users which is in this group
+     * @return list of users, users which are in this group
      */
     public List<User> getMembersList() {
         return membersList;

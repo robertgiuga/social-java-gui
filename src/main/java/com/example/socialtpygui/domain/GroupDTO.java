@@ -36,7 +36,7 @@ public class GroupDTO {
     }
 
     /**
-     * @return list with members emails
+     * @return the list with the members' id(email)
      */
     public List<String> getMembersEmail() {
         return membersEmail;
