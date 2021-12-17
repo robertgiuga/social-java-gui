@@ -154,7 +154,8 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
                 preparedStatement2.setString(3, emailUser2);
                 ResultSet resultSet1 = preparedStatement2.executeQuery();
                 if (resultSet1.next())
-                    resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+                    if(resultSet1.getInt("group_id") == 0)
+                        resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
             }
         }
         catch (SQLException throwables) {
