@@ -346,16 +346,16 @@ public class MessageDb implements Repository<Integer, Message> {
 
     /**
      * Remove a user from a group.
-     * @param user User
+     * @param email String
      * @param groupId Integer
      */
-    public void removeUserFromGroup(User user, int groupId)
+    public void removeUserFromGroup(String email, int groupId)
     {
         String sqlLeavingUserFromGroup = "delete from group_user where group_id = ? and email = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sqlLeavingUserFromGroup)) {
             preparedStatement.setInt(1, groupId);
-            preparedStatement.setString(2, user.getId());
+            preparedStatement.setString(2, email);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -400,24 +400,24 @@ public class MessageDb implements Repository<Integer, Message> {
      * @param id Integer
      */
     public void removeGroup(int id){
-        List<Integer> messageIdList = new ArrayList<>();
         String sqlSelectAllMessages = "select message from message_recipient where group_id = ?";
-        String sqlRemoveMessage = "delete from message where id = ?";
         String sqlRemoveGroup = "delete from social_group where id = ?";
+        String sqlRemoveGroupUser = "delete from group_user where group_id = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectAllMessages);
-            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlRemoveMessage);
-            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlRemoveGroup)) {
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlRemoveGroup);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlRemoveGroupUser)) {
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
                 int messageId = resultSet.getInt("message");
-                preparedStatement1.setInt(1,messageId);
-                preparedStatement1.executeUpdate();
+                remove(messageId);
             }
+            preparedStatement1.setInt(1, id);
             preparedStatement2.setInt(1, id);
             preparedStatement2.executeUpdate();
+            preparedStatement1.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

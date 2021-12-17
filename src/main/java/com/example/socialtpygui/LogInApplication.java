@@ -35,7 +35,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Tests.RunALL();
+        Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
@@ -73,7 +73,7 @@ public class LogInApplication extends Application {
         MessageService messageService = new MessageService(messageDb);
         MessageValidator messageValidator= new MessageValidator(userValidator);
         SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator);
-        messageDb.removeUserFromGroup(userDb.findOne("jon1@yahoo.com"), 1);
+        messageService.removeGroup(1);
         return service;
     }
 

@@ -1,8 +1,6 @@
 package com.example.socialtpygui.service.entityservice;
 
-import com.example.socialtpygui.domain.Message;
-import com.example.socialtpygui.domain.ReplyMessage;
-import com.example.socialtpygui.domain.ReplyMessageDTO;
+import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.repository.db.MessageDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.ValidationException;
@@ -76,7 +74,7 @@ public class MessageService {
      * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
      *                     the upright layers cannot know who to send to
      */
-    public void replayAll(ReplyMessageDTO replyMessageDTO)
+    /*public void replayAll(ReplyMessageDTO replyMessageDTO)
     {
         Message original = findOne(Integer.valueOf(replyMessageDTO.getOriginalId()));
         if (original == null) throw new NonExistingException("Original message doesn't exist!");
@@ -86,9 +84,67 @@ public class MessageService {
         replyMessageDTO.getResponse().setTo(to);
         ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
         messageRepository.saveReplyMessage(replyMessage);
-    }
+    }*/
+
 
     public int size() { return messageRepository.size(); }
 
     public Message remove(Integer id) { return messageRepository.remove(id); }
+
+    /**
+     * @param email String
+     * @return a list with GroupDTO, only the groups where the user with email "email" is in
+     */
+    public List<GroupDTO> getUserGroups(String email)
+    {
+        return messageRepository.getUserGroups(email);
+    }
+
+    /**
+     * @param id Integer
+     * @return a GroupDto which contain the group with id "id"
+     */
+    public GroupDTO getGroup(int id)
+    {
+        return messageRepository.getGroup(id);
+    }
+
+    /**
+     * Add a user to a specify group.
+     * @param user User
+     * @param groupId Integer
+     * @return null, if the user was not added and the user, if the user was added
+     */
+    public User addUserToGroup(User user, int groupId)
+    {
+        return messageRepository.addUserToGroup(user, groupId);
+    }
+
+    /**
+     * Remove a user from a group.
+     * @param email String
+     * @param groupId Integer
+     */
+    public void removeUserFromGroup(String email, int groupId)
+    {
+        messageRepository.removeUserFromGroup(email, groupId);
+    }
+
+    /**
+     * Add a group.
+     * @param group Group
+     * @return null, if the group was not added and the group, if the group was added
+     */
+    public Group addGroup(Group group)
+    {
+        return messageRepository.addGroup(group);
+    }
+
+    /**
+     * Remove a group, with a specify id.
+     * @param id Integer
+     */
+    public void removeGroup(int id){
+        messageRepository.removeGroup(id);
+    }
 }

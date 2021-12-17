@@ -409,13 +409,13 @@ public class SuperService {
      * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
      *                        the upright layers cannot know who to send to
      */
-    public void replayAll(ReplyMessageDTO replyMessageDTO){
+    /*public void replayAll(ReplyMessageDTO replyMessageDTO){
         userValidator.validateEmail(replyMessageDTO.getResponse().getFrom());
         if(!(replyMessageDTO.getResponse().getMessage().length()>0))
             throw new ValidationException("Message must not be null!");
         messageService.replayAll(replyMessageDTO);
 
-    }
+    }*/
 
     /**
      * @param completName
@@ -501,6 +501,70 @@ public class SuperService {
     {
         userValidator.validateEmail(email);
         return userService.findOne(email);
+    }
+
+    /**
+     * @param email String
+     * @return a list with GroupDTO, only the groups where the user with email "email" is in
+     */
+    public List<GroupDTO> getUserGroups(String email)
+    {
+        userValidator.validateEmail(email);
+        return messageService.getUserGroups(email);
+    }
+
+    /**
+     * @param id Integer
+     * @return a GroupDto which contain the group with id "id"
+     */
+    public GroupDTO getGroup(int id)
+    {
+        return messageService.getGroup(id);
+    }
+
+    /**
+     * Add a user to a specify group.
+     * @param email String
+     * @param groupId Integer
+     * @return null, if the user was not added and the user, if the user was added
+     */
+    public User addUserToGroup(String email, int groupId)
+    {
+        userValidator.validateEmail(email);
+        User user = userService.findOne(email);
+        return messageService.addUserToGroup(user, groupId);
+    }
+
+    /**
+     * Remove a user from a group.
+     * @param email String
+     * @param groupId Integer
+     */
+    public void removeUserFromGroup(String email, int groupId)
+    {
+        userValidator.validateEmail(email);
+        messageService.removeUserFromGroup(email, groupId);
+    }
+
+    /**
+     * Add a group.
+     * @param groupDTO Group
+     * @return null, if the group was not added and the group, if the group was added
+     */
+    public Group addGroup(GroupDTO groupDTO)
+    {
+        List<User> membersList = new ArrayList<>();
+        groupDTO.getMembersEmail().forEach(email->{membersList.add(userService.findOne(email));});
+        Group group = new Group(groupDTO.getNameGroup(), membersList);
+        return messageService.addGroup(group);
+    }
+
+    /**
+     * Remove a group, with a specify id.
+     * @param id Integer
+     */
+    public void removeGroup(int id){
+        messageService.removeGroup(id);
     }
 
 }
