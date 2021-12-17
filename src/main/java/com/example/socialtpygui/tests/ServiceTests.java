@@ -358,14 +358,14 @@ public class ServiceTests {
         List<String> list = new ArrayList<String>();
         list.add("andr@gamail.com");
         try {
-            Message newMessage = new Message("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-            service.sendMessage(newMessage);
+            MessageDTO newMessageDTO = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+            service.sendMessage(newMessageDTO);
             assert false;
         } catch (ValidationException e) {
             assert true;
         }
-        Message newMessage = new Message("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-        service.sendMessage(newMessage);
+        MessageDTO newMessageDTO = new MessageDTO("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+        service.sendMessage(newMessageDTO);
         String sql = "SELECT id FROM message ORDER BY ID DESC LIMIT 1";
 
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
@@ -379,13 +379,13 @@ public class ServiceTests {
             assert (messageDb.size() == 7);
             assert (messageDb.findOne(id) == null);
 
-            Message message = new Message("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-            ReplyMessageDTO newReplyMessageDTO = new ReplyMessageDTO(message, String.valueOf(1));
+            MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+            ReplyMessageDTO newReplyMessageDTO = new ReplyMessageDTO(messageDTO, String.valueOf(1));
             service.replyMessage(newReplyMessageDTO);
 
             try {
-                Message message1 = new Message("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-                ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(message1, String.valueOf(1));
+                MessageDTO messageDTO1 = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+                ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(messageDTO1, String.valueOf(1));
                 service.replyMessage(newReplyMessageDTO1);
                 assert false;
             } catch (ValidationException e) {
@@ -405,15 +405,15 @@ public class ServiceTests {
         list.clear();
         list.add("gg@gmail.com");
         try {
-            Message message = new Message("snj@gmail.com", list, "MesajTest", LocalDate.now());
-            service.sendMessage(message);
+            MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "MesajTest", LocalDate.now());
+            service.sendMessage(messageDTO);
             assert false;
         } catch (ValidationException e) {
             assert true;
         }
         try {
-            Message message = new Message("snj@gmail.com", list, "MesajTest", LocalDate.now());
-            ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(message, String.valueOf(1));
+            MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "MesajTest", LocalDate.now());
+            ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(messageDTO, String.valueOf(1));
             service.replyMessage(newReplyMessageDTO1);
             assert false;
         } catch (ValidationException e) {
@@ -614,25 +614,25 @@ public class ServiceTests {
 
     /*private static void testReplayAll() {
         //Test with invalid data.
-        Message message = new Message("andr@gamail.com", null, "De ce ne intrebi?", LocalDate.now());
-        ReplyMessageDTO replyMessageDTO = new ReplyMessageDTO(message, "87");
+        MessageDTO messageDTO = new MessageDTO("andr@gamail.com", null, "De ce ne intrebi?", LocalDate.now());
+        ReplyMessageDTO replyMessageDTO = new ReplyMessageDTO(messageDTO, "87");
         try {
             service.replayAll(replyMessageDTO);
             assert false;
         } catch (NonExistingException e) {
             assert true;
         }
-        message.setFrom("ddasda");
-        replyMessageDTO = new ReplyMessageDTO(message, "1");
+        messageDTO.setFrom("ddasda");
+        replyMessageDTO = new ReplyMessageDTO(messageDTO, "1");
         try {
             service.replayAll(replyMessageDTO);
             assert false;
         } catch (ValidationException e) {
             assert true;
         }
-        message.setFrom("andr@gamail.com");
-        message.setMessage("");
-        replyMessageDTO = new ReplyMessageDTO(message, "1");
+        messageDTO.setFrom("andr@gamail.com");
+        messageDTO.setMessage("");
+        replyMessageDTO = new ReplyMessageDTO(messageDTO, "1");
         try {
             service.replayAll(replyMessageDTO);
             assert false;
@@ -641,8 +641,8 @@ public class ServiceTests {
         }
 
         //Test with valid data.
-        message.setMessage("De ce ne intrebi?");
-        replyMessageDTO = new ReplyMessageDTO(message, "1");
+        messageDTO.setMessage("De ce ne intrebi?");
+        replyMessageDTO = new ReplyMessageDTO(messageDTO, "1");
         assert (messageService.size() == 7);
         service.replayAll(replyMessageDTO);
         assert (messageService.size() == 8);

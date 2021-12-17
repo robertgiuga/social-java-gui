@@ -2,6 +2,8 @@ package com.example.socialtpygui.repository.db;
 
 
 import com.example.socialtpygui.domain.*;
+import com.example.socialtpygui.domain.MessageDTO;
+import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.repository.Repository;
 import com.example.socialtpygui.service.validators.ValidationException;
 import java.sql.*;
@@ -9,7 +11,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-public class MessageDb implements Repository<Integer, Message> {
+public class MessageDb implements Repository<Integer, MessageDTO> {
     String url, username, password;
 
     public MessageDb(String url, String username, String password) {
@@ -20,8 +22,8 @@ public class MessageDb implements Repository<Integer, Message> {
 
 
     @Override
-    public Message findOne(Integer id) {
-        Message message = null;
+    public MessageDTO findOne(Integer id) {
+        MessageDTO messageDTO = null;
         String sql = "select * from message where id = ?";
         String sqlQueryMakeList = "select email from message_recipient where message = ?";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
@@ -39,43 +41,41 @@ public class MessageDb implements Repository<Integer, Message> {
             ResultSet resultSet= preparedStatement2.executeQuery();
             while (resultSet.next())
             {
-                message = new Message(resultSet.getString("ms_from"), listEmails, resultSet.getString("text"), LocalDate.parse(resultSet.getString("date")));
-                message.setId(resultSet.getInt("id"));
+                messageDTO = new MessageDTO(resultSet.getString("ms_from"), listEmails, resultSet.getString("text"), LocalDate.parse(resultSet.getString("date")));
+                messageDTO.setId(resultSet.getInt("id"));
             }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return message;
+        return messageDTO;
     }
 
 
     @Override
-    public Iterable<Message> findAll()
+    public Iterable<MessageDTO> findAll()
     {
         return null;
     }
 
     @Override
-    public Message save(Message entity) {
+    public MessageDTO save(MessageDTO entity) {
         if (entity==null)
             throw new ValidationException("Entity must not be null");
-        String sqlMessageTable = "insert into message (ms_from, text, date) values (?, ?, ?)";
+        String sqlMessageTable = "insert into message (ms_from, text, date) values (?, ?, ?) returning id";
         String sqlMessageRecipientTable = "insert into message_recipient(message, email) values (?, ?)";
-        String sqlSelectLastRecordMessage = "SELECT id FROM message ORDER BY ID DESC LIMIT 1";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement statement1 = connection.prepareStatement(sqlMessageTable);
-            PreparedStatement statement2 = connection.prepareStatement(sqlMessageRecipientTable);
-            PreparedStatement statement3 = connection.prepareStatement(sqlSelectLastRecordMessage))
+            PreparedStatement statement2 = connection.prepareStatement(sqlMessageRecipientTable))
         {
             statement1.setString(1, entity.getFrom());
             statement1.setString(2, entity.getMessage());
             statement1.setDate(3, Date.valueOf(entity.getData()));
-            statement1.executeUpdate();
-            ResultSet resultSet = statement3.executeQuery();
+            ResultSet resultSet = statement1.executeQuery();
             resultSet.next();
-            statement2.setInt(1, resultSet.getInt("id"));
-            entity.setId(resultSet.getInt("id"));
+            int id = resultSet.getInt(1);
+            statement2.setInt(1, id);
+            entity.setId(id);
             for (String email : entity.getTo())
             {
                 statement2.setString(2, email);
@@ -85,8 +85,9 @@ public class MessageDb implements Repository<Integer, Message> {
         catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return null;
+        return entity;
     }
+
 
     /**
      * Save a reply message.
@@ -94,7 +95,7 @@ public class MessageDb implements Repository<Integer, Message> {
      * @return null- if the given entity is saved
      * @throws ValidationException if the given entity is null.
      */
-    public Message saveReplyMessage(ReplyMessage replyMessage)
+    public MessageDTO saveReplyMessage(ReplyMessage replyMessage)
     {
         if (replyMessage == null) throw new ValidationException("Entity must not be null");
         String sqlMessageTable = "insert into message (ms_from, text, date, reply_to) values (?, ?, ?, ?)";
@@ -123,7 +124,7 @@ public class MessageDb implements Repository<Integer, Message> {
         catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return null;
+        return replyMessage;
     }
 
     /**
@@ -165,7 +166,7 @@ public class MessageDb implements Repository<Integer, Message> {
 
 
     @Override
-    public Message remove(Integer id)
+    public MessageDTO remove(Integer id)
     {
         String sql = "delete from message where id = ?";
         String sql1 = "delete from message_recipient where message = ?";

@@ -68,7 +68,7 @@ public class UserDb implements Repository<String,User> {
             throw new ValidationException("Entity must not be null");
 
         User a = this.findOne(entity.getId());
-        if(a != null) return a;
+        if(a != null) return null;
 
         String sql = "insert into users (email,first_name, last_name,password ) values (?, ?, ?,?)";
 
@@ -84,7 +84,7 @@ public class UserDb implements Repository<String,User> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return entity;
     }
 
     @Override

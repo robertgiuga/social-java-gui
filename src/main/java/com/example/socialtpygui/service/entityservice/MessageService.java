@@ -1,9 +1,11 @@
 package com.example.socialtpygui.service.entityservice;
 
 import com.example.socialtpygui.domain.*;
+import com.example.socialtpygui.domain.MessageDTO;
+import com.example.socialtpygui.domain.ReplyMessage;
+import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.repository.db.MessageDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
-import com.example.socialtpygui.service.validators.ValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ public class MessageService {
      * @return null- if the given entity is saved
      *         otherwise returns the entity (id already exists)
      */
-    public Message save(Message entity) {return messageRepository.save(entity);}
+    public MessageDTO save(MessageDTO entity) {return messageRepository.save(entity);}
 
     /**
      * Save a replay message.
@@ -58,7 +60,7 @@ public class MessageService {
      *      * @return null- if the given entity is saved
      *      *         otherwise returns the entity (id already exists)
      */
-    public Message saveReplyMessage(ReplyMessage replyMessage) {return messageRepository.saveReplyMessage(replyMessage);}
+    public MessageDTO saveReplyMessage(ReplyMessage replyMessage) {return messageRepository.saveReplyMessage(replyMessage);}
 
     /**
      * @param id -the id of the entity to be returned
@@ -66,17 +68,15 @@ public class MessageService {
      * @return the entity with the specified id
      * or null - if there is no entity with the given id
      */
-    public Message findOne(Integer id) {return messageRepository.findOne(id);}
+    public MessageDTO findOne(Integer id) {return messageRepository.findOne(id);}
 
     /**
      * replay with a message to all the users that the original message has been sent to
      *
-     * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
-     *                     the upright layers cannot know who to send to
      */
     /*public void replayAll(ReplyMessageDTO replyMessageDTO)
     {
-        Message original = findOne(Integer.valueOf(replyMessageDTO.getOriginalId()));
+        MessageDTO original = findOne(Integer.valueOf(replyMessageDTO.getOriginalId()));
         if (original == null) throw new NonExistingException("Original message doesn't exist!");
         Predicate<String> notSender =o -> !o.equals(replyMessageDTO.getResponse().getFrom());
         List<String> to = original.getTo().stream().filter(notSender).collect(Collectors.toList());
@@ -89,7 +89,6 @@ public class MessageService {
 
     public int size() { return messageRepository.size(); }
 
-    public Message remove(Integer id) { return messageRepository.remove(id); }
 
     /**
      * @param email String
@@ -154,4 +153,7 @@ public class MessageService {
      * @return the number of groups
      */
     public int sizeGroup() {return messageRepository.sizeGroup();}
+
+    public MessageDTO remove(Integer id) { return messageRepository.remove(id); }
+
 }

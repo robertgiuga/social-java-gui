@@ -1,14 +1,12 @@
 package com.example.socialtpygui.domainEvent;
 
-import com.example.socialtpygui.domain.Message;
-import com.example.socialtpygui.domain.ReplyMessage;
+import com.example.socialtpygui.domain.MessageDTO;
 import javafx.event.Event;
-import javafx.event.EventTarget;
 import javafx.event.EventType;
 
 public class DragMessage extends Event {
     private static final long serialVersionUID = 97924780751776547L;
-    private Message message;
+    private MessageDTO messageDTO;
 
     public static final EventType<DragMessage> MESSAGE = new EventType<>("MESSAGE");
     public static final EventType<DragMessage> ANY = MESSAGE;
@@ -18,17 +16,17 @@ public class DragMessage extends Event {
     /**
      * Constructor for Event DragMessage
      * @param eventType
-     * @param message
+     * @param messageDTO
      */
-    public DragMessage(EventType<? extends Event> eventType, Message message){
+    public DragMessage(EventType<? extends Event> eventType, MessageDTO messageDTO){
         super(eventType);
-        this.message = message;
+        this.messageDTO = messageDTO;
     }
 
     /**
      * @return field message
      */
-    public Message getMessage() {
-        return message;
+    public MessageDTO getMessage() {
+        return messageDTO;
     }
 }

@@ -124,7 +124,7 @@ public class SuperService {
                 er.append("Adding yourself as a friend is not permitted!");
                 continue;
             }
-            if(friendshipService.friendshipSave(new Friendship(toaddto.getId(),toadd.getId(), LocalDate.now())) != null){
+            if(friendshipService.friendshipSave(new Friendship(toaddto.getId(),toadd.getId(), LocalDate.now())) == null){
                 er.append("Friendship with").append(toadd.getId()).append("already exists!");
             }
         }
@@ -264,25 +264,25 @@ public class SuperService {
     /**
      * validate if the message could be real, if the sender and receiver exists and are not admins
      * validates if the friendship exist between the user to send and the ones to receive
-     * @param message the message to be tested
+     * @param messageDTO the message to be tested
      */
-    private void validateExistingMessageComponents(Message message)
+    private void validateExistingMessageComponents(MessageDTO messageDTO)
     {
-        if(userService.findOne(message.getFrom())==null)
-            throw new NonExistingException("User "+message.getFrom()+" does not exist!");
+        if(userService.findOne(messageDTO.getFrom())==null)
+            throw new NonExistingException("User "+ messageDTO.getFrom()+" does not exist!");
         StringBuilder er= new StringBuilder(" ");
-        for (String s : message.getTo()) {
+        for (String s : messageDTO.getTo()) {
 
             if (userService.findOne(s) == null)
                 er.append("User ").append(s).append(" does not exist!\n");
             boolean sem = false;
-            for (Tuple<String, LocalDate> t : friendshipService.getFriends(message.getFrom()))
+            for (Tuple<String, LocalDate> t : friendshipService.getFriends(messageDTO.getFrom()))
                 if (t.getLeft().equals(s)) {
                     sem = true;
                     break;
                 }
 
-            if (!sem) er.append("User with email ").append(message.getFrom()).append(" and user with email ").append(s).append(" are not friends!");
+            if (!sem) er.append("User with email ").append(messageDTO.getFrom()).append(" and user with email ").append(s).append(" are not friends!");
         }
         if (!er.toString().equals(" "))
             throw new ValidationException(er.toString());
@@ -292,11 +292,11 @@ public class SuperService {
      * Send a new message.
      * @throws com.example.socialtpygui.service.validators.ValidationException if the given entity is null.
      */
-    public void sendMessage(Message newMessage)
+    public void sendMessage(MessageDTO newMessageDTO)
     {
-        messageValidator.validate(newMessage);
-        validateExistingMessageComponents(newMessage);
-        messageService.save(newMessage);
+        messageValidator.validate(newMessageDTO);
+        validateExistingMessageComponents(newMessageDTO);
+        messageService.save(newMessageDTO);
     }
 
     /**
@@ -307,7 +307,7 @@ public class SuperService {
     {
         messageValidator.validate(newReplyMessageDTO.getResponse());
         validateExistingMessageComponents(newReplyMessageDTO.getResponse());
-        Message original;
+        MessageDTO original;
         if((original=messageService.findOne(Integer.valueOf(newReplyMessageDTO.getOriginalId())))==null)
             throw new ValidationException("ReplayMessage must replay to a valid Message ");
 
