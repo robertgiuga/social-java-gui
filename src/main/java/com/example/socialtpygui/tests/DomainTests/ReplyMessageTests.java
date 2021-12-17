@@ -1,7 +1,7 @@
 package com.example.socialtpygui.tests.DomainTests;
 
 
-import com.example.socialtpygui.domain.Message;
+import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.domain.User;
 
@@ -27,10 +27,10 @@ public class ReplyMessageTests {
         List<String> list = new ArrayList<>(); list.add("marian@gmail.com"); list.add("mihai@gmail.com");
         List<String> list1 = new ArrayList<>(); list.add("gulea@gmail.com"); list.add("marian@gmail.com");
         LocalDate date = LocalDate.of(2020, 1, 8);
-        Message message =  new Message( "mihai@gmail.com", list1, "Atentie!", date);
-        message.setId(43);
-        ReplyMessage replyMessage = new ReplyMessage("mihai@gmail.com", list, "Reminder!", date, message);
-        assert (replyMessage.getOriginal().equals(message));
+        MessageDTO messageDTO =  new MessageDTO( "mihai@gmail.com", list1, "Atentie!", date);
+        messageDTO.setId(43);
+        ReplyMessage replyMessage = new ReplyMessage("mihai@gmail.com", list, "Reminder!", date, messageDTO);
+        assert (replyMessage.getOriginal().equals(messageDTO));
 
     }
 

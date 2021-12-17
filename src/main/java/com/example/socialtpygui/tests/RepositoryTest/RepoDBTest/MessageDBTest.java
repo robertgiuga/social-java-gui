@@ -1,7 +1,7 @@
 package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
-import com.example.socialtpygui.domain.Message;
+import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.repository.db.MessageDb;
 
@@ -48,13 +48,13 @@ public class MessageDBTest {
     {
         assert (messageDBTest.size() == 7);
         List<String> list = new ArrayList<String>(); list.add("andr@gamail.com");
-        Message message = new Message("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-        messageDBTest.save(message);
+        MessageDTO messageDTO = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+        messageDBTest.save(messageDTO);
         assert (messageDBTest.size() == 8);
-        assert (messageDBTest.findOne(message.getId()) != null);
-        messageDBTest.remove(message.getId());
+        assert (messageDBTest.findOne(messageDTO.getId()) != null);
+        messageDBTest.remove(messageDTO.getId());
         assert (messageDBTest.size() == 7);
-        assert (messageDBTest.findOne(message.getId()) == null);
+        assert (messageDBTest.findOne(messageDTO.getId()) == null);
     }
 
     private static void testGetAllEmailsFromExistingConversation()
