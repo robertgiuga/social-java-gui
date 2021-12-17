@@ -1,12 +1,14 @@
 package com.example.socialtpygui.repository.db;
 
 
+import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.repository.Repository;
 import com.example.socialtpygui.service.validators.ValidationException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 public class MessageDb implements Repository<Integer, MessageDTO> {
@@ -263,6 +265,180 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             throwables.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * @param email String
+     * @return a list with GroupDTO, only the groups where the user with email "email" is in
+     */
+    public List<GroupDTO> getUserGroups(String email)
+    {
+        List<GroupDTO> returnList = new ArrayList<>();
+        String sql1 = "select id, name from group_user inner join social_group on group_user.group_id = social_group.id where email = ?";
+        String sql2 = "select email from group_user where group_id = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql1);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql2)) {
+            preparedStatement.setString(1,email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                int groupId = resultSet.getInt("id");
+                List<String> membersEmails = new ArrayList<>();
+                preparedStatement1.setInt(1, groupId);
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
+                while (resultSet1.next()){
+                    String memberEmail = resultSet1.getString("email");
+                    membersEmails.add(memberEmail);
+                }
+                returnList.add(new GroupDTO(groupId, name, membersEmails));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return returnList;
+    }
+
+    /**
+     * @param id Integer
+     * @return a GroupDto which contain the group with id "id"
+     */
+    public GroupDTO getGroup(int id)
+    {
+        String sql = "select name, group_user.email from social_group inner join group_user on social_group.id = group_user.group_id where id = ?";
+        List<String> membersEmails = new ArrayList<>();
+        String name = null;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                membersEmails.add(email);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new GroupDTO(id, name, membersEmails);
+    }
+
+    /**
+     * Add a user to a specify group.
+     * @param user User
+     * @param groupId Integer
+     * @return null, if the user was not added and the user, if the user was added
+     */
+    public User addUserToGroup(User user, int groupId)
+    {
+        String sql = "insert into group_user(group_id, email) values (?,?)";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, groupId);
+            preparedStatement.setString(2, user.getId());
+            preparedStatement.executeUpdate();
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Remove a user from a groupe, remove from group_user table.
+     * @param email String
+     * @param groupId Integer
+     */
+    public void removeUserFromGroup(String email, int groupId)
+    {
+        String sqlLeavingUserFromGroup = "delete from group_user where group_id = ? and email = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlLeavingUserFromGroup)) {
+            preparedStatement.setInt(1, groupId);
+            preparedStatement.setString(2, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add a group, add in table social_group and in table group_user.
+     * @param group Group
+     * @return null, if the group was not added and the group, if the group was added
+     */
+    public Group addGroup(Group group)
+    {
+        String sql = "insert into social_group(name) values (?) returning id";
+        String sqlInsertInGroupUser = "insert into group_user(group_id, email) values (?, ?)";
+
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlInsertInGroupUser)) {
+            preparedStatement.setString(1, group.getNameGroup());
+            ResultSet resultSet1 = preparedStatement.executeQuery();
+            resultSet1.next();
+            int id = resultSet1.getInt("id");
+            group.setId(id);
+            for (User user : group.getMembersList()){
+                preparedStatement2.setInt(1, id);
+                preparedStatement2.setString(2, user.getId());
+                preparedStatement2.executeUpdate();
+            }
+           return group;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
+     * the group from social_group
+     * @param id Integer
+     */
+    public void removeGroup(int id){
+        String sqlRemoveGroup = "delete from social_group where id = ?";
+        String sqlRemoveGroupUser = "delete from group_user where group_id = ?";
+        String sqlRemoveMessageAndMessageRecipient = "with t1 as (delete from message_recipient where group_id = ? returning message) delete from message where id in (select distinct * from t1)";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlRemoveMessageAndMessageRecipient);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlRemoveGroup);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlRemoveGroupUser)) {
+            preparedStatement.setInt(1,id);
+            preparedStatement.executeUpdate();
+            preparedStatement1.setInt(1, id);
+            preparedStatement2.setInt(1, id);
+            preparedStatement2.executeUpdate();
+            preparedStatement1.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * @return the number of groups
+     */
+    public int sizeGroup() {
+        int size = 0;
+        String sqlCount = "select Count(*) from social_group";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCount))
+        {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {
+                size = resultSet.getInt(1);
+
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return size;
     }
 }
 

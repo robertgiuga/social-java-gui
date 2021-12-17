@@ -1,5 +1,6 @@
 package com.example.socialtpygui.service.entityservice;
 
+import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.domain.ReplyMessageDTO;
@@ -72,10 +73,8 @@ public class MessageService {
     /**
      * replay with a message to all the users that the original message has been sent to
      *
-     * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
-     *                     the upright layers cannot know who to send to
      */
-    public void replayAll(ReplyMessageDTO replyMessageDTO)
+    /*public void replayAll(ReplyMessageDTO replyMessageDTO)
     {
         MessageDTO original = findOne(Integer.valueOf(replyMessageDTO.getOriginalId()));
         if (original == null) throw new NonExistingException("Original message doesn't exist!");
@@ -85,9 +84,76 @@ public class MessageService {
         replyMessageDTO.getResponse().setTo(to);
         ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
         messageRepository.saveReplyMessage(replyMessage);
-    }
+    }*/
+
 
     public int size() { return messageRepository.size(); }
 
+
+    /**
+     * @param email String
+     * @return a list with GroupDTO, only the groups where the user with email "email" is in
+     */
+    public List<GroupDTO> getUserGroups(String email)
+    {
+        return messageRepository.getUserGroups(email);
+    }
+
+    /**
+     * @param id Integer
+     * @return a GroupDto which contain the group with id "id"
+     */
+    public GroupDTO getGroup(int id)
+    {
+        return messageRepository.getGroup(id);
+    }
+
+    /**
+     * Add a user to a specify group.
+     * @param user User
+     * @param groupId Integer
+     * @return null, if the user was not added and the user, if the user was added
+     */
+    public User addUserToGroup(User user, int groupId)
+    {
+        return messageRepository.addUserToGroup(user, groupId);
+    }
+
+    /**
+     * Remove a user from a groupe, remove from group_user table.
+     * @param email String
+     * @param groupId Integer
+     */
+    public void removeUserFromGroup(String email, int groupId)
+    {
+        messageRepository.removeUserFromGroup(email, groupId);
+    }
+
+    /**
+     * Add a group, add in table social_group and in table group_user.
+     * @param group Group
+     * @return null, if the group was not added and the group, if the group was added
+     */
+    public Group addGroup(Group group)
+    {
+        return messageRepository.addGroup(group);
+    }
+
+    /**
+     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
+     * the group from social_group
+     * @param id Integer
+     */
+    public void removeGroup(int id){
+        messageRepository.removeGroup(id);
+    }
+
+    /**
+     * @return the number of groups
+     */
+    public int sizeGroup() {return messageRepository.sizeGroup();}
+
     public MessageDTO remove(Integer id) { return messageRepository.remove(id); }
+
 }

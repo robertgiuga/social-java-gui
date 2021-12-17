@@ -55,11 +55,14 @@ public class ServiceTests {
         testAcceptRequest();
         testDeclineRequest();
         testGetRequests();
-        testReplayAll();
+        //testReplayAll();
         testgetUsersByName();
         testfriendshipDate();
         testfriendshipRequestDate();
         testfriendRequest();
+        testGetUserGroups();
+        testGetGroup();
+        testAddRemoveUserToGroup();
     }
 
     private static void testAddUser() {
@@ -476,7 +479,7 @@ public class ServiceTests {
         }
 
         try {
-            service.sendRequest("gc@gmail.co", "gg@gmail.com");
+            service.sendRequest("gc@gmail.com", "gg@gmail.co");
             assert false;
         } catch (ValidationException e) {
             assert true;
@@ -609,7 +612,7 @@ public class ServiceTests {
 
     }
 
-    private static void testReplayAll() {
+    /*private static void testReplayAll() {
         //Test with invalid data.
         MessageDTO messageDTO = new MessageDTO("andr@gamail.com", null, "De ce ne intrebi?", LocalDate.now());
         ReplyMessageDTO replyMessageDTO = new ReplyMessageDTO(messageDTO, "87");
@@ -658,7 +661,7 @@ public class ServiceTests {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
+    }*/
 
     private static void testgetUsersByName()
     {
@@ -715,5 +718,37 @@ public class ServiceTests {
         } catch (NonExistingException e) {
             assert true;
         }
+    }
+
+
+    private static void testGetUserGroups()
+    {
+        List<GroupDTO> list = service.getUserGroups("gg@gmail.com");
+        assert (list.size() == 2);
+        List<String> nameGroups = new ArrayList<>();
+        list.forEach(groupDTO -> {nameGroups.add(groupDTO.getNameGroup());});
+        assert (nameGroups.contains("Grupa223"));
+        assert (nameGroups.contains("CabanaMunte"));
+        List<Integer> numberOfUsers = new ArrayList<>();
+        list.forEach(groupDTO -> {numberOfUsers.add(groupDTO.getMembersEmail().size());});
+        assert (numberOfUsers.contains(4));
+        assert (numberOfUsers.contains(3));
+    }
+
+    private static void testGetGroup()
+    {
+        assert (service.getGroup(1).getNameGroup().equals("Grupa223"));
+        assert (service.getGroup(2).getNameGroup().equals("CabanaMunte"));
+    }
+
+    private static void testAddRemoveUserToGroup()
+    {
+        User user = new User("Snow", "John", "snj@gmail.com", "parola2");
+        List<String> list = new ArrayList<>(service.getGroup(2).getMembersEmail());
+        assert (! list.contains(user.getId()));
+        service.addUserToGroup("snj@gmail.com", 2);
+        assert (list.contains(user.getId()));
+        service.removeUserFromGroup("snj@gmail.com", 2);
+        assert (! list.contains(user.getId()));
     }
 }

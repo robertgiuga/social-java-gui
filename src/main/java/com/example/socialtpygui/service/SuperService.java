@@ -409,13 +409,13 @@ public class SuperService {
      * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
      *                        the upright layers cannot know who to send to
      */
-    public void replayAll(ReplyMessageDTO replyMessageDTO){
+    /*public void replayAll(ReplyMessageDTO replyMessageDTO){
         userValidator.validateEmail(replyMessageDTO.getResponse().getFrom());
         if(!(replyMessageDTO.getResponse().getMessage().length()>0))
             throw new ValidationException("Message must not be null!");
         messageService.replayAll(replyMessageDTO);
 
-    }
+    }*/
 
     /**
      * @param completName
@@ -502,5 +502,82 @@ public class SuperService {
         userValidator.validateEmail(email);
         return userService.findOne(email);
     }
+
+    /**
+     * @param email String
+     * @return a list with GroupDTO, only the groups where the user with email "email" is in
+     * @throws NonExistingException, if the user with email "email" does not exist
+     */
+    public List<GroupDTO> getUserGroups(String email)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        else{return messageService.getUserGroups(email);}
+    }
+
+    /**
+     * @param id Integer
+     * @return a GroupDto which contain the group with id "id"
+     */
+    public GroupDTO getGroup(int id)
+    {
+        return messageService.getGroup(id);
+    }
+
+    /**
+     * Add a user to a specify group.
+     * @param email String
+     * @param groupId Integer
+     * @return null, if the user was not added and the user, if the user was added
+     * @throws NonExistingException, if the user with email "email" does not exist
+     */
+    public User addUserToGroup(String email, int groupId)
+    {
+        userValidator.validateEmail(email);
+        User user = userService.findOne(email);
+        if (user == null){throw new NonExistingException("User does not exist!");}
+        else{return messageService.addUserToGroup(user, groupId);}
+    }
+
+    /**
+     * Remove a user from a groupe, remove from group_user table.
+     * @param email String
+     * @param groupId Intege
+     * @throws NonExistingException, if the user with email "email" does not exist
+     */
+    public void removeUserFromGroup(String email, int groupId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        else{messageService.removeUserFromGroup(email, groupId);}
+    }
+
+    /**
+     * Add a group, add in table social_group and in table group_user.
+     * @param groupDTO GroupDTO
+     * @return null, if the group was not added and the group, if the group was added
+     */
+    public Group addGroup(GroupDTO groupDTO)
+    {
+        List<User> membersList = new ArrayList<>();
+        groupDTO.getMembersEmail().forEach(email->{membersList.add(userService.findOne(email));});
+        Group group = new Group(groupDTO.getNameGroup(), membersList);
+        return messageService.addGroup(group);
+    }
+
+    /**
+     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
+     * the group from social_group
+     * @param id Integer
+     */
+    public void removeGroup(int id){
+        messageService.removeGroup(id);
+    }
+
+    /**
+     * @return the number of groups
+     */
+    public int sizeGroup() {return messageService.sizeGroup();}
 
 }

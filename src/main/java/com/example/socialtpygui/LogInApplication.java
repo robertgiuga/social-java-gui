@@ -3,6 +3,8 @@ package com.example.socialtpygui;
 import com.example.socialtpygui.controller.LogInController;
 import com.example.socialtpygui.controller.MainWindowController;
 import com.example.socialtpygui.controller.SearchController;
+import com.example.socialtpygui.domain.Group;
+import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.repository.db.FriendshipDb;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
 import com.example.socialtpygui.repository.db.MessageDb;
@@ -24,7 +26,10 @@ import javafx.stage.Stage;
 import com.example.socialtpygui.tests.Tests;
 import javafx.stage.StageStyle;
 
+import javax.xml.transform.Source;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogInApplication extends Application {
     private double yCord;
