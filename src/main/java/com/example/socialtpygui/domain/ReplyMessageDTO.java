@@ -2,15 +2,15 @@ package com.example.socialtpygui.domain;
 
 
 public class ReplyMessageDTO {
-    private Message response;
+    private MessageDTO response;
     private String originalId;
 
-    public ReplyMessageDTO(Message response, String originalId) {
+    public ReplyMessageDTO(MessageDTO response, String originalId) {
         this.response = response;
         this.originalId = originalId;
     }
 
-    public Message getResponse() {
+    public MessageDTO getResponse() {
         return response;
     }
 
@@ -18,7 +18,7 @@ public class ReplyMessageDTO {
         return originalId;
     }
 
-    public void setResponse(Message response) {
+    public void setResponse(MessageDTO response) {
         this.response = response;
     }
 

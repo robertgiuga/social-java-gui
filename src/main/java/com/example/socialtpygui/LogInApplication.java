@@ -32,7 +32,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Tests.RunALL();
+        Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();

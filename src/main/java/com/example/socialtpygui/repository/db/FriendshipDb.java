@@ -71,7 +71,7 @@ public class FriendshipDb implements Repository<TupleOne<String>, Friendship> {
 
         Friendship friendship = this.findOne(entity.getId());
         if(friendship != null){
-            return friendship;
+            return null;
         }
 
         String sql = "insert into friendship (email1, email2, date ) values (?, ?, ?)";
@@ -87,7 +87,7 @@ public class FriendshipDb implements Repository<TupleOne<String>, Friendship> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return entity;
     }
 
     @Override
