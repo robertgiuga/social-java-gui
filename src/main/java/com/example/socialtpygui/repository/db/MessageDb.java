@@ -69,10 +69,13 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             statement1.setString(1, entity.getFrom());
             statement1.setString(2, entity.getMessage());
             statement1.setDate(3, Date.valueOf(entity.getData()));
-            Integer id = statement1.executeUpdate();
+            ResultSet resultSet = statement1.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt(1);
             statement2.setInt(1, id);
             entity.setId(id);
-            for (String email : entity.getTo()) {
+            for (String email : entity.getTo())
+            {
                 statement2.setString(2, email);
                 statement2.executeUpdate();
             }
@@ -82,6 +85,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return entity;
     }
+
 
     /**
      * Save a reply message.
