@@ -14,6 +14,13 @@ public class GroupDTO {
         group.getMembersList().forEach(user->{this.membersEmail.add(user.getId());});
     }
 
+    public GroupDTO(int id, String nameGroup, List<String> membersEmail)
+    {
+        this.membersEmail = membersEmail;
+        this.nameGroup = nameGroup;
+        this.id = id;
+    }
+
     /**
      * @return id of this group
      */
