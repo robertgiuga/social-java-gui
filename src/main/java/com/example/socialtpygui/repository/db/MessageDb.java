@@ -60,24 +60,19 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     public MessageDTO save(MessageDTO entity) {
         if (entity==null)
             throw new ValidationException("Entity must not be null");
-        String sqlMessageTable = "insert into message (ms_from, text, date) values (?, ?, ?)";
+        String sqlMessageTable = "insert into message (ms_from, text, date) values (?, ?, ?) returning id";
         String sqlMessageRecipientTable = "insert into message_recipient(message, email) values (?, ?)";
-        String sqlSelectLastRecordMessage = "SELECT id FROM message ORDER BY ID DESC LIMIT 1";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement statement1 = connection.prepareStatement(sqlMessageTable);
-            PreparedStatement statement2 = connection.prepareStatement(sqlMessageRecipientTable);
-            PreparedStatement statement3 = connection.prepareStatement(sqlSelectLastRecordMessage))
+            PreparedStatement statement2 = connection.prepareStatement(sqlMessageRecipientTable))
         {
             statement1.setString(1, entity.getFrom());
             statement1.setString(2, entity.getMessage());
             statement1.setDate(3, Date.valueOf(entity.getData()));
-            statement1.executeUpdate();
-            ResultSet resultSet = statement3.executeQuery();
-            resultSet.next();
-            statement2.setInt(1, resultSet.getInt("id"));
-            entity.setId(resultSet.getInt("id"));
-            for (String email : entity.getTo())
-            {
+            Integer id = statement1.executeUpdate();
+            statement2.setInt(1, id);
+            entity.setId(id);
+            for (String email : entity.getTo()) {
                 statement2.setString(2, email);
                 statement2.executeUpdate();
             }
