@@ -69,14 +69,10 @@ public class MessageDBTest {
     {
         List<String> list = messageDBTest.getAllEmailsFromSendMessage("gg@gmail.com");
         assert (list.size() == 3);
-        //assert (list.get(0).equals("jon1@yahoo.com"));
-        //assert (list.get(1).equals("snj@gmail.com"));
         list = messageDBTest.getAllEmailsFromSendMessage("ds");
         assert (list.size() == 0);
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gmail.com");
         assert (list.size() == 2);
-        //assert (list.get(1).equals("aand@hotmail.com"));
-        //assert (list.get(0).equals("jon1@yahoo.com"));
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gdsmail.com");
         assert (list.size() == 0);
     }
