@@ -26,7 +26,7 @@ public class ConversationItemController {
 
     /**
      * handle the clicks
-     * raise a new UserSelect Event with the id of the user which is displayed
+     * raise a new ItemSelect Event with the id of the user or the group which is displayed(selected)
      */
     public void handlerMouseClick(MouseEvent mouseEvent) {
         if (isGroup)

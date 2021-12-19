@@ -65,7 +65,7 @@ public class ConversationController {
 
 
     /**
-     * loads the gridPane with friends with active conversation.
+     * loads the gridPane with friends and groups with active conversation.
      */
     public void load()
     {

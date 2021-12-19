@@ -44,7 +44,7 @@ public class MessageController {
     }
 
     /**
-     * handle the custom UserSelected Event
+     * handle the custom ItemSelected Event
      * @param e .
      * @return
      */
