@@ -63,6 +63,7 @@ public class ServiceTests {
         testGetUserGroups();
         testGetGroup();
         testAddRemoveUserToGroup();
+        testGetGroupMessages();
     }
 
     private static void testAddUser() {
@@ -750,5 +751,13 @@ public class ServiceTests {
         assert (list.contains(user.getId()));
         service.removeUserFromGroup("snj@gmail.com", 2);
         assert (! list.contains(user.getId()));
+    }
+
+    private static void testGetGroupMessages()
+    {
+        List<ReplyMessage> list = messageService.getGroupMessages(1);
+        assert (list.size() == 1);
+        assert (list.get(0).equals(messageService.findOne(20)));
+        assert (list.get(0).getOriginal() == null);
     }
 }

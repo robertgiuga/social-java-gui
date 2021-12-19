@@ -440,5 +440,28 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return size;
     }
+
+    /**
+     * @param groupId Integer
+     * @return a list of replyMessage, it returns all the messages from a group
+     * if ReplayMessage has currentMessage null that means it is a Message entity
+     */
+    public List<ReplyMessage> getGroupMessages(int groupId)
+    {
+        List<ReplyMessage> returnList = new ArrayList<>();
+        String sql = "select distinct message.id, message.reply_to from message inner join message_recipient on message.id = message_recipient.message where message_recipient.group_id = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                returnList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return returnList;
+    }
 }
 
