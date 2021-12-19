@@ -301,14 +301,6 @@ public class ServiceTests {
             assert true;
         }
 
-        /*try {
-            YearMonth date= YearMonth.parse("2020-18", DateTimeFormatter.ofPattern("yyyy-MM"));
-            Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@sad.", date);
-            assert false;
-        }catch (ValidationException exception){
-            assert true;
-        }*/
-
         YearMonth date = YearMonth.parse("2021-10", DateTimeFormatter.ofPattern("yyyy-MM"));
         Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@gamail.com", date);
         long size = StreamSupport.stream(friends.spliterator(), false).count();
@@ -327,9 +319,6 @@ public class ServiceTests {
     private static void testGetAllConversation() {
         List<String> list = service.getAllConversation("gg@gmail.com");
         assert (list.size() == 4);
-        //assert (list.get(0).equals("jon1@yahoo.com"));
-        //assert (list.get(1).equals("snj@gmail.com"));
-        //assert (list.get(2).equals("aand@hotmail.com"));
         try {
             list = service.getAllConversation("dsa");
             assert false;
