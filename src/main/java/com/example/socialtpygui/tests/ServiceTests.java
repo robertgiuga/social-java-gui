@@ -301,14 +301,6 @@ public class ServiceTests {
             assert true;
         }
 
-        /*try {
-            YearMonth date= YearMonth.parse("2020-18", DateTimeFormatter.ofPattern("yyyy-MM"));
-            Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@sad.", date);
-            assert false;
-        }catch (ValidationException exception){
-            assert true;
-        }*/
-
         YearMonth date = YearMonth.parse("2021-10", DateTimeFormatter.ofPattern("yyyy-MM"));
         Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@gamail.com", date);
         long size = StreamSupport.stream(friends.spliterator(), false).count();
@@ -326,10 +318,7 @@ public class ServiceTests {
 
     private static void testGetAllConversation() {
         List<String> list = service.getAllConversation("gg@gmail.com");
-        assert (list.size() == 3);
-        assert (list.get(0).equals("jon1@yahoo.com"));
-        assert (list.get(1).equals("snj@gmail.com"));
-        assert (list.get(2).equals("aand@hotmail.com"));
+        assert (list.size() == 4);
         try {
             list = service.getAllConversation("dsa");
             assert false;
@@ -354,7 +343,7 @@ public class ServiceTests {
     }
 
     private static void testSaveDelete() {
-        assert (messageDb.size() == 7);
+        assert (messageDb.size() == 8);
         List<String> list = new ArrayList<String>();
         list.add("andr@gamail.com");
         try {
@@ -373,10 +362,10 @@ public class ServiceTests {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int id = resultSet.getInt("id");
-            assert (messageDb.size() == 8);
+            assert (messageDb.size() == 9);
             assert (messageDb.findOne(id) != null);
             messageDb.remove(id);
-            assert (messageDb.size() == 7);
+            assert (messageDb.size() == 8);
             assert (messageDb.findOne(id) == null);
 
             MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
@@ -394,10 +383,10 @@ public class ServiceTests {
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             id = resultSet.getInt("id");
-            assert (messageDb.size() == 8);
+            assert (messageDb.size() == 9);
             assert (messageDb.findOne(id) != null);
             messageDb.remove(id);
-            assert (messageDb.size() == 7);
+            assert (messageDb.size() == 8);
             assert (messageDb.findOne(id) == null);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -747,8 +736,12 @@ public class ServiceTests {
         List<String> list = new ArrayList<>(service.getGroup(2).getMembersEmail());
         assert (! list.contains(user.getId()));
         service.addUserToGroup("snj@gmail.com", 2);
+        list.clear();
+        list = service.getGroup(2).getMembersEmail();
         assert (list.contains(user.getId()));
         service.removeUserFromGroup("snj@gmail.com", 2);
+        list.clear();
+        list = service.getGroup(2).getMembersEmail();
         assert (! list.contains(user.getId()));
     }
 }

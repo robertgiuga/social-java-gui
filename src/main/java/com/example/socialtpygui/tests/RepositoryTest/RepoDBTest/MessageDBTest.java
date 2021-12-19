@@ -54,29 +54,25 @@ public class MessageDBTest {
 
     private static void testRemoveAndSaveSize()
     {
-        assert (messageDBTest.size() == 7);
+        assert (messageDBTest.size() == 8);
         List<String> list = new ArrayList<String>(); list.add("andr@gamail.com");
         MessageDTO messageDTO = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
         messageDBTest.save(messageDTO);
-        assert (messageDBTest.size() == 8);
+        assert (messageDBTest.size() == 9);
         assert (messageDBTest.findOne(messageDTO.getId()) != null);
         messageDBTest.remove(messageDTO.getId());
-        assert (messageDBTest.size() == 7);
+        assert (messageDBTest.size() == 8);
         assert (messageDBTest.findOne(messageDTO.getId()) == null);
     }
 
     private static void testGetAllEmailsFromExistingConversation()
     {
         List<String> list = messageDBTest.getAllEmailsFromSendMessage("gg@gmail.com");
-        assert (list.size() == 2);
-        assert (list.get(0).equals("jon1@yahoo.com"));
-        assert (list.get(1).equals("snj@gmail.com"));
+        assert (list.size() == 3);
         list = messageDBTest.getAllEmailsFromSendMessage("ds");
         assert (list.size() == 0);
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gmail.com");
         assert (list.size() == 2);
-        assert (list.get(1).equals("aand@hotmail.com"));
-        assert (list.get(0).equals("jon1@yahoo.com"));
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gdsmail.com");
         assert (list.size() == 0);
     }
@@ -107,8 +103,12 @@ public class MessageDBTest {
         List<String> list = new ArrayList<>(messageDBTest.getGroup(2).getMembersEmail());
         assert (! list.contains(user.getId()));
         messageDBTest.addUserToGroup(user, 2);
+        list.clear();
+        list = messageDBTest.getGroup(2).getMembersEmail();
         assert (list.contains(user.getId()));
         messageDBTest.removeUserFromGroup("snj@gmail.com", 2);
+        list.clear();
+        list = messageDBTest.getGroup(2).getMembersEmail();
         assert (! list.contains(user.getId()));
     }
 
@@ -126,8 +126,8 @@ public class MessageDBTest {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int id = resultSet.getInt("id");
-            assert (messageDBTest.sizeGroup() == 2);
             messageDBTest.removeGroup(id);
+            assert (messageDBTest.sizeGroup() == 2);
         } catch (SQLException e) {
             e.printStackTrace();
         } ;
