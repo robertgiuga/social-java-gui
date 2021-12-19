@@ -27,8 +27,8 @@ public interface Repository<ID, E extends Entity<ID>> {
 
     /**
      * @param entity entity must be not null
-     * @return null- if the given entity is saved
-     * otherwise returns the entity (id already exists)
+     * @return null- if the given entity already exists
+     * otherwise returns the entity
      * @throws ValidationException      if the entity is not valid
      * @throws IllegalArgumentException if the given entity is null.     *
      */

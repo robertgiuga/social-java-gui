@@ -28,7 +28,7 @@ public class UserService {
     public void addUser(User newUser){
         validator.validate(newUser);
 
-        if(repositoryUser.save(newUser)!=null)
+        if(repositoryUser.save(newUser)==null)
             throw new ValidationException("The email already exist!");
     }
 

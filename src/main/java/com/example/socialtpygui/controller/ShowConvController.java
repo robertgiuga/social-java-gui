@@ -1,7 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.domain.Message;
+import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.domain.User;
@@ -60,7 +60,7 @@ public class ShowConvController {
         to.add(email);
         //Pane item = null;
         if(dragMessage == null) {
-            service.sendMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
+            service.sendMessage(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
             //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), null));
             //item.getChildren().forEach(node -> {
             //    if (node instanceof Label)
@@ -68,7 +68,7 @@ public class ShowConvController {
             //});
         }
         else{
-            service.replyMessage(new ReplyMessageDTO(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
+            service.replyMessage(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
             //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage()));
             //item.getChildren().forEach(node -> {
             //    if (node instanceof Label)

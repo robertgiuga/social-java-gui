@@ -4,14 +4,14 @@ package com.example.socialtpygui.domain;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Message extends Entity<Integer>{
+public class MessageDTO extends Entity<Integer>{
     private String from;
     private List<String> to;
     private String message;
     private LocalDate data;
 
-    public Message(){}
-    public Message(String from, List<String> to, String message, LocalDate data) {
+    public MessageDTO(){}
+    public MessageDTO(String from, List<String> to, String message, LocalDate data) {
         this.from = from;
         this.to = to;
         this.message = message;
