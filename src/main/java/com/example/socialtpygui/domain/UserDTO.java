@@ -1,11 +1,12 @@
 package com.example.socialtpygui.domain;
 
-public class UserDTO {
+public class UserDTO extends Entity<String> {
     String id;
     String firstName;
     String lastName;
 
     public UserDTO(User user){
+
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

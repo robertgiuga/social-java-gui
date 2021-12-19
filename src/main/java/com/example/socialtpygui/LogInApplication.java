@@ -16,16 +16,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import com.example.socialtpygui.tests.Tests;
 import javafx.stage.StageStyle;
-
-import javax.xml.transform.Source;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LogInApplication extends Application {
     private double yCord;
@@ -56,7 +50,6 @@ public class LogInApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
 
 
     private SuperService createSuperService(){

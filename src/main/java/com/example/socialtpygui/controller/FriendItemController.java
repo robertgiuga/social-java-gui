@@ -17,7 +17,6 @@ public class FriendItemController {
     @FXML
     private Label dateLbl;
 
-    private FriendsController friendsController;
     private SuperService service;
     private User loggedUser;
 
@@ -28,8 +27,6 @@ public class FriendItemController {
     @FXML
     private void handlerDeleteButton(){
         service.removeFriend(loggedUser.getId(), Arrays.asList(nameLbl.getId()));
-      //  deleteBtn.fireEvent(new UserSelected(UserSelected.USER_DELETE,nameLbl.getId()));
-        friendsController.deleteItemFromGridPane(deleteBtn.getId());
     }
 
     /**
@@ -54,13 +51,6 @@ public class FriendItemController {
      */
     public void setEmail(String email){ nameLbl.setId(email);}
 
-    /**
-     * sets the friendsController, being as parent for notify of deleting an item
-     * @param friendsController .
-     */
-    public void setFriendsController(FriendsController friendsController) {
-        this.friendsController = friendsController;
-    }
 
     /**
      * sets the service
