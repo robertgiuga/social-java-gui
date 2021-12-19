@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -25,11 +26,14 @@ public class LogInController {
     private PasswordField passwordTxt;
     @FXML
     private Button logInBtn;
+    @FXML
+    private AnchorPane mainPane;
 
     private SuperService service;
     private double yCord;
     private double xCord;
     private MainWindowController mainWindowController;
+
 
     @FXML
     private void handlerLogIn() throws IOException {

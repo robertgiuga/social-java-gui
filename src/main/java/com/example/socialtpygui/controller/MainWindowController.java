@@ -2,11 +2,13 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -15,7 +17,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
@@ -46,6 +50,8 @@ public class MainWindowController {
     @FXML
     private Button extindBtnMW;
 
+    Pane friendsView=null;
+
 
     private SuperService service;
 
@@ -59,15 +65,11 @@ public class MainWindowController {
 
     @FXML
     private void handlerFriendsButton() throws IOException {
-        FXMLLoader loader= new FXMLLoader(LogInApplication.class.getResource("friends-view.fxml"));
-        AnchorPane panel= loader.load();
-
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("friends-view.fxml"));
+        Pane pane = loader.load();
         FriendsController friendsController= loader.getController();
         friendsController.load(service,loggedUser);
-
-        Pane view = new Pane(panel);
-
-        borderPane.setCenter(view);
+        borderPane.setCenter(pane);
     }
 
     @FXML
@@ -118,5 +120,28 @@ public class MainWindowController {
 
     public void handlerExtindButtonMW(ActionEvent actionEvent) {
         ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setFullScreen(true);
+    }
+
+    @FXML
+    private void handlerLogOutBtn() throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
+
+        AnchorPane panel= fxmlLoader.load();
+
+        LogInController logInController= fxmlLoader.getController();
+        logInController.setService(service);
+
+        Stage stage= new Stage();
+        Scene scene = new Scene(panel, 580, 460);
+        scene.getStylesheets().add(LogInApplication.class.getResource("log.css").toExternalForm());
+        scene.setFill(Color.TRANSPARENT);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setScene(scene);
+        stage.show();
+
+        Stage mainWnd =(Stage) borderPane.getScene().getWindow();
+        mainWnd.close();
+
     }
 }
