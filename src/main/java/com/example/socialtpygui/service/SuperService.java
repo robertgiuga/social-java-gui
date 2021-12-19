@@ -7,6 +7,11 @@ import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
+import com.example.socialtpygui.utils.events.ChangeEventType;
+import com.example.socialtpygui.utils.events.Event;
+import com.example.socialtpygui.utils.events.ViewItemEvent;
+import com.example.socialtpygui.utils.observer.Observable;
+import com.example.socialtpygui.utils.observer.Observer;
 
 
 import java.sql.Date;
@@ -17,13 +22,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
-public class SuperService {
+public class SuperService implements Observable {
     protected UserValidator userValidator;
     protected UserService userService;
     protected FriendshipService friendshipService;
     protected NetworkService networkService;
     protected MessageService messageService;
     protected MessageValidator messageValidator;
+
+    private Observer observer;
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
@@ -54,14 +61,6 @@ public class SuperService {
      */
     public void addUser(User newUser){
         userService.addUser(newUser);
-    }
-
-    /**
-     * Adds a new admin
-     * @param newUser the user to add as admin
-     */
-    public void addAdmin(User newUser){
-        userService.addAdmin(newUser);
     }
 
     /**
@@ -162,6 +161,11 @@ public class SuperService {
         }
         if (!er.toString().equals(""))
             throw new NonExistingException(er.toString());
+
+        //------------
+        User toremove=userService.findOne(ids.get(0));
+        notifyObservers(new ViewItemEvent(ChangeEventType.DELETE,new UserDTO(toremove)));
+
     }
 
     /**
@@ -373,6 +377,7 @@ public class SuperService {
     public void acceptRequest(String id1, String id2){
         validateRequest(id1, id2);
         friendshipService.acceptRequest(id1, id2);
+        notifyObservers(new ViewItemEvent(ChangeEventType.REMOVE,new UserDTO(userService.findOne(id2))));
     }
 
     /**
@@ -385,6 +390,7 @@ public class SuperService {
     public void declineRequest(String id1, String id2){
         validateRequest(id1, id2);
         friendshipService.declineRequest(id1, id2);
+        notifyObservers(new ViewItemEvent(ChangeEventType.REMOVE,new UserDTO(userService.findOne(id2))));
     }
 
     /**
@@ -404,7 +410,7 @@ public class SuperService {
         return users;
     }
 
-    /**
+  /*  /**
      * replay with a message to all the users that the original message has been sent to
      * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
      *                        the upright layers cannot know who to send to
@@ -418,7 +424,7 @@ public class SuperService {
     }*/
 
     /**
-     * @param completName
+     * @param completName .
      * @return Return a list with UserDto, where first_name and last_name contain completName.
      * @throws ValidationException if completName is empty
      */
@@ -429,8 +435,8 @@ public class SuperService {
     }
 
     /**
-     * @param email1
-     * @param email2
+     * @param email1 .
+     * @param email2 .
      * @return null if the friendship doesn t exist, and Date when the friendship was created if it exists
      * @throws ValidationException -> emails are invalid
      */
@@ -501,6 +507,17 @@ public class SuperService {
     {
         userValidator.validateEmail(email);
         return userService.findOne(email);
+    }
+
+    @Override
+    public void addObserver(Observer e) {
+        observer=e;
+    }
+
+    @Override
+    public void notifyObservers(Event t) {
+        if(observer != null)
+            observer.update(t);
     }
 
     /**
