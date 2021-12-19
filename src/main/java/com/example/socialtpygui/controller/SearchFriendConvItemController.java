@@ -1,6 +1,6 @@
 package com.example.socialtpygui.controller;
 
-import com.example.socialtpygui.domainEvent.UserSelected;
+import com.example.socialtpygui.domainEvent.ItemSelected;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -18,7 +18,7 @@ public class SearchFriendConvItemController {
      */
     @FXML
     private void handlerMouseClicked(){
-        anchorPane.fireEvent(new UserSelected(UserSelected.USER_SELECTED, nameLbl.getId()));
+        anchorPane.fireEvent(new ItemSelected(ItemSelected.USER_SELECTED, nameLbl.getId()));
     }
 
     /**

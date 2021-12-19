@@ -1,11 +1,10 @@
 package com.example.socialtpygui.controller;
 
-import com.example.socialtpygui.domainEvent.UserSelected;
+import com.example.socialtpygui.domainEvent.ItemSelected;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import org.w3c.dom.events.Event;
 
 public class ConversationItemController {
     @FXML
@@ -13,6 +12,8 @@ public class ConversationItemController {
 
     @FXML
     private Label nameLabel;
+
+    private boolean isGroup=false;
 
     /**
      * Set the name of the label.
@@ -28,6 +29,13 @@ public class ConversationItemController {
      * raise a new UserSelect Event with the id of the user which is displayed
      */
     public void handlerMouseClick(MouseEvent mouseEvent) {
-        anchorPaneConv.fireEvent(new UserSelected(UserSelected.USER_LOAD_MSJ, nameLabel.getId()));
+        if (isGroup)
+            anchorPaneConv.fireEvent(new ItemSelected(ItemSelected.GROUP_LOAD_MSJ, nameLabel.getId()));
+        else
+        anchorPaneConv.fireEvent(new ItemSelected(ItemSelected.USER_LOAD_MSJ, nameLabel.getId()));
+    }
+
+    public void setIsGroup(boolean group) {
+        isGroup = group;
     }
 }

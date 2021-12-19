@@ -2,10 +2,8 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.domainEvent.DragMessage;
-import com.example.socialtpygui.domainEvent.UserSelected;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.DragEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 

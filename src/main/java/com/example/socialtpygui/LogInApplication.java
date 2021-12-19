@@ -1,10 +1,6 @@
 package com.example.socialtpygui;
 
 import com.example.socialtpygui.controller.LogInController;
-import com.example.socialtpygui.controller.MainWindowController;
-import com.example.socialtpygui.controller.SearchController;
-import com.example.socialtpygui.domain.Group;
-import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.repository.db.FriendshipDb;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
 import com.example.socialtpygui.repository.db.MessageDb;
@@ -37,7 +33,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Tests.RunALL();
+       // Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
