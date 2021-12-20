@@ -750,7 +750,5 @@ public class ServiceTests {
     {
         List<ReplyMessage> list = messageService.getGroupMessages(1);
         assert (list.size() == 1);
-        assert (list.get(0).equals(messageService.findOne(20)));
-        assert (list.get(0).getOriginal() == null);
     }
 }
