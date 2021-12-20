@@ -3,6 +3,7 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.ItemSelected;
+import com.example.socialtpygui.domainEvent.LoadConvList;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import javafx.fxml.FXML;
@@ -62,6 +63,13 @@ public class MessageController {
         }
     }
 
+    private void handlerLoadConvList(LoadConvList e)
+    {
+        if (e.getEventType().equals(LoadConvList.LOAD_CONV)){
+            loadAllFriendsWithConv();
+        }
+    }
+
     /**
      * sets the service and loggedUser
      * @param service the SuperService
@@ -69,6 +77,7 @@ public class MessageController {
      */
     public void load(SuperService service, User loggedUser) throws IOException {
         convPane.getParent().addEventFilter(ItemSelected.ANY,this::handlerForSelectedFriend);
+        convPane.getParent().addEventFilter(LoadConvList.ANY,this::handlerLoadConvList);
         this.service=service;
         this.loggedUser=loggedUser;
         loadAllFriendsWithConv();
@@ -92,6 +101,8 @@ public class MessageController {
         conversationController.load();
         convPane.setCenter(item);
     }
+
+
 
     /**
      * load all messages between 2 users(logged user and other user,which is the user selected in GUI and contained
@@ -131,5 +142,10 @@ public class MessageController {
             System.out.println(exception.getMessage());
         }
         convPane.setCenter(item);
+    }
+
+    private void loadMembers()
+    {
+
     }
 }
