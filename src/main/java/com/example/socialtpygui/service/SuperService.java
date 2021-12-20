@@ -516,7 +516,8 @@ public class SuperService implements Observable {
 
     @Override
     public void notifyObservers(Event t) {
-        observer.update(t);
+        if(observer != null)
+            observer.update(t);
     }
 
     /**
