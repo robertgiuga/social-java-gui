@@ -2,7 +2,7 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
-import com.example.socialtpygui.domainEvent.UserSelected;
+import com.example.socialtpygui.domainEvent.ItemSelected;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;

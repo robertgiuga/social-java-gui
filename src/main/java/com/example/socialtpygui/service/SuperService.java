@@ -597,4 +597,11 @@ public class SuperService implements Observable {
      */
     public int sizeGroup() {return messageService.sizeGroup();}
 
+    /**
+     * @param groupId Integer
+     * @return a list of replyMessage, it returns all the messages from a group
+     * if ReplayMessage has currentMessage null that means it is a Message entity
+     */
+    public List<ReplyMessage> getGroupMessages(int groupId) {return messageService.getGroupMessages(groupId);}
+
 }

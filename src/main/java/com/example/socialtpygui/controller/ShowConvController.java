@@ -51,6 +51,8 @@ public class ShowConvController {
 
     private DragMessage dragMessage=null;
 
+    private int groupId;
+
     /**
      * send a message to user from conversation
      * @throws IOException
@@ -126,6 +128,39 @@ public class ShowConvController {
                 System.out.println(e.getMessage());
             }
 
+        });
+        gridShowMessages.autosize();
+    }
+
+    /**
+     * initialize loggedUser, service and groupId
+     * load into gridPane all conversation from a group
+     * @param service SuperService
+     * @param loggedUser User
+     * @param groupId Integer
+     */
+    public void loadGroup(SuperService service, User loggedUser, int groupId)
+    {
+        anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
+        this.loggedUser = loggedUser;
+        this.service = service;
+        this.groupId = groupId;
+        service.getGroupMessages(groupId).forEach(replyMessage -> {
+            try{
+                Pane item = createItem(replyMessage);
+                item.getChildren().forEach(node->{
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(replyMessage.getId()));
+                });
+                if(replyMessage.getFrom().equals(loggedUser.getId())){
+                    gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                }
+                else{
+                    gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                }
+            }catch (IOException e){
+                System.out.println(e.getMessage());
+            }
         });
         gridShowMessages.autosize();
     }
