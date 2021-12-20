@@ -601,4 +601,7 @@ public class SuperService implements Observable {
      */
     public List<ReplyMessage> getGroupMessages(int groupId) {return messageService.getGroupMessages(groupId);}
 
+    public ReplyMessageDTO replyMessageGroup(){
+        return null;
+    }
 }

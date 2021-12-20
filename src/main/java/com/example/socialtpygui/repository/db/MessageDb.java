@@ -394,7 +394,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     }
 
     /**
-     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * Remove a group, with a specify id. First remove all from message_group with group_id = "id"
      * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
      * the group from social_group
      * @param id Integer
