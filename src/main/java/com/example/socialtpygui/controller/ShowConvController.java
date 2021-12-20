@@ -9,6 +9,7 @@ import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -44,6 +45,9 @@ public class ShowConvController {
 
     @FXML
     private AnchorPane anchorPaneShowConvView;
+    @FXML
+    private Button settingsBtn;
+
 
     private User loggedUser;
 
@@ -126,6 +130,7 @@ public class ShowConvController {
      * @param email
      */
     public void load(SuperService service, User loggedUser, String email){
+        settingsBtn.setVisible(false);
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
         this.loggedUser = loggedUser;
         this.service = service;
@@ -220,5 +225,20 @@ public class ShowConvController {
             messageToReply.setText("replying to: "+m.getMessage().getMessage());
             this.dragMessage = m;
         }
+    }
+
+    /**
+     * create a groupSettings view
+     * @throws IOException
+     */
+    @FXML
+    private void handlerSettignsButton() throws IOException {
+        buttonSend.setDisable(true);
+        messageText.setDisable(true);
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("groupSettings-view.fxml"));
+        Pane item = loader.load();
+        GroupSettingsController controller=loader.getController();
+        controller.load(service,groupId);
+        scrollPaneShowConv.setContent(item);
     }
 }
