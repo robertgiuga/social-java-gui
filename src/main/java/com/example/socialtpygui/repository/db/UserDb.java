@@ -51,7 +51,6 @@ public class UserDb implements Repository<String,User> {
                 String firstName = resultSet.getString("first_name");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                Boolean admin = resultSet.getBoolean("admin");
 
                 User user = new User(firstName,lastName,email,password);
                 users.add(user);
@@ -89,7 +88,7 @@ public class UserDb implements Repository<String,User> {
 
     @Override
     public User remove(String s) {
-        User toremove = findOne(s);
+        User toRemove = findOne(s);
 
         String sql = "delete from users where email = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -101,7 +100,7 @@ public class UserDb implements Repository<String,User> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return toremove;
+        return toRemove;
     }
 
     @Override
