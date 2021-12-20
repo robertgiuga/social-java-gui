@@ -449,14 +449,13 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      * @return MessageDTO entity(added message)
      */
     public MessageDTO saveGroupMessage(MessageDTO entity, int idGroup) {
-        if (entity==null)
+        if (entity == null)
             throw new ValidationException("Entity must not be null");
         String sqlMessageTable = "insert into message (ms_from, text, date) values (?, ?, ?) returning id";
         String sqlMessageGroup = "insert into message_group(id_message, id_group)values (?, ?)";
-        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
-            PreparedStatement statement1 = connection.prepareStatement(sqlMessageTable);
-            PreparedStatement statement2 = connection.prepareStatement(sqlMessageGroup))
-        {
+        try (Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+             PreparedStatement statement1 = connection.prepareStatement(sqlMessageTable);
+             PreparedStatement statement2 = connection.prepareStatement(sqlMessageGroup)) {
             statement1.setString(1, entity.getFrom());
             statement1.setString(2, entity.getMessage());
             statement1.setDate(3, Date.valueOf(entity.getData()));
@@ -467,11 +466,33 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             statement2.setInt(2, idGroup);
             statement2.executeUpdate();
             entity.setId(id);
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return entity;
+    }
+
+    /**
+     * @param groupId Integer
+     * @return a list of replyMessage, it returns all the messages from a group
+     * if ReplayMessage has currentMessage null that means it is a Message entity
+     */
+    public List<ReplyMessage> getGroupMessages(int groupId)
+    {
+        List<ReplyMessage> returnList = new ArrayList<>();
+        String sql = "select distinct message.id, message.reply_to from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                returnList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return returnList;
     }
 }
 

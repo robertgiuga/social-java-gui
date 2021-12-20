@@ -150,4 +150,11 @@ public class MessageService {
 
     public MessageDTO remove(Integer id) { return messageRepository.remove(id); }
 
+    /**
+     * @param groupId Integer
+     * @return a list of replyMessage, it returns all the messages from a group
+     * if ReplayMessage has currentMessage null that means it is a Message entity
+     */
+    public List<ReplyMessage> getGroupMessages(int groupId) {return messageRepository.getGroupMessages(groupId);}
+
 }
