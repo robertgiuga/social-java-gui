@@ -58,10 +58,9 @@ public class MessageController {
             loadShowConv(e);
         }
         else if(e.getEventType().equals(ItemSelected.GROUP_LOAD_MSJ)){
-            System.out.println(e.getSelectedItemId());
+            loadGroupConv(e);
         }
     }
-
 
     /**
      * sets the service and loggedUser
@@ -109,6 +108,28 @@ public class MessageController {
         }
         ShowConvController showConvController = loader.getController();
         showConvController.load(service, loggedUser, e.getSelectedItemId());
+        convPane.setCenter(item);
+    }
+
+    /**
+     * load all messages from a group with id equals with id of selected item
+     * @param e
+     */
+    private void loadGroupConv(ItemSelected e) {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-view.fxml"));
+        Pane item = null;
+        try {
+            item = loader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        ShowConvController showConvController = loader.getController();
+        try {
+            showConvController.loadGroup(service, loggedUser, Integer.parseInt(e.getSelectedItemId()));
+        }
+        catch (NumberFormatException exception){
+            System.out.println(exception.getMessage());
+        }
         convPane.setCenter(item);
     }
 }

@@ -12,7 +12,8 @@ public class MessageValidator implements Validator<MessageDTO> {
     @Override
     public void validate(MessageDTO entity) throws ValidationException {
         userValidator.validateEmail(entity.getFrom());
-        entity.getTo().forEach(userValidator::validateEmail);
+        if(entity.getTo()!=null)
+            entity.getTo().forEach(userValidator::validateEmail);
         if(!(entity.getMessage().length()>0))
             throw new ValidationException("Message must not be null!");
     }

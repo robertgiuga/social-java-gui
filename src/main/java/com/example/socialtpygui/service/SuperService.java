@@ -601,7 +601,18 @@ public class SuperService implements Observable {
      */
     public List<ReplyMessage> getGroupMessages(int groupId) {return messageService.getGroupMessages(groupId);}
 
-    public ReplyMessageDTO replyMessageGroup(){
-        return null;
+    /**
+     * send a reply message to a message from a group with id equals with groupId
+     * @param replyMessageDTO ReplyMessageDTO
+     * @param groupId int
+     */
+    public void replyMessageGroup(ReplyMessageDTO replyMessageDTO, int groupId){
+        messageValidator.validate(replyMessageDTO.getResponse());
+        MessageDTO original;
+        if((original = messageService.findOne(Integer.valueOf(replyMessageDTO.getOriginalId()))) == null)
+            throw new ValidationException("ReplyMessage must reply to a valid message");
+        ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
+        messageService.saveGroupReplyMessage(replyMessage, groupId);
     }
+
 }
