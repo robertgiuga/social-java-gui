@@ -441,6 +441,13 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         return size;
     }
 
+    /**
+     * insert into table message a new message of type MessageDTO
+     * insert into table message_group row with id of new added message and id of group where is sent message
+     * @param entity MessageDTO
+     * @param idGroup int
+     * @return MessageDTO entity(added message)
+     */
     public MessageDTO saveGroupMessage(MessageDTO entity, int idGroup) {
         if (entity==null)
             throw new ValidationException("Entity must not be null");
