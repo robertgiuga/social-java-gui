@@ -450,7 +450,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     public List<ReplyMessage> getGroupMessages(int groupId)
     {
         List<ReplyMessage> returnList = new ArrayList<>();
-        String sql = "select distinct message.id, message.reply_to from message inner join message_recipient on message.id = message_recipient.message where message_recipient.group_id = ?";
+        String sql = "select distinct message.id, message.reply_to from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, groupId);
