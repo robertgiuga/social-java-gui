@@ -4,15 +4,11 @@ import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.FriendShipDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
-import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ViewItemEvent;
 import com.example.socialtpygui.utils.observer.Observer;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 

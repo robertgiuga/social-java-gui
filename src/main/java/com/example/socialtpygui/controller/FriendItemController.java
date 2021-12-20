@@ -1,7 +1,6 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.domain.User;
-import com.example.socialtpygui.domainEvent.UserSelected;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
