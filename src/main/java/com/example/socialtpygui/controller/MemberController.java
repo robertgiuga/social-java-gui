@@ -14,10 +14,18 @@ public class MemberController {
 
     private String id;
 
+    /**
+     * sets the name witch is gonna be displayed
+     * @param name
+     */
     public void setName(String name){
         nameLbl.setText(name);
     }
 
+    /**
+     * sets the id of the user witch is displayed
+     * @param id
+     */
     public void setId(String id) {
         this.id = id;
     }

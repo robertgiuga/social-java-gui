@@ -221,6 +221,11 @@ public class ShowConvController {
             this.dragMessage = m;
         }
     }
+
+    /**
+     * create a groupSettings view
+     * @throws IOException
+     */
     @FXML
     private void handlerSettignsButton() throws IOException {
         buttonSend.setDisable(true);

@@ -22,11 +22,21 @@ public class GroupSettingsController {
     private int groupId;
     private SuperService service;
 
+    /**
+     * handle the back button witch is fireing a ItemSelected Event for reloading the conv
+     */
     @FXML
     private void handlerBackButton(){
         backBtn.fireEvent(new ItemSelected(ItemSelected.GROUP_LOAD_MSJ,String.valueOf(groupId)));
     }
 
+    /**
+     * create a member-viewItem with the given name and sets the id also
+     * @param name .
+     * @param id .
+     * @return the Pane with the created view
+     * @throws IOException .
+     */
     private Pane createItem(String name,String id) throws IOException {
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("member-viewItem.fxml"));
         Pane item = loader.load();
