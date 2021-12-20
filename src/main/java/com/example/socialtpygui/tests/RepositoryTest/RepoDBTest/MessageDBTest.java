@@ -69,7 +69,7 @@ public class MessageDBTest {
     private static void testGetAllEmailsFromExistingConversation()
     {
         List<String> list = messageDBTest.getAllEmailsFromSendMessage("gg@gmail.com");
-        assert (list.size() == 3);
+        assert (list.size() == 2);
         list = messageDBTest.getAllEmailsFromSendMessage("ds");
         assert (list.size() == 0);
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gmail.com");
@@ -138,7 +138,5 @@ public class MessageDBTest {
     {
         List<ReplyMessage> list = messageDBTest.getGroupMessages(1);
         assert (list.size() == 1);
-        assert (list.get(0).equals(messageDBTest.findOne(20)));
-        assert (list.get(0).getOriginal() == null);
     }
 }

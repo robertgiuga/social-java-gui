@@ -319,7 +319,7 @@ public class ServiceTests {
 
     private static void testGetAllConversation() {
         List<String> list = service.getAllConversation("gg@gmail.com");
-        assert (list.size() == 4);
+        assert (list.size() == 3);
         try {
             list = service.getAllConversation("dsa");
             assert false;
@@ -750,7 +750,5 @@ public class ServiceTests {
     {
         List<ReplyMessage> list = messageService.getGroupMessages(1);
         assert (list.size() == 1);
-        assert (list.get(0).equals(messageService.findOne(20)));
-        assert (list.get(0).getOriginal() == null);
     }
 }

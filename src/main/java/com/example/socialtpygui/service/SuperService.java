@@ -410,18 +410,15 @@ public class SuperService implements Observable {
         return users;
     }
 
-  /*  /**
-     * replay with a message to all the users that the original message has been sent to
-     * @param replyMessageDTO the message to be sent. The 'to' list in the object it will be null because
-     *                        the upright layers cannot know who to send to
+    /**
+     * replay with a message to all the users from a group
+     * @param messageDTO the message to be sent in group with id idGroup
+     * @param idGroup the id of group where the message will be send in
      */
-    /*public void replayAll(ReplyMessageDTO replyMessageDTO){
-        userValidator.validateEmail(replyMessageDTO.getResponse().getFrom());
-        if(!(replyMessageDTO.getResponse().getMessage().length()>0))
-            throw new ValidationException("Message must not be null!");
-        messageService.replayAll(replyMessageDTO);
-
-    }*/
+    public MessageDTO replyAll(MessageDTO messageDTO, int idGroup){
+        messageValidator.validate(messageDTO);
+        return messageService.replyAll(messageDTO, idGroup);
+    }
 
     /**
      * @param completName .
@@ -604,4 +601,7 @@ public class SuperService implements Observable {
      */
     public List<ReplyMessage> getGroupMessages(int groupId) {return messageService.getGroupMessages(groupId);}
 
+    public ReplyMessageDTO replyMessageGroup(){
+        return null;
+    }
 }

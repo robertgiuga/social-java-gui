@@ -154,8 +154,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
                 preparedStatement2.setString(3, emailUser2);
                 ResultSet resultSet1 = preparedStatement2.executeQuery();
                 if (resultSet1.next())
-                    if(resultSet1.getInt("group_id") == 0)
-                        resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+                    resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
             }
         }
         catch (SQLException throwables) {
@@ -387,7 +386,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
                 preparedStatement2.setString(2, user.getId());
                 preparedStatement2.executeUpdate();
             }
-           return group;
+            return group;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -395,7 +394,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     }
 
     /**
-     * Remove a group, with a specify id. First remove all from message_recipient with group_id = "id"
+     * Remove a group, with a specify id. First remove all from message_group with group_id = "id"
      * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
      * the group from social_group
      * @param id Integer
@@ -403,9 +402,9 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     public void removeGroup(int id){
         String sqlRemoveGroup = "delete from social_group where id = ?";
         String sqlRemoveGroupUser = "delete from group_user where group_id = ?";
-        String sqlRemoveMessageAndMessageRecipient = "with t1 as (delete from message_recipient where group_id = ? returning message) delete from message where id in (select distinct * from t1)";
+        String sqlRemoveMessageAndMessageGroup = "with t1 as (delete from message_group where id_group = ? returning id_message) delete from message where id in (select distinct * from t1)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlRemoveMessageAndMessageRecipient);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlRemoveMessageAndMessageGroup);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlRemoveGroup);
             PreparedStatement preparedStatement2 = connection.prepareStatement(sqlRemoveGroupUser)) {
             preparedStatement.setInt(1,id);
@@ -440,6 +439,37 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             throwables.printStackTrace();
         }
         return size;
+    }
+
+    /**
+     * insert into table message a new message of type MessageDTO
+     * insert into table message_group row with id of new added message and id of group where is sent message
+     * @param entity MessageDTO
+     * @param idGroup int
+     * @return MessageDTO entity(added message)
+     */
+    public MessageDTO saveGroupMessage(MessageDTO entity, int idGroup) {
+        if (entity == null)
+            throw new ValidationException("Entity must not be null");
+        String sqlMessageTable = "insert into message (ms_from, text, date) values (?, ?, ?) returning id";
+        String sqlMessageGroup = "insert into message_group(id_message, id_group)values (?, ?)";
+        try (Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+             PreparedStatement statement1 = connection.prepareStatement(sqlMessageTable);
+             PreparedStatement statement2 = connection.prepareStatement(sqlMessageGroup)) {
+            statement1.setString(1, entity.getFrom());
+            statement1.setString(2, entity.getMessage());
+            statement1.setDate(3, Date.valueOf(entity.getData()));
+            ResultSet resultSet = statement1.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt(1);
+            statement2.setInt(1, id);
+            statement2.setInt(2, idGroup);
+            statement2.executeUpdate();
+            entity.setId(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return entity;
     }
 
     /**
