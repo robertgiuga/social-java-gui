@@ -7,17 +7,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneShowConvView" prefHeight="339.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
+<AnchorPane fx:id="anchorPaneShowConvView" prefHeight="357.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
    <children>
-      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" prefHeight="288.0" prefWidth="485.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" layoutY="12.0" prefHeight="294.0" prefWidth="481.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="12.0">
          <content>
-            <GridPane fx:id="gridShowMessages" prefHeight="282.0" prefWidth="482.0">
+            <GridPane fx:id="gridShowMessages" prefHeight="275.0" prefWidth="482.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
             </GridPane>
          </content>
       </ScrollPane>
@@ -32,5 +36,6 @@
             <Font size="11.0" />
          </font>
       </Label>
+      <Button fx:id="settingsBtn" layoutX="419.0" layoutY="1.0" mnemonicParsing="false" onAction="#handlerSettignsButton" text="Settings" />
    </children>
 </AnchorPane>
