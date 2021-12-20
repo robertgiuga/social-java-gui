@@ -12,6 +12,7 @@ import com.example.socialtpygui.service.entityservice.NetworkService;
 import com.example.socialtpygui.service.entityservice.UserService;
 import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
+import com.example.socialtpygui.tests.Tests;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +28,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-       // Tests.RunALL();
+        Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();

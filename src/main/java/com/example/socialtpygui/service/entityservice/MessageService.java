@@ -71,20 +71,14 @@ public class MessageService {
     public MessageDTO findOne(Integer id) {return messageRepository.findOne(id);}
 
     /**
-     * replay with a message to all the users that the original message has been sent to
-     *
+     * reply with a message to all members from a group
+     * @param entity MessageDTO
+     * @param idGroup int
+     * @return the sent message
      */
-    /*public void replayAll(ReplyMessageDTO replyMessageDTO)
-    {
-        MessageDTO original = findOne(Integer.valueOf(replyMessageDTO.getOriginalId()));
-        if (original == null) throw new NonExistingException("Original message doesn't exist!");
-        Predicate<String> notSender =o -> !o.equals(replyMessageDTO.getResponse().getFrom());
-        List<String> to = original.getTo().stream().filter(notSender).collect(Collectors.toList());
-        to.add(original.getFrom());
-        replyMessageDTO.getResponse().setTo(to);
-        ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
-        messageRepository.saveReplyMessage(replyMessage);
-    }*/
+    public MessageDTO replyAll(MessageDTO entity, int idGroup) {
+        return messageRepository.saveGroupMessage(entity, idGroup);
+    }
 
 
     public int size() { return messageRepository.size(); }
