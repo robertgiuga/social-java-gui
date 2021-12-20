@@ -494,5 +494,36 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return returnList;
     }
+
+    /**
+     * save into database a reply to message from a group
+     * @param replyMessage ReplyMessage
+     * @param groupId int
+     * @return saved ReplyMessage with id get from database
+     */
+    public ReplyMessage saveGroupReplyMessage(ReplyMessage replyMessage, int groupId){
+        if (replyMessage == null)
+            throw new ValidationException("Entity must not be null");
+        String sqlMessageTable = "insert into message (ms_from, text, date, reply_to) values (?, ?, ?, ?) returning id";
+        String sqlMessageGroup = "insert into message_group(id_message, id_group)values (?, ?)";
+        try (Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+             PreparedStatement statement1 = connection.prepareStatement(sqlMessageTable);
+             PreparedStatement statement2 = connection.prepareStatement(sqlMessageGroup)) {
+            statement1.setString(1, replyMessage.getFrom());
+            statement1.setString(2, replyMessage.getMessage());
+            statement1.setDate(3, Date.valueOf(replyMessage.getData()));
+            statement1.setInt(4, replyMessage.getOriginal().getId());
+            ResultSet resultSet = statement1.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt(1);
+            statement2.setInt(1, id);
+            statement2.setInt(2, groupId);
+            statement2.executeUpdate();
+            replyMessage.setId(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return replyMessage;
+    }
 }
 

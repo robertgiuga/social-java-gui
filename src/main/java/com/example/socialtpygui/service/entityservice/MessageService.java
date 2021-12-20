@@ -157,4 +157,12 @@ public class MessageService {
      */
     public List<ReplyMessage> getGroupMessages(int groupId) {return messageRepository.getGroupMessages(groupId);}
 
+    /**
+     * send a reply message to a message from a group with id equals with groupId
+     * @param replyMessage ReplyMessage
+     * @param groupId int
+     */
+    public void saveGroupReplyMessage(ReplyMessage replyMessage, int groupId){
+        messageRepository.saveGroupReplyMessage(replyMessage, groupId);
+    }
 }

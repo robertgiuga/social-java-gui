@@ -8,8 +8,8 @@ import com.example.socialtpygui.tests.RepositoryTest.RepoDBTest.UserDBTest;
 public class RepositoryTests {
 
     public static void runTests(){
-        //UserDBTest.runTests();
-        //FriendshipDBTest.runTests();
+        UserDBTest.runTests();
+        FriendshipDBTest.runTests();
         MessageDBTest.runTests();
     }
 }
