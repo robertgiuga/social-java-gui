@@ -306,6 +306,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     public GroupDTO getGroup(int id)
     {
         String sql = "select name, group_user.email from social_group inner join group_user on social_group.id = group_user.group_id where id = ?";
+        GroupDTO groupDTO = null;
         List<String> membersEmails = new ArrayList<>();
         String name = null;
         try(Connection connection = DriverManager.getConnection(url, username, password);
@@ -318,10 +319,11 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
                 String email = resultSet.getString("email");
                 membersEmails.add(email);
             }
+            if (membersEmails.size() != 0) groupDTO = new GroupDTO(id, name, membersEmails);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new GroupDTO(id, name, membersEmails);
+        return groupDTO;
     }
 
     /**
@@ -546,6 +548,26 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * @param groupId Integer
+     * @return number of users in group with id "groupId"
+     */
+    public int numberOfUserFromAGroup(int groupId)
+    {
+        String sql = "select count(*) from group_user where group_id = ?";
+        int numberOfUsers = 0;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            numberOfUsers = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfUsers;
     }
 }
 
