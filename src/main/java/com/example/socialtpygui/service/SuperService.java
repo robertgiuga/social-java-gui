@@ -296,18 +296,18 @@ public class SuperService implements Observable {
      * Send a new message.
      * @throws com.example.socialtpygui.service.validators.ValidationException if the given entity is null.
      */
-    public void sendMessage(MessageDTO newMessageDTO)
+    public MessageDTO sendMessage(MessageDTO newMessageDTO)
     {
         messageValidator.validate(newMessageDTO);
         validateExistingMessageComponents(newMessageDTO);
-        messageService.save(newMessageDTO);
+        return messageService.save(newMessageDTO);
     }
 
     /**
      * Send a reply message.
      * @throws com.example.socialtpygui.service.validators.ValidationException if the given entity is null.
      */
-    public void replyMessage(ReplyMessageDTO newReplyMessageDTO)
+    public ReplyMessage replyMessage(ReplyMessageDTO newReplyMessageDTO)
     {
         messageValidator.validate(newReplyMessageDTO.getResponse());
         validateExistingMessageComponents(newReplyMessageDTO.getResponse());
@@ -316,7 +316,7 @@ public class SuperService implements Observable {
             throw new ValidationException("ReplayMessage must replay to a valid Message ");
 
         ReplyMessage replyMessage = new ReplyMessage(newReplyMessageDTO.getResponse(), original);
-        messageService.saveReplyMessage(replyMessage);
+        return messageService.saveReplyMessage(replyMessage);
     }
 
     /**
@@ -606,13 +606,13 @@ public class SuperService implements Observable {
      * @param replyMessageDTO ReplyMessageDTO
      * @param groupId int
      */
-    public void replyMessageGroup(ReplyMessageDTO replyMessageDTO, int groupId){
+    public ReplyMessage replyMessageGroup(ReplyMessageDTO replyMessageDTO, int groupId){
         messageValidator.validate(replyMessageDTO.getResponse());
         MessageDTO original;
         if((original = messageService.findOne(Integer.valueOf(replyMessageDTO.getOriginalId()))) == null)
             throw new ValidationException("ReplyMessage must reply to a valid message");
         ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
-        messageService.saveGroupReplyMessage(replyMessage, groupId);
+        return messageService.saveGroupReplyMessage(replyMessage, groupId);
     }
 
 }

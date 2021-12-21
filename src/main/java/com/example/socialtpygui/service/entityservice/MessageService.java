@@ -60,7 +60,7 @@ public class MessageService {
      *      * @return null- if the given entity is saved
      *      *         otherwise returns the entity (id already exists)
      */
-    public MessageDTO saveReplyMessage(ReplyMessage replyMessage) {return messageRepository.saveReplyMessage(replyMessage);}
+    public ReplyMessage saveReplyMessage(ReplyMessage replyMessage) {return messageRepository.saveReplyMessage(replyMessage);}
 
     /**
      * @param id -the id of the entity to be returned
@@ -162,7 +162,7 @@ public class MessageService {
      * @param replyMessage ReplyMessage
      * @param groupId int
      */
-    public void saveGroupReplyMessage(ReplyMessage replyMessage, int groupId){
-        messageRepository.saveGroupReplyMessage(replyMessage, groupId);
+    public ReplyMessage saveGroupReplyMessage(ReplyMessage replyMessage, int groupId){
+        return messageRepository.saveGroupReplyMessage(replyMessage, groupId);
     }
 }

@@ -95,7 +95,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      * @return null- if the given entity is saved
      * @throws ValidationException if the given entity is null.
      */
-    public MessageDTO saveReplyMessage(ReplyMessage replyMessage)
+    public ReplyMessage saveReplyMessage(ReplyMessage replyMessage)
     {
         if (replyMessage == null) throw new ValidationException("Entity must not be null");
         String sqlMessageTable = "insert into message (ms_from, text, date, reply_to) values (?, ?, ?, ?)";
