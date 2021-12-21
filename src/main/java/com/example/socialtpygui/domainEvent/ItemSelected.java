@@ -14,6 +14,8 @@ public class ItemSelected extends Event {
     public static final EventType<ItemSelected> USER_LOAD_MSJ= new EventType<>(ItemSelected.ANY,"USER_LOAD_MSJ");
     public static final EventType<ItemSelected> USER_SELECTED= new EventType<>(ItemSelected.ANY,"USER_SELECTED");
     public static final EventType<ItemSelected> GROUP_LOAD_MSJ= new EventType<>(ItemSelected.ANY,"GROUP_LOAD_MSJ");
+    public static final EventType<ItemSelected> ADD_MEMBER= new EventType<>(ItemSelected.ANY,"ADD_MEMBER");
+    public static final EventType<ItemSelected> REMOVE_MEMBER= new EventType<>(ItemSelected.ANY,"REMOVE_MEMBER");
 
     public ItemSelected(EventType<? extends Event> eventType, String userId) {
         super(eventType);

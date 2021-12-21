@@ -31,6 +31,7 @@ public class MessageDBTest {
         testAddRemoveUserToGroup();
         testAddRemoveGroup();
         testGetGroupMessages();
+        testUserInGroup();
     }
 
     private static void testFindOne()
@@ -138,5 +139,13 @@ public class MessageDBTest {
     {
         List<ReplyMessage> list = messageDBTest.getGroupMessages(1);
         assert (list.size() == 1);
+    }
+
+    private static void testUserInGroup()
+    {
+        assert (messageDBTest.userInGroup("gg@gmail.com",1));
+        assert (!messageDBTest.userInGroup("gc@gmail.com",1));
+        assert (messageDBTest.userInGroup("andr@gamail.com",2));
+
     }
 }

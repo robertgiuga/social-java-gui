@@ -3,6 +3,7 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.ItemSelected;
+import com.example.socialtpygui.domainEvent.LoadConvList;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import javafx.fxml.FXML;
@@ -63,12 +64,24 @@ public class MessageController {
     }
 
     /**
+     * handle the custom LoadConvList Event
+     * @param e LoadConvList
+     */
+    private void handlerLoadConvList(LoadConvList e)
+    {
+        if (e.getEventType().equals(LoadConvList.LOAD_CONV)){
+            loadAllFriendsWithConv();
+        }
+    }
+
+    /**
      * sets the service and loggedUser
      * @param service the SuperService
      * @param loggedUser  the user currently logged in
      */
     public void load(SuperService service, User loggedUser) throws IOException {
         convPane.getParent().addEventFilter(ItemSelected.ANY,this::handlerForSelectedFriend);
+        convPane.getParent().addEventFilter(LoadConvList.ANY,this::handlerLoadConvList);
         this.service=service;
         this.loggedUser=loggedUser;
         loadAllFriendsWithConv();

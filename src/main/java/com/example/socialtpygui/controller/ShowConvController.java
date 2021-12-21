@@ -253,7 +253,7 @@ public class ShowConvController {
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("groupSettings-view.fxml"));
         Pane item = loader.load();
         GroupSettingsController controller=loader.getController();
-        controller.load(service,groupId);
+        controller.load(service,groupId,this.loggedUser);
         scrollPaneShowConv.setContent(item);
     }
 }

@@ -525,5 +525,27 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return replyMessage;
     }
+
+    /**
+     * @param email String
+     * @param groupId Integer
+     * @return true if the user with email "email" is in group with "groupId"
+     */
+    public boolean userInGroup(String email, int groupId)
+    {
+        String sql = "select count(*) from group_user where (group_id = ? and email = ?)";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1,groupId);
+            preparedStatement.setString(2, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            if (count != 0) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
