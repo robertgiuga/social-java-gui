@@ -532,9 +532,11 @@ public class SuperService implements Observable {
     /**
      * @param id Integer
      * @return a GroupDto which contain the group with id "id"
+     * @throws NonExistingException if the group does not exist
      */
     public GroupDTO getGroup(int id)
     {
+        if (messageService.numberOfUserFromAGroup(id) == 0) {throw new NonExistingException("Group with id " + id + " does not exist!");}
         return messageService.getGroup(id);
     }
 
@@ -543,36 +545,44 @@ public class SuperService implements Observable {
      * @param email String
      * @param groupId Integer
      * @return null, if the user was not added and the user, if the user was added
-     * @throws NonExistingException, if the user with email "email" does not exist
+     * @throws NonExistingException, if the user with email "email" does not exist or the group with groupId doe not exist
      */
     public User addUserToGroup(String email, int groupId)
     {
         userValidator.validateEmail(email);
         User user = userService.findOne(email);
         if (user == null){throw new NonExistingException("User does not exist!");}
-        else{return messageService.addUserToGroup(user, groupId);}
+        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        return messageService.addUserToGroup(user, groupId);
     }
 
     /**
      * Remove a user from a groupe, remove from group_user table.
      * @param email String
      * @param groupId Intege
-     * @throws NonExistingException, if the user with email "email" does not exist
+     * @throws NonExistingException, if the user with email "email" does not exist or the group with groupId does not exist
      */
     public void removeUserFromGroup(String email, int groupId)
     {
         userValidator.validateEmail(email);
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
-        else{messageService.removeUserFromGroup(email, groupId);}
+        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        messageService.removeUserFromGroup(email, groupId);
     }
 
     /**
      * Add a group, add in table social_group and in table group_user.
      * @param groupDTO GroupDTO
      * @return null, if the group was not added and the group, if the group was added
+     * @throws ValidationException if the name is null or one email from members list is invalid
      */
     public Group addGroup(GroupDTO groupDTO)
     {
+        if (groupDTO.getNameGroup().length() == 0) {throw new ValidationException("Name can not be null");}
+        for (String email : groupDTO.getMembersEmail())
+        {
+            userValidator.validateEmail(email);
+        }
         List<User> membersList = new ArrayList<>();
         groupDTO.getMembersEmail().forEach(email->{membersList.add(userService.findOne(email));});
         Group group = new Group(groupDTO.getNameGroup(), membersList);
@@ -584,8 +594,10 @@ public class SuperService implements Observable {
      * ,then remove all messages was sent to this group, then remove all from group_user and ,finally, remove
      * the group from social_group
      * @param id Integer
+     * @throws NonExistingException if the group with id does not exist
      */
     public void removeGroup(int id){
+        if (messageService.numberOfUserFromAGroup(id) == 0) {throw new NonExistingException("Group with id " + id + " does not exist!");}
         messageService.removeGroup(id);
     }
 
@@ -598,19 +610,26 @@ public class SuperService implements Observable {
      * @param groupId Integer
      * @return a list of replyMessage, it returns all the messages from a group
      * if ReplayMessage has currentMessage null that means it is a Message entity
+     * @throws NonExistingException if the group with groupId does not exist
      */
-    public List<ReplyMessage> getGroupMessages(int groupId) {return messageService.getGroupMessages(groupId);}
+    public List<ReplyMessage> getGroupMessages(int groupId)
+    {
+        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        return messageService.getGroupMessages(groupId);
+    }
 
     /**
      * send a reply message to a message from a group with id equals with groupId
      * @param replyMessageDTO ReplyMessageDTO
      * @param groupId int
+     * @throws NonExistingException if the group with groupId does not exist
      */
     public ReplyMessage replyMessageGroup(ReplyMessageDTO replyMessageDTO, int groupId){
         messageValidator.validate(replyMessageDTO.getResponse());
         MessageDTO original;
         if((original = messageService.findOne(Integer.valueOf(replyMessageDTO.getOriginalId()))) == null)
             throw new ValidationException("ReplyMessage must reply to a valid message");
+        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
         return messageService.saveGroupReplyMessage(replyMessage, groupId);
     }
@@ -619,17 +638,25 @@ public class SuperService implements Observable {
      * @param email String
      * @param groupId Integer
      * @return true if the user with email "email" is in group with "groupId"
+     * @throws NonExistingException if the group with groupId does not exist
      */
     public boolean userInGroup(String email, int groupId)
     {
         userValidator.validateEmail(email);
+        if (userService.findOne(email) == null) {throw new NonExistingException("User with id " + email + " does not exist");}
+        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         return messageService.userInGroup(email, groupId);
     }
 
     /**
      * @param groupId Integer
      * @return number of users in group with id "groupId"
+     * @throws NonExistingException if the group with groupId does not exist
      */
-    public int numberOfUserFromAGroup(int groupId) {return messageService.numberOfUserFromAGroup(groupId);}
+    public int numberOfUserFromAGroup(int groupId)
+    {
+        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        return messageService.numberOfUserFromAGroup(groupId);
+    }
 
 }
