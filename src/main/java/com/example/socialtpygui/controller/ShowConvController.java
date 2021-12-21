@@ -64,45 +64,49 @@ public class ShowConvController {
     private void sendMessage() throws IOException {
         List<String> to = new ArrayList<>();
         to.add(email);
-        //Pane item = null;
+        Pane item = null;
         if(groupId == null) {
             if (dragMessage == null) {
-                service.sendMessage(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
-                //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), null));
-                //item.getChildren().forEach(node -> {
-                //    if (node instanceof Label)
-                //        node.setId(String.valueOf(messageText.getText()));
-                //});
+                MessageDTO messageDTO = service.sendMessage(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
+                item = createItem(new ReplyMessage(messageDTO, null));
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
             }
             else {
-                service.replyMessage(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
-                //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage()));
-                //item.getChildren().forEach(node -> {
-                //    if (node instanceof Label)
-                //        node.setId(String.valueOf(messageText.getText()));
-                //});
-                messageToReply.setText("");
+                ReplyMessage replyMessage = service.replyMessage(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
+                item = createItem(replyMessage);
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
                 dragMessage = null;
             }
-            gridShowMessages.getChildren().clear();
-            this.load(service, loggedUser, email);
         }
         else{
             if(dragMessage == null) {
-                service.replyAll(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), groupId);
-                gridShowMessages.getChildren().clear();
-                loadGroup(service, loggedUser, groupId);
+                MessageDTO messageDTO = service.replyAll(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), groupId);
+                item = createItem(new ReplyMessage(messageDTO, null));
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
             }
             else{
-                service.replyMessageGroup(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()), groupId);
-                gridShowMessages.getChildren().clear();
-                messageToReply.setText("");
-                loadGroup(service, loggedUser, groupId);
+                ReplyMessage replyMessage = service.replyMessageGroup(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()), groupId);
+                item = createItem(replyMessage);
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
             }
         }
 
-        //gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        messageToReply.setText("");
         messageText.clear();
+        scrollPaneShowConv.setVvalue(1.0f);
     }
 
     /**
@@ -119,6 +123,21 @@ public class ShowConvController {
     }
 
     /**
+     *
+     * @param replyMessage
+     * @return
+     * @throws IOException
+     */
+    private Pane createGroupItem(ReplyMessage replyMessage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-item.fxml"));
+        Pane item = loader.load();
+        ShowConvItemController controller = loader.getController();
+        controller.setMessage(replyMessage);
+        User user =service.findOneUser(replyMessage.getFrom());
+        controller.setFrom(user.getFirstName()+" "+user.getLastName());
+        return item;
+    }
+    /**
      * initialize loggedUser, service and email
      * load into gridPane conversation between two users
      * @param service
@@ -132,6 +151,7 @@ public class ShowConvController {
         this.service = service;
         this.email = email;
         this.groupId = null;
+        scrollPaneShowConv.setVvalue(1.0f);
         service.getMessages(loggedUser.getId(), email).forEach(replyMessage->{
             try{
                 Pane item = createItem(replyMessage);
@@ -168,7 +188,7 @@ public class ShowConvController {
         this.groupId = groupId;
         service.getGroupMessages(groupId).forEach(replyMessage -> {
             try{
-                Pane item = createItem(replyMessage);
+                Pane item = createGroupItem(replyMessage);
                 item.getChildren().forEach(node->{
                     if (node instanceof Label)
                         node.setId(String.valueOf(replyMessage.getId()));

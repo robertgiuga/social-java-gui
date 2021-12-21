@@ -16,11 +16,18 @@ public class ShowConvItemController {
 
     @FXML
     private Pane paneShowConvItem;
+    @FXML
+    private Label fromLbl;
 
     private ReplyMessage replyMessage;
 
+    public void setFrom(String from){
+        fromLbl.setVisible(true);
+        fromLbl.setText("from: "+from);
+    }
 
     public void setMessage(ReplyMessage replyMessage){
+        fromLbl.setVisible(false);
         this.replyMessage =replyMessage;
         if(replyMessage.getOriginal()==null){
             paneShowConvItem.getChildren().remove(messageToReply);
