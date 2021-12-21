@@ -626,4 +626,10 @@ public class SuperService implements Observable {
         return messageService.userInGroup(email, groupId);
     }
 
+    /**
+     * @param groupId Integer
+     * @return number of users in group with id "groupId"
+     */
+    public int numberOfUserFromAGroup(int groupId) {return messageService.numberOfUserFromAGroup(groupId);}
+
 }

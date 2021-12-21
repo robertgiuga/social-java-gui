@@ -547,5 +547,25 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return false;
     }
+
+    /**
+     * @param groupId Integer
+     * @return number of users in group with id "groupId"
+     */
+    public int numberOfUserFromAGroup(int groupId)
+    {
+        String sql = "select count(*) from group_user where group_id = ?";
+        int numberOfUsers = 0;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            numberOfUsers = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfUsers;
+    }
 }
 

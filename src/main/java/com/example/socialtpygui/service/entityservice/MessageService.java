@@ -175,4 +175,10 @@ public class MessageService {
     {
         return messageRepository.userInGroup(email, groupId);
     }
+
+    /**
+     * @param groupId Integer
+     * @return number of users in group with id "groupId"
+     */
+    public int numberOfUserFromAGroup(int groupId) {return messageRepository.numberOfUserFromAGroup(groupId);}
 }

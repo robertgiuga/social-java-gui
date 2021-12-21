@@ -32,6 +32,7 @@ public class MessageDBTest {
         testAddRemoveGroup();
         testGetGroupMessages();
         testUserInGroup();
+        testNumberOfUserFromAGroup();
     }
 
     private static void testFindOne()
@@ -146,6 +147,12 @@ public class MessageDBTest {
         assert (messageDBTest.userInGroup("gg@gmail.com",1));
         assert (!messageDBTest.userInGroup("gc@gmail.com",1));
         assert (messageDBTest.userInGroup("andr@gamail.com",2));
-
     }
+
+    private static void testNumberOfUserFromAGroup()
+    {
+        assert (messageDBTest.numberOfUserFromAGroup(1) == 4);
+        assert (messageDBTest.numberOfUserFromAGroup(2) == 3);
+    }
+
 }

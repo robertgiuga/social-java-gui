@@ -104,6 +104,9 @@ public class GroupSettingsController {
      */
     public void handlerLeaveGroup(ActionEvent actionEvent) {
         service.removeUserFromGroup(this.loggerUser.getId(), groupId);
+        if (service.numberOfUserFromAGroup(groupId) == 0){
+            service.removeGroup(groupId);
+        }
         leaveBtn.fireEvent(new LoadConvList(LoadConvList.LOAD_CONV));
     }
 
