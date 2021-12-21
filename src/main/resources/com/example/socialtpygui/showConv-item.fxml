@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="paneShowConvItem" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#HandlerDragMessage" prefHeight="53.0" prefWidth="233.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvItemController">
+
+<VBox fx:id="paneShowConvItem" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#HandlerDragMessage" prefHeight="60.0" prefWidth="233.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvItemController">
    <children>
-      <Text fx:id="messageLabel" fill="#c9e9d8" layoutX="14.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="153.9999988079071" AnchorPane.bottomAnchor="21.2353515625">
+      <Label fx:id="messageToReply" prefHeight="10.0" prefWidth="154.0" text="Label">
+         <padding>
+            <Insets left="25.0" />
+         </padding>
+      </Label>
+      <Text fx:id="messageLabel" fill="#c9e9d8" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="232.39996218681335" VBox.vgrow="ALWAYS">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Label fx:id="messageToReply" layoutX="20.0" layoutY="3.0" prefHeight="17.0" prefWidth="154.0" text="Label" />
-      <Label fx:id="fromLbl" layoutX="31.0" layoutY="30.0" prefHeight="17.0" prefWidth="154.0" text="Label" AnchorPane.bottomAnchor="5.399999999999999">
+      <Label fx:id="fromLbl" prefHeight="0.0" prefWidth="154.0" text="Label">
          <font>
             <Font size="10.0" />
          </font>
+         <padding>
+            <Insets left="25.0" />
+         </padding>
       </Label>
    </children>
-</AnchorPane>
+</VBox>

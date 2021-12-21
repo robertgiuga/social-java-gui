@@ -138,7 +138,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     {
         if (emailUser1 == null || emailUser2 == null) throw new ValidationException("Entity must not be null");
         List<ReplyMessage> resultList = new ArrayList<>();
-        String sqlAllMessagesFromBothUsers = "select * from message where ms_from = ? or ms_from = ?";
+        String sqlAllMessagesFromBothUsers = "select * from message where ms_from = ? or ms_from = ? order by id";
         String sqlVerify = "select * from message_recipient where message = ? and (email = ? or email = ?)";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers);
@@ -480,7 +480,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     public List<ReplyMessage> getGroupMessages(int groupId)
     {
         List<ReplyMessage> returnList = new ArrayList<>();
-        String sql = "select distinct message.id, message.reply_to from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ?";
+        String sql = "select distinct message.id, message.reply_to from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.id";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, groupId);
