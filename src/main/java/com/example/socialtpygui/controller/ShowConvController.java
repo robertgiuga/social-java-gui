@@ -123,6 +123,21 @@ public class ShowConvController {
     }
 
     /**
+     *
+     * @param replyMessage
+     * @return
+     * @throws IOException
+     */
+    private Pane createGroupItem(ReplyMessage replyMessage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-item.fxml"));
+        Pane item = loader.load();
+        ShowConvItemController controller = loader.getController();
+        controller.setMessage(replyMessage);
+        User user =service.findOneUser(replyMessage.getFrom());
+        controller.setFrom(user.getFirstName()+" "+user.getLastName());
+        return item;
+    }
+    /**
      * initialize loggedUser, service and email
      * load into gridPane conversation between two users
      * @param service
@@ -173,7 +188,7 @@ public class ShowConvController {
         this.groupId = groupId;
         service.getGroupMessages(groupId).forEach(replyMessage -> {
             try{
-                Pane item = createItem(replyMessage);
+                Pane item = createGroupItem(replyMessage);
                 item.getChildren().forEach(node->{
                     if (node instanceof Label)
                         node.setId(String.valueOf(replyMessage.getId()));
