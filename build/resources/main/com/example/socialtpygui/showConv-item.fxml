@@ -12,5 +12,10 @@
             <Font size="15.0" />
          </font></Text>
       <Label fx:id="messageToReply" layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="154.0" text="Label" />
+      <Label fx:id="fromLbl" layoutX="26.0" layoutY="38.0" prefHeight="17.0" prefWidth="154.0" text="Label">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
