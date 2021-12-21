@@ -702,6 +702,13 @@ public class ServiceTests {
     private static void testGetGroup() {
         assert (service.getGroup(1).getNameGroup().equals("Grupa223"));
         assert (service.getGroup(2).getNameGroup().equals("CabanaMunte"));
+        try{
+            service.getGroup(287);
+            assert false;
+        }
+        catch (NonExistingException e){
+            assert true;
+        }
     }
 
     private static void testAddRemoveUserToGroup() {
@@ -709,10 +716,24 @@ public class ServiceTests {
         List<String> list = new ArrayList<>(service.getGroup(2).getMembersEmail());
         assert (!list.contains(user.getId()));
         service.addUserToGroup("snj@gmail.com", 2);
+        try{
+            service.addUserToGroup("snj@gmail.com", 22);
+            assert false;
+        }
+        catch (NonExistingException e){
+            assert true;
+        }
         list.clear();
         list = service.getGroup(2).getMembersEmail();
         assert (list.contains(user.getId()));
         service.removeUserFromGroup("snj@gmail.com", 2);
+        try{
+            service.removeUserFromGroup("snj@gmail.com", 2);
+            assert false;
+        }
+        catch (NonExistingException e){
+            assert true;
+        }
         list.clear();
         list = service.getGroup(2).getMembersEmail();
         assert (!list.contains(user.getId()));
