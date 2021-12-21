@@ -87,7 +87,7 @@ public class ShowConvController {
         else{
             if(dragMessage == null) {
                 MessageDTO messageDTO = service.replyAll(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), groupId);
-                item = createItem(new ReplyMessage(messageDTO, null));
+                item = createGroupItem(new ReplyMessage(messageDTO, null));
                 item.getChildren().forEach(node -> {
                     if (node instanceof Label)
                         node.setId(String.valueOf(messageText.getText()));
@@ -95,7 +95,7 @@ public class ShowConvController {
             }
             else{
                 ReplyMessage replyMessage = service.replyMessageGroup(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()), groupId);
-                item = createItem(replyMessage);
+                item = createGroupItem(replyMessage);
                 item.getChildren().forEach(node -> {
                     if (node instanceof Label)
                         node.setId(String.valueOf(messageText.getText()));
