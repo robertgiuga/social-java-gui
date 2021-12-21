@@ -116,7 +116,7 @@ public class GroupSettingsController {
         possibleParticipants = new ArrayList<>();
             gridPaneGroupSettingSB.getChildren().clear();
         try {
-            for (UserDTO user : service.getUsersByName(completeNameSearch)) {
+            for (UserDTO user : service.getFriendsByName(this.loggerUser.getId(), completeNameSearch)) {
                 if (!service.userInGroup(user.getId(), groupId)) {
                     FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("possibleMember-item.fxml"));
                     Pane item = fxmlLoader.load();
