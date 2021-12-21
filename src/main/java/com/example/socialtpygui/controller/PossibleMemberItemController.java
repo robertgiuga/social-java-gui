@@ -20,6 +20,10 @@ public class PossibleMemberItemController {
     int groupId;
 
 
+    /**
+     * Handler for add a member in a group with id "groupId"
+     * @param actionEvent ActionEvent
+     */
     public void handlerAddMemberBtn(ActionEvent actionEvent) {
         service.addUserToGroup(userDTO.getId(), groupId);
         btnPossibleMember.fireEvent(new ItemSelected(ItemSelected.ADD_MEMBER, userDTO.getId()));

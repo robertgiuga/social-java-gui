@@ -168,7 +168,7 @@ public class GroupSettingsController {
     }
 
     /**
-     * Catch fire events
+     * Catch fire events, adds filter for Events.
      */
     public void catchEvent() {
         settingsPane.addEventFilter(ItemSelected.REMOVE_MEMBER, this::handlerForSelectedMembers);
