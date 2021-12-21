@@ -6,8 +6,10 @@ import com.example.socialtpygui.domainEvent.ItemSelected;
 import com.example.socialtpygui.domainEvent.LoadConvList;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.NonExistingException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,6 +24,8 @@ public class MessageController {
     private TextField searchFriendBar;
     @FXML
     private BorderPane convPane;
+    @FXML
+    private Button createGroupBtn;
 
 
     private SuperService service;
@@ -143,6 +147,18 @@ public class MessageController {
         catch (NumberFormatException exception){
             System.out.println(exception.getMessage());
         }
+        convPane.setCenter(item);
+    }
+
+    /**
+     * create and load in convPane a view of createGroup
+     * @throws IOException
+     */
+    public void handlerCreateGroup() throws IOException {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("createGroup-view.fxml"));
+        Pane item= loader.load();
+        CreateGroupController controller= loader.getController();
+        controller.load(service,loggedUser);
         convPane.setCenter(item);
     }
 }
