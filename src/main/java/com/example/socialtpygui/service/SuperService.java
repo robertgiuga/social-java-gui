@@ -536,7 +536,7 @@ public class SuperService implements Observable {
      */
     public GroupDTO getGroup(int id)
     {
-        if (messageService.numberOfUserFromAGroup(id) == 0) {throw new NonExistingException("Group with id " + id + " does not exist!");}
+        if (messageService.getGroup(id) == null) {throw new NonExistingException("Group with id " + id + " does not exist!");}
         return messageService.getGroup(id);
     }
 
@@ -552,7 +552,7 @@ public class SuperService implements Observable {
         userValidator.validateEmail(email);
         User user = userService.findOne(email);
         if (user == null){throw new NonExistingException("User does not exist!");}
-        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         return messageService.addUserToGroup(user, groupId);
     }
 
@@ -566,8 +566,12 @@ public class SuperService implements Observable {
     {
         userValidator.validateEmail(email);
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
-        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         messageService.removeUserFromGroup(email, groupId);
+        if (messageService.numberOfUserFromAGroup(groupId) == 0)
+        {
+            messageService.removeGroup(groupId);
+        }
     }
 
     /**
@@ -597,7 +601,7 @@ public class SuperService implements Observable {
      * @throws NonExistingException if the group with id does not exist
      */
     public void removeGroup(int id){
-        if (messageService.numberOfUserFromAGroup(id) == 0) {throw new NonExistingException("Group with id " + id + " does not exist!");}
+        if (messageService.getGroup(id) == null) {throw new NonExistingException("Group with id " + id + " does not exist!");}
         messageService.removeGroup(id);
     }
 
@@ -614,7 +618,7 @@ public class SuperService implements Observable {
      */
     public List<ReplyMessage> getGroupMessages(int groupId)
     {
-        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         return messageService.getGroupMessages(groupId);
     }
 
@@ -629,7 +633,7 @@ public class SuperService implements Observable {
         MessageDTO original;
         if((original = messageService.findOne(Integer.valueOf(replyMessageDTO.getOriginalId()))) == null)
             throw new ValidationException("ReplyMessage must reply to a valid message");
-        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         ReplyMessage replyMessage = new ReplyMessage(replyMessageDTO.getResponse(), original);
         return messageService.saveGroupReplyMessage(replyMessage, groupId);
     }
@@ -644,7 +648,7 @@ public class SuperService implements Observable {
     {
         userValidator.validateEmail(email);
         if (userService.findOne(email) == null) {throw new NonExistingException("User with id " + email + " does not exist");}
-        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         return messageService.userInGroup(email, groupId);
     }
 
@@ -655,7 +659,7 @@ public class SuperService implements Observable {
      */
     public int numberOfUserFromAGroup(int groupId)
     {
-        if (messageService.numberOfUserFromAGroup(groupId) == 0) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         return messageService.numberOfUserFromAGroup(groupId);
     }
 

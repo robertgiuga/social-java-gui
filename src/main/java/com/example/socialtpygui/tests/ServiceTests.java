@@ -728,7 +728,7 @@ public class ServiceTests {
         assert (list.contains(user.getId()));
         service.removeUserFromGroup("snj@gmail.com", 2);
         try{
-            service.removeUserFromGroup("snj@gmail.com", 2);
+            service.removeUserFromGroup("snj@gmail.com", 42);
             assert false;
         }
         catch (NonExistingException e){
