@@ -615,4 +615,15 @@ public class SuperService implements Observable {
         messageService.saveGroupReplyMessage(replyMessage, groupId);
     }
 
+    /**
+     * @param email String
+     * @param groupId Integer
+     * @return true if the user with email "email" is in group with "groupId"
+     */
+    public boolean userInGroup(String email, int groupId)
+    {
+        userValidator.validateEmail(email);
+        return messageService.userInGroup(email, groupId);
+    }
+
 }

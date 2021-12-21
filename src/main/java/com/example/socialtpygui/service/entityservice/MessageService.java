@@ -165,4 +165,14 @@ public class MessageService {
     public void saveGroupReplyMessage(ReplyMessage replyMessage, int groupId){
         messageRepository.saveGroupReplyMessage(replyMessage, groupId);
     }
+
+    /**
+     * @param email String
+     * @param groupId Integer
+     * @return true if the user with email "email" is in group with "groupId"
+     */
+    public boolean userInGroup(String email, int groupId)
+    {
+        return messageRepository.userInGroup(email, groupId);
+    }
 }

@@ -63,6 +63,10 @@ public class MessageController {
         }
     }
 
+    /**
+     * handle the custom LoadConvList Event
+     * @param e LoadConvList
+     */
     private void handlerLoadConvList(LoadConvList e)
     {
         if (e.getEventType().equals(LoadConvList.LOAD_CONV)){
@@ -102,8 +106,6 @@ public class MessageController {
         convPane.setCenter(item);
     }
 
-
-
     /**
      * load all messages between 2 users(logged user and other user,which is the user selected in GUI and contained
      * by the UserSelected Event)
@@ -142,10 +144,5 @@ public class MessageController {
             System.out.println(exception.getMessage());
         }
         convPane.setCenter(item);
-    }
-
-    private void loadMembers()
-    {
-
     }
 }
