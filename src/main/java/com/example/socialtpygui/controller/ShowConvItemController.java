@@ -5,6 +5,7 @@ import com.example.socialtpygui.domainEvent.DragMessage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class ShowConvItemController {
@@ -15,7 +16,7 @@ public class ShowConvItemController {
     private Label messageToReply;
 
     @FXML
-    private Pane paneShowConvItem;
+    private VBox paneShowConvItem;
     @FXML
     private Label fromLbl;
 
@@ -31,7 +32,6 @@ public class ShowConvItemController {
         this.replyMessage =replyMessage;
         if(replyMessage.getOriginal()==null){
             paneShowConvItem.getChildren().remove(messageToReply);
-            paneShowConvItem.setPrefHeight(30);
         }
         else{
             messageToReply.setText("replied to: "+replyMessage.getOriginal().getMessage());
