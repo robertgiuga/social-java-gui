@@ -1,5 +1,6 @@
 package com.example.socialtpygui.controller;
 import com.example.socialtpygui.domainEvent.LoadView;
+import com.example.socialtpygui.utils.JavaMailUtil;
 import com.example.socialtpygui.utils.RandomString;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -45,7 +46,7 @@ public class SignUpMainWindowController {
             alert.show();
         }
         else {
-            System.out.println(verificationConde);
+            JavaMailUtil.sendMail(textFieldSignUpEmail.getText(), verificationConde);
             btnSignUpNext.fireEvent(new LoadView(LoadView.SIGN_UP_NEXT, verificationConde));
         }
     }
