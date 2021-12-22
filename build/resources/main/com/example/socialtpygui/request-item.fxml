@@ -7,13 +7,13 @@
 
 <AnchorPane prefHeight="55.0" prefWidth="508.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.RequestItemController">
    <children>
-      <Label fx:id="requestLabel" layoutX="14.0" layoutY="17.0" prefHeight="18.0" prefWidth="107.0" text="Name" textFill="#c9e9d8">
+      <Label fx:id="requestLabel" layoutX="14.0" layoutY="17.0" prefHeight="18.0" prefWidth="107.0" text="Name" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Label>
-      <Button fx:id="declineBtn" layoutX="364.0" layoutY="14.0" mnemonicParsing="false" onAction="#handlerDeclineButton" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #242E3D; -fx-border-color: #C9E9D8;" text="Decline" textFill="#c9e9d8" AnchorPane.leftAnchor="364.0" AnchorPane.rightAnchor="37.0" />
-      <Button fx:id="acceptBtn" layoutX="242.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlerAcceptButton" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #242E3D; -fx-border-color: #C9E9D8;" text="Accept" textFill="#c9e9d8" />
-      <Label fx:id="dateLabel" layoutX="135.0" layoutY="17.0" prefHeight="18.0" prefWidth="107.0" text="Date" textFill="#c9e9d8">
+      <Button fx:id="declineBtn" layoutX="364.0" layoutY="14.0" mnemonicParsing="false" onAction="#handlerDeclineButton" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #242E3D; -fx-border-color: #C9E9D8;" text="Decline" textFill="WHITE" AnchorPane.leftAnchor="364.0" AnchorPane.rightAnchor="37.0" />
+      <Button fx:id="acceptBtn" layoutX="242.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlerAcceptButton" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #242E3D; -fx-border-color: #C9E9D8;" text="Accept" textFill="WHITE" />
+      <Label fx:id="dateLabel" layoutX="135.0" layoutY="17.0" prefHeight="18.0" prefWidth="107.0" text="Date" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Label>
