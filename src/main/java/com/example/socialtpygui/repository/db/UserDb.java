@@ -51,7 +51,6 @@ public class UserDb implements Repository<String,User> {
                 String firstName = resultSet.getString("first_name");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                Boolean admin = resultSet.getBoolean("admin");
 
                 User user = new User(firstName,lastName,email,password);
                 users.add(user);
@@ -68,7 +67,7 @@ public class UserDb implements Repository<String,User> {
             throw new ValidationException("Entity must not be null");
 
         User a = this.findOne(entity.getId());
-        if(a != null) return a;
+        if(a != null) return null;
 
         String sql = "insert into users (email,first_name, last_name,password ) values (?, ?, ?,?)";
 
@@ -84,12 +83,12 @@ public class UserDb implements Repository<String,User> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return entity;
     }
 
     @Override
     public User remove(String s) {
-        User toremove = findOne(s);
+        User toRemove = findOne(s);
 
         String sql = "delete from users where email = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -101,7 +100,7 @@ public class UserDb implements Repository<String,User> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return toremove;
+        return toRemove;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.GroupDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
@@ -36,6 +37,21 @@ public class ConversationController {
     }
 
     /**
+     * creates a conversationItem that is a group (the isGroup boolean identifier from itemController is set to true)
+     * @param group the group of the item
+     * @return  conversationItem
+     * @throws IOException .
+     */
+    private Pane createGroupIem(GroupDTO group) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("conversation-item-view.fxml"));
+        Pane item = loader.load();
+        ConversationItemController controller= loader.getController();
+        controller.setNameLabel(group.getNameGroup());
+        controller.setIsGroup(true);
+        return item;
+    }
+
+    /**
      * Set the service.
      * @param service
      */
@@ -49,7 +65,7 @@ public class ConversationController {
 
 
     /**
-     * loads the gridPane with friends with active conversation.
+     * loads the gridPane with friends and groups with active conversation.
      */
     public void load()
     {
@@ -64,5 +80,15 @@ public class ConversationController {
             } catch (IOException e) {
                 e.printStackTrace();
             }});
+        this.service.getUserGroups(loggedUser.getId()).forEach(groupDTO -> {
+            try {
+                Pane item= createGroupIem(groupDTO);
+                item.getChildren().forEach(node-> {if (node instanceof Label) node.setId(String.valueOf(groupDTO.getId()));});
+                gridPane.addRow(gridPane.getRowCount(),item);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
     }
 }

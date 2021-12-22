@@ -1,7 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.domain.Message;
+import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.domain.User;
@@ -9,6 +9,7 @@ import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -44,12 +45,17 @@ public class ShowConvController {
 
     @FXML
     private AnchorPane anchorPaneShowConvView;
+    @FXML
+    private Button settingsBtn;
+
 
     private User loggedUser;
 
     private String email;
 
     private DragMessage dragMessage=null;
+
+    private Integer groupId = null;
 
     /**
      * send a message to user from conversation
@@ -58,30 +64,49 @@ public class ShowConvController {
     private void sendMessage() throws IOException {
         List<String> to = new ArrayList<>();
         to.add(email);
-        //Pane item = null;
-        if(dragMessage == null) {
-            service.sendMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
-            //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), null));
-            //item.getChildren().forEach(node -> {
-            //    if (node instanceof Label)
-            //        node.setId(String.valueOf(messageText.getText()));
-            //});
+        Pane item = null;
+        if(groupId == null) {
+            if (dragMessage == null) {
+                MessageDTO messageDTO = service.sendMessage(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()));
+                item = createItem(new ReplyMessage(messageDTO, null));
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
+            }
+            else {
+                ReplyMessage replyMessage = service.replyMessage(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
+                item = createItem(replyMessage);
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
+                dragMessage = null;
+            }
         }
         else{
-            service.replyMessage(new ReplyMessageDTO(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
-            //item = createItem(new ReplyMessage(new Message(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage()));
-            //item.getChildren().forEach(node -> {
-            //    if (node instanceof Label)
-            //        node.setId(String.valueOf(messageText.getText()));
-            //});
-            messageToReply.setText("");
-            dragMessage = null;
+            if(dragMessage == null) {
+                MessageDTO messageDTO = service.replyAll(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), groupId);
+                item = createGroupItem(new ReplyMessage(messageDTO, null));
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
+            }
+            else{
+                ReplyMessage replyMessage = service.replyMessageGroup(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()), groupId);
+                item = createGroupItem(replyMessage);
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(messageText.getText()));
+                });
+            }
         }
 
-        //gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        messageToReply.setText("");
         messageText.clear();
-        gridShowMessages.getChildren().clear();
-        this.load(service, loggedUser, email);
+        scrollPaneShowConv.setVvalue(1.0f);
     }
 
     /**
@@ -98,6 +123,21 @@ public class ShowConvController {
     }
 
     /**
+     *
+     * @param replyMessage
+     * @return
+     * @throws IOException
+     */
+    private Pane createGroupItem(ReplyMessage replyMessage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("showConv-item.fxml"));
+        Pane item = loader.load();
+        ShowConvItemController controller = loader.getController();
+        controller.setMessage(replyMessage);
+        User user =service.findOneUser(replyMessage.getFrom());
+        controller.setFrom(user.getFirstName()+" "+user.getLastName());
+        return item;
+    }
+    /**
      * initialize loggedUser, service and email
      * load into gridPane conversation between two users
      * @param service
@@ -105,10 +145,13 @@ public class ShowConvController {
      * @param email
      */
     public void load(SuperService service, User loggedUser, String email){
+        settingsBtn.setVisible(false);
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
         this.loggedUser = loggedUser;
         this.service = service;
         this.email = email;
+        this.groupId = null;
+        scrollPaneShowConv.setVvalue(1.0f);
         service.getMessages(loggedUser.getId(), email).forEach(replyMessage->{
             try{
                 Pane item = createItem(replyMessage);
@@ -130,6 +173,39 @@ public class ShowConvController {
         gridShowMessages.autosize();
     }
 
+    /**
+     * initialize loggedUser, service and groupId
+     * load into gridPane all conversation from a group
+     * @param service SuperService
+     * @param loggedUser User
+     * @param groupId Integer
+     */
+    public void loadGroup(SuperService service, User loggedUser, int groupId)
+    {
+        anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
+        this.loggedUser = loggedUser;
+        this.service = service;
+        this.groupId = groupId;
+        service.getGroupMessages(groupId).forEach(replyMessage -> {
+            try{
+                Pane item = createGroupItem(replyMessage);
+                item.getChildren().forEach(node->{
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(replyMessage.getId()));
+                });
+                if(replyMessage.getFrom().equals(loggedUser.getId())){
+                    gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                }
+                else{
+                    gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                }
+            }catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+        });
+        gridShowMessages.autosize();
+    }
+
 
     /**
      * handle press ok 'ENTER' key sending a Message with text from textField
@@ -138,7 +214,7 @@ public class ShowConvController {
     @FXML
     private void pressedSendButton() throws IOException {
         if(!messageText.getText().equals("")){
-                sendMessage();
+            sendMessage();
             }
     }
 
@@ -164,5 +240,20 @@ public class ShowConvController {
             messageToReply.setText("replying to: "+m.getMessage().getMessage());
             this.dragMessage = m;
         }
+    }
+
+    /**
+     * create a groupSettings view
+     * @throws IOException
+     */
+    @FXML
+    private void handlerSettignsButton() throws IOException {
+        buttonSend.setDisable(true);
+        messageText.setDisable(true);
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("groupSettings-view.fxml"));
+        Pane item = loader.load();
+        GroupSettingsController controller=loader.getController();
+        controller.load(service,groupId,this.loggedUser);
+        scrollPaneShowConv.setContent(item);
     }
 }
