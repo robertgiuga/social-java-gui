@@ -1,13 +1,17 @@
 package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
-import com.example.socialtpygui.domain.Message;
+import com.example.socialtpygui.domain.*;
+import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.repository.db.MessageDb;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class MessageDBTest {
@@ -22,6 +26,13 @@ public class MessageDBTest {
         testFindAllMessageBetweenTwoUsers();
         testRemoveAndSaveSize();
         testGetAllEmailsFromExistingConversation();
+        testGetUserGroups();
+        testGetGroup();
+        testAddRemoveUserToGroup();
+        testAddRemoveGroup();
+        testGetGroupMessages();
+        testUserInGroup();
+        testNumberOfUserFromAGroup();
     }
 
     private static void testFindOne()
@@ -46,30 +57,102 @@ public class MessageDBTest {
 
     private static void testRemoveAndSaveSize()
     {
-        assert (messageDBTest.size() == 7);
-        List<String> list = new ArrayList<String>(); list.add("andr@gamail.com");
-        Message message = new Message("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-        messageDBTest.save(message);
         assert (messageDBTest.size() == 8);
-        assert (messageDBTest.findOne(message.getId()) != null);
-        messageDBTest.remove(message.getId());
-        assert (messageDBTest.size() == 7);
-        assert (messageDBTest.findOne(message.getId()) == null);
+        List<String> list = new ArrayList<String>(); list.add("andr@gamail.com");
+        MessageDTO messageDTO = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+        messageDBTest.save(messageDTO);
+        assert (messageDBTest.size() == 9);
+        assert (messageDBTest.findOne(messageDTO.getId()) != null);
+        messageDBTest.remove(messageDTO.getId());
+        assert (messageDBTest.size() == 8);
+        assert (messageDBTest.findOne(messageDTO.getId()) == null);
     }
 
     private static void testGetAllEmailsFromExistingConversation()
     {
         List<String> list = messageDBTest.getAllEmailsFromSendMessage("gg@gmail.com");
         assert (list.size() == 2);
-        assert (list.get(0).equals("jon1@yahoo.com"));
-        assert (list.get(1).equals("snj@gmail.com"));
         list = messageDBTest.getAllEmailsFromSendMessage("ds");
         assert (list.size() == 0);
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gmail.com");
         assert (list.size() == 2);
-        assert (list.get(1).equals("aand@hotmail.com"));
-        assert (list.get(0).equals("jon1@yahoo.com"));
         list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gdsmail.com");
         assert (list.size() == 0);
     }
+
+    private static void testGetUserGroups()
+    {
+        List<GroupDTO> list = messageDBTest.getUserGroups("gg@gmail.com");
+        assert (list.size() == 2);
+        List<String> nameGroups = new ArrayList<>();
+        list.forEach(groupDTO -> {nameGroups.add(groupDTO.getNameGroup());});
+        assert (nameGroups.contains("Grupa223"));
+        assert (nameGroups.contains("CabanaMunte"));
+        List<Integer> numberOfUsers = new ArrayList<>();
+        list.forEach(groupDTO -> {numberOfUsers.add(groupDTO.getMembersEmail().size());});
+        assert (numberOfUsers.contains(4));
+        assert (numberOfUsers.contains(3));
+    }
+
+    private static void testGetGroup()
+    {
+        assert (messageDBTest.getGroup(1).getNameGroup().equals("Grupa223"));
+        assert (messageDBTest.getGroup(2).getNameGroup().equals("CabanaMunte"));
+    }
+
+    private static void testAddRemoveUserToGroup()
+    {
+        User user = new User("Snow", "John", "snj@gmail.com", "parola2");
+        List<String> list = new ArrayList<>(messageDBTest.getGroup(2).getMembersEmail());
+        assert (! list.contains(user.getId()));
+        messageDBTest.addUserToGroup(user, 2);
+        list.clear();
+        list = messageDBTest.getGroup(2).getMembersEmail();
+        assert (list.contains(user.getId()));
+        messageDBTest.removeUserFromGroup("snj@gmail.com", 2);
+        list.clear();
+        list = messageDBTest.getGroup(2).getMembersEmail();
+        assert (! list.contains(user.getId()));
+    }
+
+
+    private static void testAddRemoveGroup()
+    {
+        List<User> listMembers = new ArrayList<>();
+        listMembers.add(new User("a", "b", "snj@gmail.com", "p")); listMembers.add(new User("a", "b", "gg@gmail.com", "p"));
+        assert (messageDBTest.sizeGroup() == 2);
+        messageDBTest.addGroup(new Group("Grup224", listMembers));
+        assert (messageDBTest.sizeGroup() == 3);
+        String sql = "select id from social_group order by id desc limit 1";
+        try(Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt("id");
+            messageDBTest.removeGroup(id);
+            assert (messageDBTest.sizeGroup() == 2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } ;
+    }
+
+    private static void testGetGroupMessages()
+    {
+        List<ReplyMessage> list = messageDBTest.getGroupMessages(1);
+        assert (list.size() == 1);
+    }
+
+    private static void testUserInGroup()
+    {
+        assert (messageDBTest.userInGroup("gg@gmail.com",1));
+        assert (!messageDBTest.userInGroup("gc@gmail.com",1));
+        assert (messageDBTest.userInGroup("andr@gamail.com",2));
+    }
+
+    private static void testNumberOfUserFromAGroup()
+    {
+        assert (messageDBTest.numberOfUserFromAGroup(1) == 4);
+        assert (messageDBTest.numberOfUserFromAGroup(2) == 3);
+    }
+
 }

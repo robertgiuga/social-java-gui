@@ -143,7 +143,7 @@ public class FriendshipService {
      * @throws NonExistingException when a friendship or a friend request already exist
      */
     public void sendRequest(String id1, String id2) {
-        if (repositoryFriendshipRequest.save(new Friendship(id1, id2, LocalDate.now())) != null) {
+        if (repositoryFriendshipRequest.save(new Friendship(id1, id2, LocalDate.now())) == null) {
             throw new NonExistingException("This friend request already exist!");
         }
     }
@@ -179,7 +179,7 @@ public class FriendshipService {
 
         Friendship friendship1 = new Friendship(friendship.getId().getLeft(), friendship.getId().getRight(), LocalDate.now());
 
-        if (repositoryFriendship.save(friendship1) != null) {
+        if (repositoryFriendship.save(friendship1) == null) {
             throw new NonExistingException("This friendship already exist!");
         }
     }

@@ -6,6 +6,8 @@ import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.NonExistingException;
+import com.example.socialtpygui.utils.events.ViewItemEvent;
+import com.example.socialtpygui.utils.observer.Observer;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,21 +17,24 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class RequestController {
+public class RequestController implements Observer<ViewItemEvent> {
     User loggedUser;
     SuperService service;
 
     @FXML
     private GridPane gridPane;
 
-    private ObservableList<Node> requests;
+    private List<UserDTO> requests;
 
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
     }
 
     public void setService(SuperService service) {
+        service.addObserver(this);
         this.service = service;
     }
 
@@ -42,19 +47,17 @@ public class RequestController {
         requestItemController.setLoggedUser(loggedUser);
         requestItemController.setService(service);
         requestItemController.setEmail(request.getUser2().getId());
-        requestItemController.setRequestController(this);
         return item;
     }
 
     public void load(){
         try {
+            requests=new ArrayList<>();
             service.getFriendRequest(loggedUser.getId()).forEach(friendShipDTO-> {
                 try {
                     Pane item = createItem(friendShipDTO);
-                    item.getChildren().forEach(node -> {
-                        if (node instanceof Button) node.setId(String.valueOf(gridPane.getRowCount()));
-                    });
                     gridPane.addRow(gridPane.getRowCount(), item);
+                    requests.add(friendShipDTO.getUser2());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -62,10 +65,12 @@ public class RequestController {
         }catch (NonExistingException e){
             System.out.println(e.getMessage());
         }
-        requests = gridPane.getChildren();
     }
 
-    public void deleteItemFromGridPane(String row){
-        gridPane.getChildren().remove(requests.get(Integer.parseInt(row)));
+
+    @Override
+    public void update(ViewItemEvent viewItemEvent) {
+        gridPane.getChildren().remove(requests.indexOf(viewItemEvent.getUserDTO()));
+        requests.remove(viewItemEvent.getUserDTO());
     }
 }

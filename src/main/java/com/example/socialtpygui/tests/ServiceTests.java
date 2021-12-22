@@ -39,6 +39,7 @@ public class ServiceTests {
     }
 
     public static void runTests() {
+
         testAddUser();
         testRemoveUser();
         testUsers();
@@ -55,11 +56,15 @@ public class ServiceTests {
         testAcceptRequest();
         testDeclineRequest();
         testGetRequests();
-        testReplayAll();
+        testReplyAll();
         testgetUsersByName();
         testfriendshipDate();
         testfriendshipRequestDate();
         testfriendRequest();
+        testGetUserGroups();
+        testGetGroup();
+        testAddRemoveUserToGroup();
+        testGetGroupMessages();
     }
 
     private static void testAddUser() {
@@ -298,14 +303,6 @@ public class ServiceTests {
             assert true;
         }
 
-        /*try {
-            YearMonth date= YearMonth.parse("2020-18", DateTimeFormatter.ofPattern("yyyy-MM"));
-            Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@sad.", date);
-            assert false;
-        }catch (ValidationException exception){
-            assert true;
-        }*/
-
         YearMonth date = YearMonth.parse("2021-10", DateTimeFormatter.ofPattern("yyyy-MM"));
         Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@gamail.com", date);
         long size = StreamSupport.stream(friends.spliterator(), false).count();
@@ -324,9 +321,6 @@ public class ServiceTests {
     private static void testGetAllConversation() {
         List<String> list = service.getAllConversation("gg@gmail.com");
         assert (list.size() == 3);
-        assert (list.get(0).equals("jon1@yahoo.com"));
-        assert (list.get(1).equals("snj@gmail.com"));
-        assert (list.get(2).equals("aand@hotmail.com"));
         try {
             list = service.getAllConversation("dsa");
             assert false;
@@ -351,18 +345,18 @@ public class ServiceTests {
     }
 
     private static void testSaveDelete() {
-        assert (messageDb.size() == 7);
+        assert (messageDb.size() == 8);
         List<String> list = new ArrayList<String>();
         list.add("andr@gamail.com");
         try {
-            Message newMessage = new Message("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-            service.sendMessage(newMessage);
+            MessageDTO newMessageDTO = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+            service.sendMessage(newMessageDTO);
             assert false;
         } catch (ValidationException e) {
             assert true;
         }
-        Message newMessage = new Message("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-        service.sendMessage(newMessage);
+        MessageDTO newMessageDTO = new MessageDTO("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+        service.sendMessage(newMessageDTO);
         String sql = "SELECT id FROM message ORDER BY ID DESC LIMIT 1";
 
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
@@ -370,19 +364,19 @@ public class ServiceTests {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int id = resultSet.getInt("id");
-            assert (messageDb.size() == 8);
+            assert (messageDb.size() == 9);
             assert (messageDb.findOne(id) != null);
             messageDb.remove(id);
-            assert (messageDb.size() == 7);
+            assert (messageDb.size() == 8);
             assert (messageDb.findOne(id) == null);
 
-            Message message = new Message("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-            ReplyMessageDTO newReplyMessageDTO = new ReplyMessageDTO(message, String.valueOf(1));
+            MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+            ReplyMessageDTO newReplyMessageDTO = new ReplyMessageDTO(messageDTO, String.valueOf(1));
             service.replyMessage(newReplyMessageDTO);
 
             try {
-                Message message1 = new Message("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
-                ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(message1, String.valueOf(1));
+                MessageDTO messageDTO1 = new MessageDTO("gg@gmail.com", list, "Proiect1.pdf", LocalDate.now());
+                ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(messageDTO1, String.valueOf(1));
                 service.replyMessage(newReplyMessageDTO1);
                 assert false;
             } catch (ValidationException e) {
@@ -391,10 +385,10 @@ public class ServiceTests {
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             id = resultSet.getInt("id");
-            assert (messageDb.size() == 8);
+            assert (messageDb.size() == 9);
             assert (messageDb.findOne(id) != null);
             messageDb.remove(id);
-            assert (messageDb.size() == 7);
+            assert (messageDb.size() == 8);
             assert (messageDb.findOne(id) == null);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -402,15 +396,15 @@ public class ServiceTests {
         list.clear();
         list.add("gg@gmail.com");
         try {
-            Message message = new Message("snj@gmail.com", list, "MesajTest", LocalDate.now());
-            service.sendMessage(message);
+            MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "MesajTest", LocalDate.now());
+            service.sendMessage(messageDTO);
             assert false;
         } catch (ValidationException e) {
             assert true;
         }
         try {
-            Message message = new Message("snj@gmail.com", list, "MesajTest", LocalDate.now());
-            ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(message, String.valueOf(1));
+            MessageDTO messageDTO = new MessageDTO("snj@gmail.com", list, "MesajTest", LocalDate.now());
+            ReplyMessageDTO newReplyMessageDTO1 = new ReplyMessageDTO(messageDTO, String.valueOf(1));
             service.replyMessage(newReplyMessageDTO1);
             assert false;
         } catch (ValidationException e) {
@@ -476,7 +470,7 @@ public class ServiceTests {
         }
 
         try {
-            service.sendRequest("gc@gmail.com", "gg@gmail.com");
+            service.sendRequest("gc@gmail.com", "gg@gmail.co");
             assert false;
         } catch (ValidationException e) {
             assert true;
@@ -609,82 +603,52 @@ public class ServiceTests {
 
     }
 
-    private static void testReplayAll() {
-        //Test with invalid data.
-        Message message = new Message("andr@gamail.com", null, "De ce ne intrebi?", LocalDate.now());
-        ReplyMessageDTO replyMessageDTO = new ReplyMessageDTO(message, "87");
-        try {
-            service.replayAll(replyMessageDTO);
-            assert false;
-        } catch (NonExistingException e) {
-            assert true;
-        }
-        message.setFrom("ddasda");
-        replyMessageDTO = new ReplyMessageDTO(message, "1");
-        try {
-            service.replayAll(replyMessageDTO);
-            assert false;
-        } catch (ValidationException e) {
-            assert true;
-        }
-        message.setFrom("andr@gamail.com");
-        message.setMessage("");
-        replyMessageDTO = new ReplyMessageDTO(message, "1");
-        try {
-            service.replayAll(replyMessageDTO);
-            assert false;
-        } catch (ValidationException e) {
-            assert true;
-        }
-
-        //Test with valid data.
-        message.setMessage("De ce ne intrebi?");
-        replyMessageDTO = new ReplyMessageDTO(message, "1");
-        assert (messageService.size() == 7);
-        service.replayAll(replyMessageDTO);
-        assert (messageService.size() == 8);
-        String sql1 = "SELECT id FROM message ORDER BY ID DESC LIMIT 1";
-        String sql2 = "select email from message_recipient order by message desc limit 2";
+    private static void testReplyAll() {
+        MessageDTO messageDTO = service.replyAll(new MessageDTO("gg@gmail.com", null, "Salut!", LocalDate.now()), 1);
+        assert (service.getGroupMessages(1).size() == 2);
+        int id = messageDTO.getId();
+        String sql = "select count (*) from message_group";
+        String sql1 = "delete from message_group where id_message = ?";
+        String sql2 = "delete from message where id = ?";
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
              PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
              PreparedStatement preparedStatement2 = connection.prepareStatement(sql2)) {
-            ResultSet resultSet1 = preparedStatement1.executeQuery();
-            resultSet1.next(); int id = resultSet1.getInt("id");
-            assert (messageService.findOne(id).getMessage().equals("De ce ne intrebi?"));
-            ResultSet resultSet2 = preparedStatement2.executeQuery();
-            resultSet2.next(); assert (replyMessageDTO.getResponse().getTo().contains(resultSet2.getString("email")));
-            resultSet2.next(); assert (replyMessageDTO.getResponse().getTo().contains(resultSet2.getString("email")));
-            messageService.remove(id);
+            preparedStatement1.setInt(1, id);
+            preparedStatement2.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement1.executeUpdate();
+            preparedStatement2.executeUpdate();
+            resultSet.next();
+            String nr = resultSet.getString(1);
+            assert (nr.equals(String.valueOf(2)));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    private static void testgetUsersByName()
-    {
+    private static void testgetUsersByName() {
         List<String> list1 = new ArrayList<>();
-        service.getUsersByName("a").forEach(elem-> list1.add(elem.getId()));
+        service.getUsersByName("a").forEach(elem -> list1.add(elem.getId()));
         assert (list1.size() == 4);
         assert (list1.contains("gc@gmail.com"));
         assert (list1.contains("gg@gmail.com"));
         assert (list1.contains("andr@gamail.com"));
         assert (list1.contains("aand@hotmail.com"));
         list1.clear();
-        service.getUsersByName("adasda dasda").forEach(elem->list1.add(elem.getId()));
+        service.getUsersByName("adasda dasda").forEach(elem -> list1.add(elem.getId()));
         assert (list1.size() == 0);
     }
 
 
-    private static void testfriendshipRequestDate()
-    {
+    private static void testfriendshipRequestDate() {
         assert (service.friendshipRequestDate("andr@gamail.com", "snj@gmail.com").toString().equals("2021-10-29"));
         assert (service.friendshipRequestDate("andr@gamail.com", "snj@sadgmail.com") == null);
         assert (service.friendshipRequestDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
 
     }
 
-    private static void testfriendshipDate()
-    {
+    private static void testfriendshipDate() {
         assert (service.friendshipDate("snj@gmail.com", "andr@gamail.com").toString().equals("2021-10-29"));
         assert (service.friendshipDate("snj@gmail.com", "andrrqwe@gamail.com") == null);
         assert (service.friendshipDate("andr@gamail.com", "aand@hotmail.com").toString().equals("2021-10-29"));
@@ -715,5 +679,68 @@ public class ServiceTests {
         } catch (NonExistingException e) {
             assert true;
         }
+    }
+
+
+    private static void testGetUserGroups() {
+        List<GroupDTO> list = service.getUserGroups("gg@gmail.com");
+        assert (list.size() == 2);
+        List<String> nameGroups = new ArrayList<>();
+        list.forEach(groupDTO -> {
+            nameGroups.add(groupDTO.getNameGroup());
+        });
+        assert (nameGroups.contains("Grupa223"));
+        assert (nameGroups.contains("CabanaMunte"));
+        List<Integer> numberOfUsers = new ArrayList<>();
+        list.forEach(groupDTO -> {
+            numberOfUsers.add(groupDTO.getMembersEmail().size());
+        });
+        assert (numberOfUsers.contains(4));
+        assert (numberOfUsers.contains(3));
+    }
+
+    private static void testGetGroup() {
+        assert (service.getGroup(1).getNameGroup().equals("Grupa223"));
+        assert (service.getGroup(2).getNameGroup().equals("CabanaMunte"));
+        try{
+            service.getGroup(287);
+            assert false;
+        }
+        catch (NonExistingException e){
+            assert true;
+        }
+    }
+
+    private static void testAddRemoveUserToGroup() {
+        User user = new User("Snow", "John", "snj@gmail.com", "parola2");
+        List<String> list = new ArrayList<>(service.getGroup(2).getMembersEmail());
+        assert (!list.contains(user.getId()));
+        service.addUserToGroup("snj@gmail.com", 2);
+        try{
+            service.addUserToGroup("snj@gmail.com", 22);
+            assert false;
+        }
+        catch (NonExistingException e){
+            assert true;
+        }
+        list.clear();
+        list = service.getGroup(2).getMembersEmail();
+        assert (list.contains(user.getId()));
+        service.removeUserFromGroup("snj@gmail.com", 2);
+        try{
+            service.removeUserFromGroup("snj@gmail.com", 42);
+            assert false;
+        }
+        catch (NonExistingException e){
+            assert true;
+        }
+        list.clear();
+        list = service.getGroup(2).getMembersEmail();
+        assert (!list.contains(user.getId()));
+    }
+
+    private static void testGetGroupMessages() {
+        List<ReplyMessage> list = messageService.getGroupMessages(1);
+        assert (list.size() == 1);
     }
 }

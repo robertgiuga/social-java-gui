@@ -1,8 +1,5 @@
 package com.example.socialtpygui.tests.DomainTests;
 
-import com.example.socialtpygui.domain.Message;
-import com.example.socialtpygui.domain.User;
-
 public class DomainTests {
 
     /**
