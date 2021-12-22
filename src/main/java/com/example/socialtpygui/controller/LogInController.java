@@ -32,6 +32,8 @@ public class LogInController {
     @FXML
     private BorderPane borderPaneLogWindow;
 
+    SignUpMainWindowController signUpMainWindowController;
+
     private SuperService service;
     private double yCord;
     private double xCord;
@@ -102,27 +104,18 @@ public class LogInController {
     public void handlerCreateAccountBtn(MouseEvent mouseEvent) throws IOException {
         if (createAcountBtn.getText().equals("SignUp")) {
             loadEventFilter();
-            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("singUpMainWindow.fxml"));
-            AnchorPane panel = fxmlLoader.load();
-            Pane view = new Pane(panel);
-            borderPaneLogWindow.setCenter(view);
-            createAcountBtn.setText("SignIn");
+            loadSignUpWindow();
         }
         else if (createAcountBtn.getText().equals("SignIn"))
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signInWindow.fxml"));
-            AnchorPane panel = fxmlLoader.load();
-            LogInController logInController = fxmlLoader.getController();
-            logInController.setService(service);
-            Pane view = new Pane(panel);
-            borderPaneLogWindow.setCenter(view);
-            createAcountBtn.setText("SignUp");
+            loadSignInWindow();
         }
     }
 
     public void loadEventFilter()
     {
         borderPaneLogWindow.addEventFilter(LoadView.SIGN_UP_NEXT, this::handlerForLoadView);
+        borderPaneLogWindow.addEventFilter(LoadView.FINAL_SIGN_UP, this::handlerForLoadView);
     }
 
     private void handlerForLoadView(LoadView t) {
@@ -130,8 +123,41 @@ public class LogInController {
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signUpConfirmEmailWindow.fxml"));
             AnchorPane panel = null;
             try {panel = fxmlLoader.load();} catch (IOException e) {e.printStackTrace();}
+            SignUpConfirmEmailWindowController controller = fxmlLoader.getController();
+            controller.setVerificationCode(t.getValidationCode());
             Pane view = new Pane(panel);
             borderPaneLogWindow.setCenter(view);
         }
+        if (t.getEventType().equals(LoadView.FINAL_SIGN_UP))
+        {
+            try{
+                service.addUser(new User(signUpMainWindowController.getTextFieldSignUpFN(), signUpMainWindowController.getTextFieldSignUpLN(),signUpMainWindowController.getTextFieldSignUpEmail(),signUpMainWindowController.getTextFieldPassword()));
+                loadSignInWindow();
+            }catch(Exception e)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Invalid Date!");
+                alert.show();
+            }
+        }
+    }
+
+    private void loadSignInWindow() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signInWindow.fxml"));
+        AnchorPane panel = fxmlLoader.load();
+        LogInController logInController = fxmlLoader.getController();
+        logInController.setService(service);
+        Pane view = new Pane(panel);
+        borderPaneLogWindow.setCenter(view);
+        createAcountBtn.setText("SignUp");
+    }
+
+    private void loadSignUpWindow() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("singUpMainWindow.fxml"));
+        AnchorPane panel = fxmlLoader.load();
+        this.signUpMainWindowController = fxmlLoader.getController();
+        Pane view = new Pane(panel);
+        borderPaneLogWindow.setCenter(view);
+        createAcountBtn.setText("SignIn");
     }
 }
