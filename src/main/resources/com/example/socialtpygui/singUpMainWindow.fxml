@@ -22,17 +22,17 @@
         <TextField fx:id="textFieldSignUpFN" layoutX="14.0" layoutY="120.0" prefHeight="38.0" prefWidth="149.0" promptText="First Name" />
         <TextField fx:id="textFieldSignUpLN" layoutX="193.0" layoutY="120.0" prefHeight="38.0" prefWidth="149.0" promptText="Last Name" />
         <TextField fx:id="textFieldSignUpEmail" layoutX="14.0" layoutY="187.0" prefHeight="38.0" prefWidth="329.0" promptText="Email" />
-        <Button fx:id="btnSignUpNext" layoutX="264.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#handlerBtnSignUpNext" prefHeight="38.0" prefWidth="78.0" text="Next" textFill="#242e3d">
+        <Button fx:id="btnSignUpNext" layoutX="264.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#handlerBtnSignUpNext" prefHeight="38.0" prefWidth="78.0" text="Next" textFill="#c9e9d8">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
         <PasswordField fx:id="passwordFieldSignUp" layoutX="14.0" layoutY="254.0" prefHeight="38.0" prefWidth="149.0" promptText="Password" />
         <PasswordField fx:id="passwordFieldSignUpConfirm" layoutX="192.0" layoutY="254.0" prefHeight="38.0" prefWidth="149.0" promptText="Confirm Password" />
-        <Label layoutX="14.0" layoutY="102.0" text="First Name" textFill="#c9e9d8" />
-        <Label layoutX="193.0" layoutY="102.0" text="Last Name" textFill="#c9e9d8" />
-        <Label layoutX="14.0" layoutY="169.0" text="Email" textFill="#c9e9d8" />
-        <Label layoutX="192.0" layoutY="236.0" text="Confirm Password" textFill="#c9e9d8" />
-        <Label layoutX="14.0" layoutY="236.0" text="Password" textFill="#c9e9d8" />
+        <Label layoutX="25.0" layoutY="102.0" text="First Name" textFill="#c9e9d8" />
+        <Label layoutX="202.0" layoutY="102.0" text="Last Name" textFill="#c9e9d8" />
+        <Label layoutX="25.0" layoutY="170.0" text="Email" textFill="#c9e9d8" />
+        <Label layoutX="202.0" layoutY="236.0" text="Confirm Password" textFill="#c9e9d8" />
+        <Label layoutX="20.0" layoutY="236.0" text="Password" textFill="#c9e9d8" />
     </children>
 </AnchorPane>
