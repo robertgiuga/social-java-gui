@@ -2,6 +2,7 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domainEvent.LoadView;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
@@ -11,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,14 +28,14 @@ public class LogInController {
     @FXML
     private PasswordField passwordTxt;
     @FXML
-    private Button logInBtn;
+    private Button logInBtn, createAcountBtn;
     @FXML
-    private AnchorPane mainPane;
+    private BorderPane borderPaneLogWindow;
 
     private SuperService service;
     private double yCord;
     private double xCord;
-    private MainWindowController mainWindowController;
+
 
 
     @FXML
@@ -94,5 +97,41 @@ public class LogInController {
 
     public void handlerExtindButton(ActionEvent actionEvent) {
         ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setFullScreen(true);
+    }
+
+    public void handlerCreateAccountBtn(MouseEvent mouseEvent) throws IOException {
+        if (createAcountBtn.getText().equals("SignUp")) {
+            loadEventFilter();
+            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("singUpMainWindow.fxml"));
+            AnchorPane panel = fxmlLoader.load();
+            Pane view = new Pane(panel);
+            borderPaneLogWindow.setCenter(view);
+            createAcountBtn.setText("SignIn");
+        }
+        else if (createAcountBtn.getText().equals("SignIn"))
+        {
+            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signInWindow.fxml"));
+            AnchorPane panel = fxmlLoader.load();
+            LogInController logInController = fxmlLoader.getController();
+            logInController.setService(service);
+            Pane view = new Pane(panel);
+            borderPaneLogWindow.setCenter(view);
+            createAcountBtn.setText("SignUp");
+        }
+    }
+
+    public void loadEventFilter()
+    {
+        borderPaneLogWindow.addEventFilter(LoadView.SIGN_UP_NEXT, this::handlerForLoadView);
+    }
+
+    private void handlerForLoadView(LoadView t) {
+        if (t.getEventType().equals(LoadView.SIGN_UP_NEXT)){
+            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signUpConfirmEmailWindow.fxml"));
+            AnchorPane panel = null;
+            try {panel = fxmlLoader.load();} catch (IOException e) {e.printStackTrace();}
+            Pane view = new Pane(panel);
+            borderPaneLogWindow.setCenter(view);
+        }
     }
 }

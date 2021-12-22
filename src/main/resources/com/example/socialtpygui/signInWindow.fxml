@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="396.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.LogInController">
+    <children>
+        <TextField fx:id="usernameTxt" layoutX="70.0" layoutY="129.0" prefHeight="34.0" prefWidth="235.0" promptText="Username">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </TextField>
+        <Button fx:id="logInBtn" layoutX="121.0" layoutY="249.0" mnemonicParsing="false" onAction="#handlerLogIn" prefHeight="25.0" prefWidth="133.0" text="SignIn" textFill="#c9e9d8">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
+        <PasswordField fx:id="passwordTxt" layoutX="70.0" layoutY="189.0" prefHeight="34.0" prefWidth="235.0" promptText="Password">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </PasswordField>
+    </children>
+</AnchorPane>
