@@ -1,6 +1,8 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.Socket.TCPClient;
+import com.example.socialtpygui.Socket.UDPClient;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.LoadView;
 import com.example.socialtpygui.service.SuperService;
@@ -53,7 +55,12 @@ public class LogInController {
             StackPane panel= fxmlLoader.load();
 
             MainWindowController mainWindowController= fxmlLoader.getController();
-            mainWindowController.load(service,user);
+
+            TCPClient client= new TCPClient();
+            UDPClient client1= new UDPClient(service,client.createConnection(user.getId()));
+            client1.start();
+
+            mainWindowController.load(service,user,client1);
 
             Scene scene = new Scene(panel, 500, 520);
 

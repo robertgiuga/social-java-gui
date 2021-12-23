@@ -1,6 +1,8 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.Socket.TCPClient;
+import com.example.socialtpygui.Socket.UDPClient;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.ItemSelected;
 import com.example.socialtpygui.service.SuperService;
@@ -25,6 +27,8 @@ import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class MainWindowController {
 
@@ -61,11 +65,13 @@ public class MainWindowController {
     private SuperService service;
 
     private User loggedUser;
+    private UDPClient udpThread;
 
-    public void load(SuperService service, User loggedUser){
+    public void load(SuperService service, User loggedUser, UDPClient udpThread){
         leftPane.setVisible(false);
         this.service=service;
         this.loggedUser=loggedUser;
+        this.udpThread= udpThread;
     }
 
 
@@ -117,7 +123,10 @@ public class MainWindowController {
         borderPane.setCenter(panel);
     }
 
-    public void handlerExitBtnMW(ActionEvent actionEvent) {
+    public void handlerExitBtnMW(ActionEvent actionEvent) throws IOException {
+        TCPClient closeThread = new TCPClient();
+        closeThread.createConnection(loggedUser.getId());
+
         ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).close();
     }
 

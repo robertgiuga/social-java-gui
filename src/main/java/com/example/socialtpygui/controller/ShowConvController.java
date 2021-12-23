@@ -7,6 +7,8 @@ import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
+import com.example.socialtpygui.utils.events.NewMessageEvent;
+import com.example.socialtpygui.utils.observer.Observer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,7 +27,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowConvController {
+public class ShowConvController implements Observer<NewMessageEvent> {
     private SuperService service;
 
     @FXML
@@ -145,6 +147,7 @@ public class ShowConvController {
      * @param email
      */
     public void load(SuperService service, User loggedUser, String email){
+        service.addObserver(this);
         settingsBtn.setVisible(false);
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
         this.loggedUser = loggedUser;
@@ -255,5 +258,10 @@ public class ShowConvController {
         GroupSettingsController controller=loader.getController();
         controller.load(service,groupId,this.loggedUser);
         scrollPaneShowConv.setContent(item);
+    }
+
+    @Override
+    public void update(NewMessageEvent newMessageEvent) {
+        System.out.println("ar trb incarcat nou mesaj");
     }
 }
