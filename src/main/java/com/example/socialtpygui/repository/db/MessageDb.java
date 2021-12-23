@@ -8,9 +8,9 @@ import com.example.socialtpygui.repository.Repository;
 import com.example.socialtpygui.service.validators.ValidationException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+
 public class MessageDb implements Repository<Integer, MessageDTO> {
     String url, username, password;
 

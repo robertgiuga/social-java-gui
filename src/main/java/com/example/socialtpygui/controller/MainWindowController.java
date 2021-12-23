@@ -50,6 +50,9 @@ public class MainWindowController {
     @FXML
     private Button extindBtnMW;
 
+    @FXML
+    private Button statisticsBtn;
+
     Pane friendsView=null;
 
 
@@ -142,6 +145,10 @@ public class MainWindowController {
 
         Stage mainWnd =(Stage) borderPane.getScene().getWindow();
         mainWnd.close();
+
+    }
+
+    public void handelerStatisticsbtn(ActionEvent event) {
 
     }
 }

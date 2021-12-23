@@ -1,7 +1,6 @@
 package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
-import com.example.socialtpygui.domain.FriendShipDTO;
 import com.example.socialtpygui.domain.Friendship;
 import com.example.socialtpygui.domain.TupleOne;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;

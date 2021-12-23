@@ -3,14 +3,10 @@ package com.example.socialtpygui.service.entityservice;
 import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
-import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.repository.db.MessageDb;
-import com.example.socialtpygui.service.validators.NonExistingException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 public class MessageService {
