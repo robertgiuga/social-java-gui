@@ -17,6 +17,11 @@ public class SignUpConfirmEmailWindowController {
     SuperService service;
     String verificationCode;
 
+    /**
+     * Handler for btnSignUpConfirmEmail, if the text from textFieldVerificationCodeSignUp is equal
+     * with verificationCode fire LoadEvent Event for SignUp
+     * @param mouseEvent MouseEvent
+     */
     public void handlerBtnSignUpConfirmEmail(MouseEvent mouseEvent) {
         if (textFieldVerificationCodeSignUp.getText().equals(verificationCode))
         {
@@ -30,7 +35,15 @@ public class SignUpConfirmEmailWindowController {
         }
     }
 
+    /**
+     * Set service
+     * @param service SuperService
+     */
     public void setService(SuperService service) {this.service = service;}
 
+    /**
+     * Set verification code
+     * @param verificationCode String
+     */
     public void setVerificationCode(String verificationCode) {this.verificationCode = verificationCode;}
 }

@@ -30,7 +30,12 @@ public class SignUpMainWindowController {
 
     String verificationConde = RandomString.getAlphaNumericString(10);
 
-
+    /**
+     * Handler for btnSignUpNext, if the text fields are not empty, then send a mail with verificationCode
+     * and fire LoadView Event for load window for validation code
+     * @param mouseEvent
+     * @throws Exception
+     */
     public void handlerBtnSignUpNext(MouseEvent mouseEvent) throws Exception {
         if ((textFieldSignUpLN.getText().length() == 0) || (textFieldSignUpFN.getText().length() == 0) || (textFieldSignUpEmail.getText().length() == 0)
         || (passwordFieldSignUp.getText().length() == 0) || (passwordFieldSignUpConfirm.getText().length() == 0))
@@ -51,18 +56,30 @@ public class SignUpMainWindowController {
         }
     }
 
+    /**
+     * @return text from textFieldSignUpEmail
+     */
     public String getTextFieldSignUpEmail() {
         return textFieldSignUpEmail.getText();
     }
 
+    /**
+     * @return text from textFieldSignUpFN
+     */
     public String getTextFieldSignUpFN() {
         return textFieldSignUpFN.getText();
     }
 
+    /**
+     * @return text from textFieldSignUpLN
+     */
     public String getTextFieldSignUpLN() {
         return textFieldSignUpLN.getText();
     }
 
+    /**
+     * @return text from textFieldPassword
+     */
     public String getTextFieldPassword(){return passwordFieldSignUp.getText();}
 
 

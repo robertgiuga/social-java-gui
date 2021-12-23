@@ -101,6 +101,12 @@ public class LogInController {
         ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).setFullScreen(true);
     }
 
+    /**
+     * Handler for createAccountBtn, if the text is SignUp then load the SignUp window, if the
+     * text is SignIn then load the SignIn window
+     * @param mouseEvent MouseEvent
+     * @throws IOException
+     */
     public void handlerCreateAccountBtn(MouseEvent mouseEvent) throws IOException {
         if (createAcountBtn.getText().equals("SignUp")) {
             loadEventFilter();
@@ -112,12 +118,20 @@ public class LogInController {
         }
     }
 
+    /**
+     * Filter for catch the LoadView event.
+     */
     public void loadEventFilter()
     {
         borderPaneLogWindow.addEventFilter(LoadView.SIGN_UP_NEXT, this::handlerForLoadView);
         borderPaneLogWindow.addEventFilter(LoadView.FINAL_SIGN_UP, this::handlerForLoadView);
     }
 
+    /**
+     * if the flag of LoadView event is SIGN_UP_NEXT then load the verification code window, if the flag is
+     * FINAL_SIGN_UP add the user and if the data is invalid throw alert
+     * @param t LoadView event
+     */
     private void handlerForLoadView(LoadView t) {
         if (t.getEventType().equals(LoadView.SIGN_UP_NEXT)){
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signUpConfirmEmailWindow.fxml"));
@@ -142,6 +156,10 @@ public class LogInController {
         }
     }
 
+    /**
+     * Load SignIn window
+     * @throws IOException
+     */
     private void loadSignInWindow() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("signInWindow.fxml"));
         AnchorPane panel = fxmlLoader.load();
@@ -152,6 +170,10 @@ public class LogInController {
         createAcountBtn.setText("SignUp");
     }
 
+    /**
+     * Load SignUp window
+     * @throws IOException
+     */
     private void loadSignUpWindow() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("singUpMainWindow.fxml"));
         AnchorPane panel = fxmlLoader.load();
