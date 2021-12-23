@@ -7,15 +7,15 @@
 
 <AnchorPane fx:id="anchorPaneSearchItemView" prefHeight="64.0" prefWidth="508.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchItemController">
    <children>
-      <Button fx:id="addBtn" layoutX="375.0" layoutY="16.0" mnemonicParsing="false" onAction="#handlerAddBtn" prefHeight="25.0" prefWidth="95.0" text="Add" textFill="#c9e9d8">
+      <Button fx:id="addBtn" layoutX="375.0" layoutY="16.0" mnemonicParsing="false" onAction="#handlerAddBtn" prefHeight="25.0" prefWidth="95.0" text="Add" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Label fx:id="nameLbl" layoutX="14.0" layoutY="24.0" prefHeight="17.0" prefWidth="207.0" text="Nume" textFill="#c9e9d8">
+      <Label fx:id="nameLbl" layoutX="14.0" layoutY="24.0" prefHeight="17.0" prefWidth="207.0" text="Nume" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Label>
-      <Button fx:id="cancelBtn" layoutX="375.0" layoutY="16.0" mnemonicParsing="false" onAction="#handlerCloseBtn" prefHeight="25.0" prefWidth="95.0" text="Cancel" textFill="#c9e9d8">
+      <Button fx:id="cancelBtn" layoutX="375.0" layoutY="16.0" mnemonicParsing="false" onAction="#handlerCloseBtn" prefHeight="25.0" prefWidth="95.0" text="Cancel" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Button>
