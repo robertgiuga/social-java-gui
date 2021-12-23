@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -27,6 +28,8 @@ import java.io.IOException;
 
 public class MainWindowController {
 
+    public AnchorPane leftPane;
+    public Button meniuBtn;
     @FXML
     private ImageView friendsViewBtn;
 
@@ -51,6 +54,7 @@ public class MainWindowController {
     @FXML
     private Button extindBtnMW;
 
+
     Pane friendsView=null;
 
 
@@ -59,6 +63,7 @@ public class MainWindowController {
     private User loggedUser;
 
     public void load(SuperService service, User loggedUser){
+        leftPane.setVisible(false);
         this.service=service;
         this.loggedUser=loggedUser;
     }
@@ -66,6 +71,7 @@ public class MainWindowController {
 
     @FXML
     private void handlerFriendsButton() throws IOException {
+        slidebarDisbale();
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("friends-view.fxml"));
         Pane pane = loader.load();
         FriendsController friendsController= loader.getController();
@@ -144,5 +150,24 @@ public class MainWindowController {
         Stage mainWnd =(Stage) borderPane.getScene().getWindow();
         mainWnd.close();
 
+    }
+
+    public void handlerForBgClick(MouseEvent event) {
+       // leftPane.setVisible(false);
+        //borderPane.setDisable(false);
+    }
+    private void slidebarDisbale(){
+        leftPane.setVisible(false);
+        borderPane.setDisable(false);
+    }
+
+    public void handlerMenuShow(ActionEvent event) {
+        if(leftPane.isVisible()) {
+            slidebarDisbale();
+        }
+        else {
+            leftPane.setVisible(true);
+            borderPane.setDisable(true);
+        }
     }
 }

@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,12 +50,12 @@ public class LogInController {
 
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("mainWindow.fxml"));
             Stage manWindowStage= new Stage();
-            AnchorPane panel= fxmlLoader.load();
+            StackPane panel= fxmlLoader.load();
 
             MainWindowController mainWindowController= fxmlLoader.getController();
             mainWindowController.load(service,user);
 
-            Scene scene = new Scene(panel, 700, 520);
+            Scene scene = new Scene(panel, 500, 520);
 
             panel.setOnMousePressed(event->{
                 xCord = event.getSceneX();
