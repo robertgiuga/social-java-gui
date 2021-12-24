@@ -64,6 +64,9 @@ public class ServiceTests {
         testGetGroup();
         testAddRemoveUserToGroup();
         testGetGroupMessages();
+        testFindOne();
+        testSaveRemove();
+        testAddRemoveParticipants();
     }
 
     private static void testAddUser() {
@@ -741,5 +744,106 @@ public class ServiceTests {
     private static void testGetGroupMessages() {
         List<ReplyMessage> list = messageService.getGroupMessages(1);
         assert (list.size() == 1);
+    }
+
+
+
+
+
+    private static void testFindOne()
+    {
+        assert service.findOneEvent(1).getParticipants().size() == 4;
+        assert service.findOneEvent(1).getName().equals("Untold");
+        assert service.findOneEvent(1).getDescription().equals("Festival");
+        assert service.findOneEvent(1).getLocation().equals("Cluj");
+        try {
+            service.findOneEvent(12);
+            assert false;
+        }catch (NonExistingException e){
+            assert true;
+        }
+
+    }
+
+    private static void testSaveRemove(){
+        List<UserDTO> list = new ArrayList<>();
+        list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert");
+        assert service.sizeEvent() == 2;
+        service.saveEvent(eventDTO);
+        assert service.sizeEvent() == 3;
+        int id = eventDTO.getId();
+        assert service.findOneEvent(id) != null;
+        service.removeEvent(id);
+        assert service.sizeEvent() == 2;
+        try{
+        service.findOneEvent(id);
+        assert false;
+        }catch (NonExistingException e){
+            assert true;
+        }
+        try{
+            service.removeEvent(3);
+            assert false;
+        }catch (NonExistingException e)
+        {
+            assert true;
+        }
+    }
+
+    private static void testAddRemoveParticipants()
+    {
+        List<String> list = new ArrayList<>();
+        for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
+        {
+            list.add(userDTO.getId());
+        }
+        assert  ! (list.contains("aand@hotmail.com"));
+        service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1);
+        list.clear();
+        for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
+        {
+            list.add(userDTO.getId());
+        }
+        assert   (list.contains("aand@hotmail.com"));
+        service.removeParticipants("aand@hotmail.com", 1);
+        list.clear();
+        for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
+        {
+            list.add(userDTO.getId());
+        }
+        assert   ! (list.contains("aand@hotmail.com"));
+        try{
+            service.addParticipants(new User("s", "s","aansad@hotmail.com", "p"), 1);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+        try{
+            service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 3);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+        try{
+            service.removeParticipants("aansad@hotmail.com", 1);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+        try{
+            service.removeParticipants("aand@hotmail.com", 3);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
     }
 }

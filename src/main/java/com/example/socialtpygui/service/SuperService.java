@@ -672,7 +672,7 @@ public class SuperService implements Observable {
      * @return null if the event does not exist and the eventDTO if the event exist
      * @throws NonExistingException if the event does not exist
      */
-    public EventDTO findOne(Integer eventId) {
+    public EventDTO findOneEvent(Integer eventId) {
         if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.findOne(eventId);
     }
@@ -682,7 +682,7 @@ public class SuperService implements Observable {
      * @param event EventDTO
      * @return event if was saved and null otherwise
      */
-    public EventDTO save(EventDTO event) {
+    public EventDTO saveEvent(EventDTO event) {
         return eventService.save(event);
     }
 
@@ -692,7 +692,7 @@ public class SuperService implements Observable {
      * @return null
      * @throws NonExistingException if the event does not exist
      */
-    public EventDTO remove(Integer eventId) {
+    public EventDTO removeEvent(Integer eventId) {
         if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.remove(eventId);
     }
@@ -700,7 +700,7 @@ public class SuperService implements Observable {
     /**
      * @return the number of events
      */
-    public int size() {
+    public int sizeEvent() {
         return eventService.size();
     }
 

@@ -15,6 +15,7 @@ public class DomainTests {
         ReplyMessageTests.runTest();
         UserDTOTests.runTests();
         FriendshipDTOTests.runTest();
+        EntityTests.runTests();
     }
 
 }

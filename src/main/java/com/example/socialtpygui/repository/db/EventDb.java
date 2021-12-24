@@ -71,11 +71,12 @@ public class EventDb implements Repository<Integer, EventDTO> {
             ResultSet resultSet = preparedStatement1.executeQuery();
             resultSet.next();
             int id = resultSet.getInt(1);
+            event.setId(id);
             for (UserDTO user : event.getParticipants())
             {
                 preparedStatement2.setInt(1, id);
                 preparedStatement2.setString(2, user.getId());
-                preparedStatement1.executeUpdate();
+                preparedStatement2.executeUpdate();
             }
             return event;
         } catch (SQLException e) {
