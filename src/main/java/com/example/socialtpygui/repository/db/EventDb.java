@@ -132,12 +132,12 @@ public class EventDb implements Repository<Integer, EventDTO> {
         return null;
     }
 
-    public void removeParticipants(String email, int groupId)
+    public void removeParticipants(String email, int eventId)
     {
         String sql = "delete from user_event where id_event = ? and email = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, groupId);
+            preparedStatement.setInt(1, eventId);
             preparedStatement.setString(2, email);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

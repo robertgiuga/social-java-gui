@@ -2,10 +2,7 @@ package com.example.socialtpygui.tests;
 
 
 import com.example.socialtpygui.domain.*;
-import com.example.socialtpygui.repository.db.FriendshipDb;
-import com.example.socialtpygui.repository.db.MessageDb;
-import com.example.socialtpygui.repository.db.FriendshipRequestDb;
-import com.example.socialtpygui.repository.db.UserDb;
+import com.example.socialtpygui.repository.db.*;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.entityservice.*;
 import com.example.socialtpygui.service.validators.MessageValidator;
@@ -32,7 +29,9 @@ public class ServiceTests {
     private static NetworkService networkService = new NetworkService(userDb, friendshipDb);
     private static MessageService messageService = new MessageService(messageDb);
     private static FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);
-    private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator);
+    private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static EventService eventService = new EventService(eventDb);
+    private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator,eventService);
 
 
     private ServiceTests() {

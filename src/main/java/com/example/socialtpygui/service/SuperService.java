@@ -29,19 +29,22 @@ public class SuperService implements Observable {
     protected NetworkService networkService;
     protected MessageService messageService;
     protected MessageValidator messageValidator;
+    protected EventService eventService;
 
     private Observer observer;
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
                         FriendshipService friendshipService, UserService userService,
-                        UserValidator userValidator,MessageValidator messageValidator) {
+                        UserValidator userValidator,MessageValidator messageValidator,
+                        EventService eventService) {
         this.userService = userService;
         this.userValidator=userValidator;
         this.friendshipService = friendshipService;
         this.networkService = networkService;
         this.messageService = messageService;
         this.messageValidator= messageValidator;
+        this.eventService = eventService;
     }
 
     /**
@@ -661,6 +664,36 @@ public class SuperService implements Observable {
     {
         if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
         return messageService.numberOfUserFromAGroup(groupId);
+    }
+
+    public EventDTO findOne(Integer eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        return eventService.findOne(eventId);
+    }
+
+    public EventDTO save(EventDTO event) {
+        return eventService.save(event);
+    }
+
+    public EventDTO remove(Integer eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        return eventService.remove(eventId);
+    }
+
+    public int size() {
+        return eventService.size();
+    }
+
+    public User addParticipants(User user, int eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
+        return  eventService.addParticipants(user, eventId);
+    }
+
+    public void removeParticipants(String email, int eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        eventService.removeParticipants(email, eventId);
     }
 
 }
