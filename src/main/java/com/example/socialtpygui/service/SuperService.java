@@ -762,4 +762,9 @@ public class SuperService implements Observable {
         return messageService.getConvMessagesGreaterThan(email1,email2,lastMsjId);
     }
 
+    /**
+     * @return all events.
+     */
+    public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
+
 }

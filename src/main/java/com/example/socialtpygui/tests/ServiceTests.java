@@ -64,9 +64,10 @@ public class ServiceTests {
         testGetGroup();
         testAddRemoveUserToGroup();
         testGetGroupMessages();
-        testFindOne();
-        testSaveRemove();
+        testFindOneEvent();
+        testSaveRemoveEvents();
         testAddRemoveParticipants();
+        testFindAllEvents();
     }
 
     private static void testAddUser() {
@@ -750,7 +751,7 @@ public class ServiceTests {
 
 
 
-    private static void testFindOne()
+    private static void testFindOneEvent()
     {
         assert service.findOneEvent(1).getParticipants().size() == 4;
         assert service.findOneEvent(1).getName().equals("Untold");
@@ -765,7 +766,7 @@ public class ServiceTests {
 
     }
 
-    private static void testSaveRemove(){
+    private static void testSaveRemoveEvents(){
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
         EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert");
@@ -845,5 +846,17 @@ public class ServiceTests {
             assert true;
         }
 
+    }
+
+    private static void testFindAllEvents(){
+        Iterable<EventDTO> list1 = service.findAllEvents();
+        List<EventDTO> list = new ArrayList<>();
+        list1.forEach(list::add);
+        assert list.size() == 2;
+        List<Integer> idList = new ArrayList<>();
+        idList.add(list.get(0).getId());
+        idList.add(list.get(1).getId());
+        assert idList.contains(1);
+        assert idList.contains(2);
     }
 }

@@ -8,6 +8,7 @@ import com.example.socialtpygui.repository.db.EventDb;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 public class EventDBTest {
@@ -22,6 +23,7 @@ public class EventDBTest {
         testFindOne();
         testSaveRemove();
         testAddRemoveParticipants();
+        testFindAll();
     }
 
     private static void testFindOne()
@@ -70,7 +72,18 @@ public class EventDBTest {
             list.add(userDTO.getId());
         }
         assert   ! (list.contains("aand@hotmail.com"));
+    }
 
+    private static void testFindAll(){
+        Iterable<EventDTO> list1 = eventDb.findAll();
+        List<EventDTO> list = new ArrayList<>();
+        list1.forEach(list::add);
+        assert list.size() == 2;
+        List<Integer> idList = new ArrayList<>();
+        idList.add(list.get(0).getId());
+        idList.add(list.get(1).getId());
+        assert idList.contains(1);
+        assert idList.contains(2);
     }
 
 

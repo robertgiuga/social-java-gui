@@ -64,4 +64,9 @@ public class EventService {
     public void removeParticipants(String email, int eventId) {
         repositoryEvent.removeParticipants(email, eventId);
     }
+
+    /**
+     * @return all events.
+     */
+    public Iterable<EventDTO> findAll() {return repositoryEvent.findAll();}
 }

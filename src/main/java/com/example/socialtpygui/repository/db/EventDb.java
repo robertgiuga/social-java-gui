@@ -8,7 +8,9 @@ import com.example.socialtpygui.repository.Repository;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EventDb implements Repository<Integer, EventDTO> {
     String url,username,password;
@@ -54,7 +56,40 @@ public class EventDb implements Repository<Integer, EventDTO> {
 
     @Override
     public Iterable<EventDTO> findAll() {
-        return null;
+        Set<EventDTO> events = new HashSet<>();
+        List<UserDTO> list = new ArrayList<>();
+        String sqlSelectAllEvents = "select * from event";
+        String sqlSelectParticipants = "select users.first_name, users.last_name, user_event.email from user_event inner join users on users.email = user_event.email where id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectAllEvents);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlSelectParticipants)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next())
+            {
+                String location = resultSet.getString("location");
+                String name = resultSet.getString("name");
+                String  description = resultSet.getString("description");
+                LocalDate date = LocalDate.parse(resultSet.getString("date"));
+                int id = resultSet.getInt("id");
+                preparedStatement1.setInt(1, id);
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
+                while (resultSet1.next())
+                {
+                    String first_name = resultSet1.getString("first_name");
+                    String last_name = resultSet1.getString("last_name");
+                    String email = resultSet1.getString("email");
+                    UserDTO userDTO = new UserDTO(first_name, last_name, email);
+                    list.add(userDTO);
+                }
+                EventDTO eventDTO = new EventDTO(description, date, location, list, name);
+                eventDTO.setId(id);
+                events.add(eventDTO);
+                list.clear();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
     }
 
     @Override
