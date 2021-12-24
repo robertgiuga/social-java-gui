@@ -1,7 +1,5 @@
 package com.example.socialtpygui;
 
-import com.example.socialtpygui.Socket.TCPClient;
-import com.example.socialtpygui.Socket.UDPClient;
 import com.example.socialtpygui.controller.LogInController;
 import com.example.socialtpygui.repository.db.FriendshipDb;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
@@ -14,11 +12,10 @@ import com.example.socialtpygui.service.entityservice.NetworkService;
 import com.example.socialtpygui.service.entityservice.UserService;
 import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
-import com.example.socialtpygui.tests.Tests;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -53,6 +50,7 @@ public class LogInApplication extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
+
     }
 
 

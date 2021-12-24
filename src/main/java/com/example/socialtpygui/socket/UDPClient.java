@@ -1,8 +1,9 @@
-package com.example.socialtpygui.Socket;
+package com.example.socialtpygui.socket;
 
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ChangeEventType;
 import com.example.socialtpygui.utils.events.NewMessageEvent;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.net.*;
@@ -12,8 +13,6 @@ public class UDPClient extends Thread{
     private InetAddress address;
     private SuperService service;
     private boolean run=true;
-    private int serverPort;
-    private boolean portSended=false;
 
     private byte[] buf;
 
@@ -32,16 +31,13 @@ public class UDPClient extends Thread{
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
-                if(!portSended)
-                    serverPort=Integer.parseInt(received);
-                if(Integer.parseInt(received)==0)
-                    run= false;
+                //first integer of the receive int
                 int code= Integer.parseInt(String.valueOf(received.charAt(0)));
                 switch (code){
                     case 2:
                         //for msj
                         int nr=Integer.parseInt(String.valueOf(received.charAt(1)));
-                        service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_MSJ, nr));
+                        Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_MSJ, nr)));
                         break;
                     case 3:
                         //for requests
@@ -49,8 +45,10 @@ public class UDPClient extends Thread{
                     case 4:
                         //for events
                         break;
+                    case 0:
+                        run=false;
+                        break;
                 }
-                System.out.println(received);
             }
         }catch (IOException e){}
         socket.close();

@@ -1,4 +1,4 @@
-package com.example.socialtpygui.Socket;
+package com.example.socialtpygui.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,11 +20,14 @@ public class TCPClient{
     public int createConnection(String email) throws IOException {
         out.println(email);
         String port= in.readLine();
-        System.out.println();
         in.close();
         out.close();
         clientSocket.close();
         return Integer.valueOf(port);
+    }
+
+    public void closeConnection(String email){
+        out.println(email+";close");
     }
 
 }

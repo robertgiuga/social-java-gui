@@ -64,6 +64,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
      * @throws IOException
      */
     private void sendMessage() throws IOException {
+        scrollPaneShowConv.setVvalue(1.0f);
         List<String> to = new ArrayList<>();
         to.add(email);
         Pane item = null;
@@ -108,6 +109,8 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
         messageToReply.setText("");
         messageText.clear();
+        gridShowMessages.autosize();
+        scrollPaneShowConv.autosize();
         scrollPaneShowConv.setVvalue(1.0f);
     }
 
@@ -262,6 +265,27 @@ public class ShowConvController implements Observer<NewMessageEvent> {
 
     @Override
     public void update(NewMessageEvent newMessageEvent) {
-        System.out.println("ar trb incarcat nou mesaj");
+        scrollPaneShowConv.setVvalue(1.0f);
+        service.getLastNMessagesOfAUser(loggedUser.getId(),newMessageEvent.getNrOfMsj()).forEach(replyMessage -> {
+            try{
+                Pane item = createItem(replyMessage);
+                item.getChildren().forEach(node->{
+                    if (node instanceof Label)
+                        node.setId(String.valueOf(replyMessage.getId()));
+                });
+                if(replyMessage.getFrom().equals(loggedUser.getId())){
+                    gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                }
+                else{
+                    gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                }
+            }catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+        });
+        gridShowMessages.autosize();
+        scrollPaneShowConv.autosize();
+        scrollPaneShowConv.setVvalue(1.0f);
+
     }
 }

@@ -22,6 +22,16 @@ public class MessageService {
     }
 
     /**
+     *  gets the newest nrOfMsj RECEIVED messages of a user
+     * @param email the email of a user
+     * @param nrOfMsj the nr of messages to get
+     * @return the list
+     */
+    public List<ReplyMessage> getLastNMessagesOfAUser(String email, int nrOfMsj) {
+        return messageRepository.getLastNMessagesOfAUser(email,nrOfMsj);
+    }
+
+    /**
      * @param id .
      * @return All emails with whom a user has interacted(receive message/send message).
      */

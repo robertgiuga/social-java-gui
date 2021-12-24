@@ -663,4 +663,17 @@ public class SuperService implements Observable {
         return messageService.numberOfUserFromAGroup(groupId);
     }
 
+    /**
+     *  gets the newest nrOfMsj RECEIVED messages of a user
+     * @param email the email of a user
+     * @param nrOfMsj the nr of messages to get
+     * @return the list
+     */
+    public List<ReplyMessage> getLastNMessagesOfAUser(String email, int nrOfMsj){
+        userValidator.validateEmail(email);
+        if(nrOfMsj<0)
+            throw new ValidationException("number should be positive");
+        return messageService.getLastNMessagesOfAUser(email,nrOfMsj);
+    }
+
 }

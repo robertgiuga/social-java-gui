@@ -569,5 +569,33 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return numberOfUsers;
     }
+
+    /**
+     * gets the newest nrOfMsj RECEIVED messages of a user
+     * @param emailUser the email of the user
+     * @return
+     */
+    public List<ReplyMessage> getLastNMessagesOfAUser(String emailUser, int nrOfMsj)
+    {
+        if (emailUser == null) throw new ValidationException("Entity must not be null");
+        List<ReplyMessage> resultList = new ArrayList<>();
+        String sqlAllMessagesFromBothUsers = "select * from message where id in (select message from message_recipient where email = ? order by message desc limit ?)";
+
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
+        {
+            preparedStatement1.setString(1, emailUser);
+            preparedStatement1.setInt(2, nrOfMsj);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            while (resultSet.next())
+            {
+                resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return resultList;
+    }
 }
 

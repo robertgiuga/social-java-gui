@@ -1,10 +1,9 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.Socket.TCPClient;
-import com.example.socialtpygui.Socket.UDPClient;
+import com.example.socialtpygui.socket.TCPClient;
+import com.example.socialtpygui.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
-import com.example.socialtpygui.domainEvent.ItemSelected;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
@@ -27,8 +26,6 @@ import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class MainWindowController {
 
@@ -125,7 +122,7 @@ public class MainWindowController {
 
     public void handlerExitBtnMW(ActionEvent actionEvent) throws IOException {
         TCPClient closeThread = new TCPClient();
-        closeThread.createConnection(loggedUser.getId());
+        closeThread.closeConnection(loggedUser.getId());
 
         ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).close();
     }

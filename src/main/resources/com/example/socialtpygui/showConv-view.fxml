@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="anchorPaneShowConvView" prefHeight="357.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
    <children>
-      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" layoutY="12.0" prefHeight="294.0" prefWidth="481.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="12.0">
+      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" hbarPolicy="NEVER" layoutY="12.0" prefHeight="294.0" prefWidth="481.0" vvalue="1.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="12.0">
          <content>
             <GridPane fx:id="gridShowMessages" prefHeight="275.0" prefWidth="482.0">
                <columnConstraints>
