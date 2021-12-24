@@ -570,8 +570,13 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         return numberOfUsers;
     }
 
-
-    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int msjID){
+    /**
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
+     */
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID){
         List<ReplyMessage> resultList = new ArrayList<>();
         String sqlAllMessagesFromBothUsers = "select * from message where id in (select id_message from message_group where id_group = ? and id_message > ? )";
 
@@ -579,7 +584,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
         {
             preparedStatement1.setInt(1,groupId);
-            preparedStatement1.setInt(2, msjID);
+            preparedStatement1.setInt(2,lastMsjID);
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next())
             {

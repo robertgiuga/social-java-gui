@@ -189,8 +189,8 @@ public class MessageService {
      * @param lastMsjID the message id to get bigger id messages than
      * @return a list of ReplayMessage
      */
-    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int msjID) {
-        return messageRepository.getGroupMessagesGreaterThen(groupId,msjID);
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID) {
+        return messageRepository.getGroupMessagesGreaterThen(groupId,lastMsjID);
     }
     /**
      * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId

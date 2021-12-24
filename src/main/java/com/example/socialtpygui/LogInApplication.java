@@ -12,6 +12,7 @@ import com.example.socialtpygui.service.entityservice.NetworkService;
 import com.example.socialtpygui.service.entityservice.UserService;
 import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
+import com.example.socialtpygui.tests.Tests;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-       //Tests.RunALL();
+        //Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
@@ -66,7 +67,6 @@ public class LogInApplication extends Application {
         MessageService messageService = new MessageService(messageDb);
         MessageValidator messageValidator= new MessageValidator(userValidator);
         SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator);
-        messageDb.getConvMessagesGreaterThan("snj@gmail.com", "gg@gmail.com",70).forEach(System.out::println);
         return service;
     }
 
