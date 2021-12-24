@@ -570,26 +570,53 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         return numberOfUsers;
     }
 
-    /**
-     * gets the newest nrOfMsj RECEIVED messages of a user
-     * @param emailUser the email of the user
-     * @return
-     */
-    public List<ReplyMessage> getLastNMessagesOfAUser(String emailUser, int nrOfMsj)
-    {
-        if (emailUser == null) throw new ValidationException("Entity must not be null");
+
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int msjID){
         List<ReplyMessage> resultList = new ArrayList<>();
-        String sqlAllMessagesFromBothUsers = "select * from message where id in (select message from message_recipient where email = ? order by message desc limit ?)";
+        String sqlAllMessagesFromBothUsers = "select * from message where id in (select id_message from message_group where id_group = ? and id_message > ? )";
 
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
         {
-            preparedStatement1.setString(1, emailUser);
-            preparedStatement1.setInt(2, nrOfMsj);
+            preparedStatement1.setInt(1,groupId);
+            preparedStatement1.setInt(2, msjID);
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next())
             {
                 resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return resultList;
+    }
+
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId){
+        List<ReplyMessage> resultList = new ArrayList<>();
+        String sqlAllMessagesFromBothUsers = "select * from message where ms_from = ? and id > ? order by id ";
+        String sqlVerify = "select * from message_recipient where message = ? and email =?";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlVerify))
+        {
+            preparedStatement1.setString(1, email2);
+            preparedStatement1.setInt(2,lastMsjId);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            while (resultSet.next())
+            {
+                preparedStatement2.setInt(1, resultSet.getInt("id"));
+                preparedStatement2.setString(2, email1);
+                ResultSet resultSet1 = preparedStatement2.executeQuery();
+                if (resultSet1.next())
+                    resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
             }
         }
         catch (SQLException throwables) {

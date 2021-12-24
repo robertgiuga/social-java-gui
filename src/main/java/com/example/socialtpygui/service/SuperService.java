@@ -664,16 +664,31 @@ public class SuperService implements Observable {
     }
 
     /**
-     *  gets the newest nrOfMsj RECEIVED messages of a user
-     * @param email the email of a user
-     * @param nrOfMsj the nr of messages to get
-     * @return the list
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
      */
-    public List<ReplyMessage> getLastNMessagesOfAUser(String email, int nrOfMsj){
-        userValidator.validateEmail(email);
-        if(nrOfMsj<0)
-            throw new ValidationException("number should be positive");
-        return messageService.getLastNMessagesOfAUser(email,nrOfMsj);
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID){
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if(lastMsjID<0)
+            throw new ValidationException("there should be no negative id message");
+        return messageService.getGroupMessagesGreaterThen(groupId,lastMsjID);
+    }
+
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId){
+        userValidator.validateEmail(email1);
+        userValidator.validateEmail(email2);
+        if(lastMsjId<0)
+            throw new ValidationException("there should be no negative id message");
+        return messageService.getConvMessagesGreaterThan(email1,email2,lastMsjId);
     }
 
 }

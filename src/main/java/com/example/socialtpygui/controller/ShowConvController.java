@@ -7,11 +7,11 @@ import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
+import com.example.socialtpygui.utils.events.ChangeEventType;
 import com.example.socialtpygui.utils.events.NewMessageEvent;
 import com.example.socialtpygui.utils.observer.Observer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -53,11 +53,13 @@ public class ShowConvController implements Observer<NewMessageEvent> {
 
     private User loggedUser;
 
-    private String email;
+    private String email2User;
 
     private DragMessage dragMessage=null;
 
     private Integer groupId = null;
+    private int lastGroupMsjId;
+    private int lastConvMsjId;
 
     /**
      * send a message to user from conversation
@@ -66,7 +68,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
     private void sendMessage() throws IOException {
         scrollPaneShowConv.setVvalue(1.0f);
         List<String> to = new ArrayList<>();
-        to.add(email);
+        to.add(email2User);
         Pane item = null;
         if(groupId == null) {
             if (dragMessage == null) {
@@ -76,6 +78,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
                     if (node instanceof Label)
                         node.setId(String.valueOf(messageText.getText()));
                 });
+                lastConvMsjId =messageDTO.getId();
             }
             else {
                 ReplyMessage replyMessage = service.replyMessage(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), to, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()));
@@ -85,6 +88,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
                         node.setId(String.valueOf(messageText.getText()));
                 });
                 dragMessage = null;
+                lastConvMsjId = replyMessage.getId();
             }
         }
         else{
@@ -95,6 +99,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
                     if (node instanceof Label)
                         node.setId(String.valueOf(messageText.getText()));
                 });
+                lastGroupMsjId =messageDTO.getId();
             }
             else{
                 ReplyMessage replyMessage = service.replyMessageGroup(new ReplyMessageDTO(new MessageDTO(loggedUser.getId(), null, messageText.getText(), LocalDate.now()), dragMessage.getMessage().getId().toString()), groupId);
@@ -103,6 +108,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
                     if (node instanceof Label)
                         node.setId(String.valueOf(messageText.getText()));
                 });
+                lastGroupMsjId = replyMessage.getId();
             }
         }
 
@@ -155,12 +161,13 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
         this.loggedUser = loggedUser;
         this.service = service;
-        this.email = email;
+        this.email2User = email;
         this.groupId = null;
         scrollPaneShowConv.setVvalue(1.0f);
         service.getMessages(loggedUser.getId(), email).forEach(replyMessage->{
             try{
                 Pane item = createItem(replyMessage);
+                lastConvMsjId= replyMessage.getId();
                 item.getChildren().forEach(node->{
                     if (node instanceof Label)
                         node.setId(String.valueOf(replyMessage.getId()));
@@ -188,6 +195,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
      */
     public void loadGroup(SuperService service, User loggedUser, int groupId)
     {
+        service.addObserver(this);
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
         this.loggedUser = loggedUser;
         this.service = service;
@@ -195,6 +203,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         service.getGroupMessages(groupId).forEach(replyMessage -> {
             try{
                 Pane item = createGroupItem(replyMessage);
+                lastGroupMsjId =replyMessage.getId();
                 item.getChildren().forEach(node->{
                     if (node instanceof Label)
                         node.setId(String.valueOf(replyMessage.getId()));
@@ -211,6 +220,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         });
         gridShowMessages.autosize();
     }
+
 
 
     /**
@@ -266,23 +276,50 @@ public class ShowConvController implements Observer<NewMessageEvent> {
     @Override
     public void update(NewMessageEvent newMessageEvent) {
         scrollPaneShowConv.setVvalue(1.0f);
-        service.getLastNMessagesOfAUser(loggedUser.getId(),newMessageEvent.getNrOfMsj()).forEach(replyMessage -> {
-            try{
-                Pane item = createItem(replyMessage);
-                item.getChildren().forEach(node->{
-                    if (node instanceof Label)
-                        node.setId(String.valueOf(replyMessage.getId()));
-                });
-                if(replyMessage.getFrom().equals(loggedUser.getId())){
-                    gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        System.out.println("update");
+        if(newMessageEvent.getEventType().equals(ChangeEventType.NEW_MSJ)) {
+            //TODO
+            // get msj from a certain id ahead
+            service.getConvMessagesGreaterThan(loggedUser.getId(), email2User,lastConvMsjId ).forEach(replyMessage -> {
+                try {
+                    Pane item = createItem(replyMessage);
+                    item.getChildren().forEach(node -> {
+                        if (node instanceof Label)
+                            node.setId(String.valueOf(replyMessage.getId()));
+                    });
+                    if (replyMessage.getFrom().equals(loggedUser.getId())) {
+                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                    } else {
+                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                    }
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
                 }
-                else{
-                    gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+            });
+        }
+        else if(groupId!=null&&newMessageEvent.getEventType().equals(ChangeEventType.NEW_GROUP_MSJ)){
+            //TODO
+           // System.out.println(groupId);
+            System.out.println("reload msj");
+            service.getGroupMessagesGreaterThen(groupId, lastGroupMsjId).forEach(replyMessage -> {
+                try{
+                    Pane item = createGroupItem(replyMessage);
+                    lastGroupMsjId =replyMessage.getId();
+                    item.getChildren().forEach(node->{
+                        if (node instanceof Label)
+                            node.setId(String.valueOf(replyMessage.getId()));
+                    });
+                    if(replyMessage.getFrom().equals(loggedUser.getId())){
+                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                    }
+                    else{
+                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                    }
+                }catch (IOException e){
+                    System.out.println(e.getMessage());
                 }
-            }catch (IOException e){
-                System.out.println(e.getMessage());
-            }
-        });
+            });
+        }
         gridShowMessages.autosize();
         scrollPaneShowConv.autosize();
         scrollPaneShowConv.setVvalue(1.0f);

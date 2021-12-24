@@ -66,6 +66,7 @@ public class LogInApplication extends Application {
         MessageService messageService = new MessageService(messageDb);
         MessageValidator messageValidator= new MessageValidator(userValidator);
         SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator);
+        messageDb.getConvMessagesGreaterThan("snj@gmail.com", "gg@gmail.com",70).forEach(System.out::println);
         return service;
     }
 

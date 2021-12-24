@@ -27,7 +27,7 @@ public class UDPClient extends Thread{
     public void run(){
         try {
             while (run) {
-                buf = new byte[4];
+                buf = new byte[1];
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
@@ -36,11 +36,11 @@ public class UDPClient extends Thread{
                 switch (code){
                     case 2:
                         //for msj
-                        int nr=Integer.parseInt(String.valueOf(received.charAt(1)));
-                        Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_MSJ, nr)));
+                        Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_MSJ)));
                         break;
                     case 3:
-                        //for requests
+                        System.out.println("*");
+                        Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_GROUP_MSJ)));
                         break;
                     case 4:
                         //for events

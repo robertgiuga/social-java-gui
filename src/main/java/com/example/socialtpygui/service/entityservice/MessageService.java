@@ -21,15 +21,6 @@ public class MessageService {
         this.messageRepository = messageDb;
     }
 
-    /**
-     *  gets the newest nrOfMsj RECEIVED messages of a user
-     * @param email the email of a user
-     * @param nrOfMsj the nr of messages to get
-     * @return the list
-     */
-    public List<ReplyMessage> getLastNMessagesOfAUser(String email, int nrOfMsj) {
-        return messageRepository.getLastNMessagesOfAUser(email,nrOfMsj);
-    }
 
     /**
      * @param id .
@@ -191,4 +182,24 @@ public class MessageService {
      * @return number of users in group with id "groupId"
      */
     public int numberOfUserFromAGroup(int groupId) {return messageRepository.numberOfUserFromAGroup(groupId);}
+
+    /**
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
+     */
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int msjID) {
+        return messageRepository.getGroupMessagesGreaterThen(groupId,msjID);
+    }
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId) {
+        return messageRepository.getConvMessagesGreaterThan(email1,email2,lastMsjId);
+    }
 }
