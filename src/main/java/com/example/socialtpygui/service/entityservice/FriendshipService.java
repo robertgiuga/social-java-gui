@@ -228,5 +228,6 @@ public class FriendshipService {
     public Iterable<Friendship> getFriendRequests(String email){
         return repositoryFriendshipRequest.getFriendRequest(email);
     }
+
 }
 

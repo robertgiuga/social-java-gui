@@ -663,4 +663,30 @@ public class SuperService implements Observable {
         return messageService.numberOfUserFromAGroup(groupId);
     }
 
+    /**
+     * gets the friendships of a user in a Date interval
+     * @param id the email of the user
+     * @param dateStart the start date for searching
+     * @param dateStop the end date for searching
+     * @return a list of FriendshipDTO
+     */
+    public List<FriendShipDTO> getUserFriendshipsInDate(String id, LocalDate dateStart ,LocalDate dateStop ){
+        userValidator.validateEmail(id);
+        if(dateStart==null||dateStop==null)
+            throw new ValidationException("Date invalid!");
+        if(dateStart.compareTo(dateStop)>0)
+            throw new ValidationException("Data start must be less than stop date!");
+
+        List<FriendShipDTO> friendships=new ArrayList<>();
+        UserDTO currentUser= new UserDTO(userService.findOne(id));
+        List<Tuple<String, LocalDate>> friends= friendshipService.getFriends(id);
+        friends.forEach(stringLocalDateTuple -> {
+            LocalDate frindshipDate=stringLocalDateTuple.getRight();
+            if (frindshipDate.compareTo(dateStart)>=0&&frindshipDate.compareTo(dateStop)<=0){
+                friendships.add(new FriendShipDTO(currentUser,new UserDTO(userService.findOne(stringLocalDateTuple.getLeft())),frindshipDate));
+            }
+        });
+        return friendships;
+    }
+
 }

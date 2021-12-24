@@ -148,7 +148,13 @@ public class MainWindowController {
 
     }
 
-    public void handelerStatisticsbtn(ActionEvent event) {
+    public void handelerStatisticsbtn(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("statistics-view.fxml"));
 
+        AnchorPane pane= fxmlLoader.load();
+        StatisticsController controller= fxmlLoader.getController();
+        controller.load(service,loggedUser);
+
+        borderPane.setCenter(pane);
     }
 }
