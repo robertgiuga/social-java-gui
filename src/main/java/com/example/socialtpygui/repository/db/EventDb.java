@@ -117,6 +117,12 @@ public class EventDb implements Repository<Integer, EventDTO> {
         return size;
     }
 
+    /**
+     * Add a user(participant) to user_event table.
+     * @param user User
+     * @param eventId Integer
+     * @return user if the user was added and null if the user was not added
+     */
     public User addParticipants(User user, int eventId)
     {
         String sql = "insert into user_event(id_event, email) values (?, ?)";
@@ -132,6 +138,11 @@ public class EventDb implements Repository<Integer, EventDTO> {
         return null;
     }
 
+    /**
+     * Remove a user(participant) from user_event table
+     * @param email String
+     * @param eventId Integer
+     */
     public void removeParticipants(String email, int eventId)
     {
         String sql = "delete from user_event where id_event = ? and email = ?";

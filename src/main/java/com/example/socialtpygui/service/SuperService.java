@@ -666,30 +666,63 @@ public class SuperService implements Observable {
         return messageService.numberOfUserFromAGroup(groupId);
     }
 
+    /**
+     * Find one event with id "eventId".
+     * @param eventId Integer
+     * @return null if the event does not exist and the eventDTO if the event exist
+     * @throws NonExistingException if the event does not exist
+     */
     public EventDTO findOne(Integer eventId) {
         if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.findOne(eventId);
     }
 
+    /**
+     * Save an event.
+     * @param event EventDTO
+     * @return event if was saved and null otherwise
+     */
     public EventDTO save(EventDTO event) {
         return eventService.save(event);
     }
 
+    /**
+     * Remove a event.
+     * @param eventId Integer
+     * @return null
+     * @throws NonExistingException if the event does not exist
+     */
     public EventDTO remove(Integer eventId) {
         if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.remove(eventId);
     }
 
+    /**
+     * @return the number of events
+     */
     public int size() {
         return eventService.size();
     }
 
+    /**
+     * Add a user(participant) to user_event table.
+     * @param user User
+     * @param eventId Integer
+     * @return user if the user was added and null if the user was not added
+     * @throws NonExistingException if the user does not exist or the event does not exist
+     */
     public User addParticipants(User user, int eventId) {
         if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
         return  eventService.addParticipants(user, eventId);
     }
 
+    /**
+     * Remove a user(participant) from user_event table
+     * @param email String
+     * @param eventId Integer
+     * @throws NonExistingException if the user does not exist or the event does not exist
+     */
     public void removeParticipants(String email, int eventId) {
         if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
