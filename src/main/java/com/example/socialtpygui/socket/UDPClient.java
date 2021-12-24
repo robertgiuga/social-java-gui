@@ -17,10 +17,11 @@ public class UDPClient extends Thread{
     private byte[] buf;
 
     public UDPClient(SuperService service, int port) throws SocketException, UnknownHostException {
+        if(port==0)
+            run=false;
         this.service = service;
         socket = new DatagramSocket(port);
         address = InetAddress.getByName("localhost");
-
     }
 
     @Override
