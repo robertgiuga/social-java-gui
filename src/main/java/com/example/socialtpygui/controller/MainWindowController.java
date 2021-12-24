@@ -1,8 +1,9 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.socket.TCPClient;
+import com.example.socialtpygui.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
-import com.example.socialtpygui.domainEvent.ItemSelected;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
@@ -61,11 +62,13 @@ public class MainWindowController {
     private SuperService service;
 
     private User loggedUser;
+    private UDPClient udpThread;
 
-    public void load(SuperService service, User loggedUser){
+    public void load(SuperService service, User loggedUser, UDPClient udpThread){
         leftPane.setVisible(false);
         this.service=service;
         this.loggedUser=loggedUser;
+        this.udpThread= udpThread;
     }
 
 
@@ -117,7 +120,10 @@ public class MainWindowController {
         borderPane.setCenter(panel);
     }
 
-    public void handlerExitBtnMW(ActionEvent actionEvent) {
+    public void handlerExitBtnMW(ActionEvent actionEvent) throws IOException {
+        TCPClient closeThread = new TCPClient();
+        closeThread.closeConnection(loggedUser.getId());
+
         ((Stage)(((Button)actionEvent.getSource()).getScene().getWindow())).close();
     }
 

@@ -663,4 +663,32 @@ public class SuperService implements Observable {
         return messageService.numberOfUserFromAGroup(groupId);
     }
 
+    /**
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
+     */
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID){
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if(lastMsjID<0)
+            throw new ValidationException("there should be no negative id message");
+        return messageService.getGroupMessagesGreaterThen(groupId,lastMsjID);
+    }
+
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId){
+        userValidator.validateEmail(email1);
+        userValidator.validateEmail(email2);
+        if(lastMsjId<0)
+            throw new ValidationException("there should be no negative id message");
+        return messageService.getConvMessagesGreaterThan(email1,email2,lastMsjId);
+    }
+
 }

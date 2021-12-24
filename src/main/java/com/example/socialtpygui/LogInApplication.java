@@ -14,6 +14,7 @@ import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.tests.Tests;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -28,7 +29,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-       //Tests.RunALL();
+        //Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
@@ -50,6 +51,7 @@ public class LogInApplication extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
+
     }
 
 
