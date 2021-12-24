@@ -1,15 +1,9 @@
 package com.example.socialtpygui;
 
 import com.example.socialtpygui.controller.LogInController;
-import com.example.socialtpygui.repository.db.FriendshipDb;
-import com.example.socialtpygui.repository.db.FriendshipRequestDb;
-import com.example.socialtpygui.repository.db.MessageDb;
-import com.example.socialtpygui.repository.db.UserDb;
+import com.example.socialtpygui.repository.db.*;
 import com.example.socialtpygui.service.SuperService;
-import com.example.socialtpygui.service.entityservice.FriendshipService;
-import com.example.socialtpygui.service.entityservice.MessageService;
-import com.example.socialtpygui.service.entityservice.NetworkService;
-import com.example.socialtpygui.service.entityservice.UserService;
+import com.example.socialtpygui.service.entityservice.*;
 import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.tests.Tests;
@@ -29,7 +23,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Tests.RunALL();
+        Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
@@ -66,7 +60,9 @@ public class LogInApplication extends Application {
         NetworkService networkService = new NetworkService(userDb, friendshipDb);
         MessageService messageService = new MessageService(messageDb);
         MessageValidator messageValidator= new MessageValidator(userValidator);
-        SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator);
+        EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
+        EventService eventService = new EventService(eventDb);
+        SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator, eventService);
         return service;
     }
 
