@@ -689,4 +689,29 @@ public class SuperService implements Observable {
         return friendships;
     }
 
+    /**
+     * gets all messages sent and received by a user in a Date interval
+     * @param id the id to send messages for
+     * @param dateStart the minim date
+     * @param dateStop the maxim date
+     * @return a list of replayMessages
+     */
+    public List<Tuple<User , Integer>> getMessagesInDate(String id, LocalDate dateStart, LocalDate dateStop){
+        userValidator.validateEmail(id);
+        if(dateStart==null||dateStop==null)
+            throw new ValidationException("Date invalid!");
+        if(dateStart.compareTo(dateStop)>0)
+            throw new ValidationException("Data start must be less than stop date!");
+
+        List<Tuple<User,Integer>> userMessage= new ArrayList<>();
+        messageService.getAllConversation(id).forEach(s ->{
+            long a= messageService.getMessages(id,s).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
+                    .count();
+            if(a>0)
+                userMessage.add(new Tuple<User,Integer>(userService.findOne(s), (int) a));
+
+        } );
+
+        return userMessage;
+    }
 }
