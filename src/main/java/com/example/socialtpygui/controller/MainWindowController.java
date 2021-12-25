@@ -146,6 +146,8 @@ public class MainWindowController {
         Stage mainWnd =(Stage) borderPane.getScene().getWindow();
         mainWnd.close();
 
+
+        //TODO disconect from the server
     }
 
     public void handelerStatisticsbtn(ActionEvent event) throws IOException {

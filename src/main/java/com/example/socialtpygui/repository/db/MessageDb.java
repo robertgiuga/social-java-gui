@@ -138,23 +138,34 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     {
         if (emailUser1 == null || emailUser2 == null) throw new ValidationException("Entity must not be null");
         List<ReplyMessage> resultList = new ArrayList<>();
-        String sqlAllMessagesFromBothUsers = "select * from message where ms_from = ? or ms_from = ? order by id";
-        String sqlVerify = "select * from message_recipient where message = ? and (email = ? or email = ?)";
+        String sqlAllMessagesFromBothUsers = "select * from message as m inner join message_recipient as mr\n" +
+                "on mr.message= m.id and ((mr.email = ? and m.ms_from = ?) \n" +
+                "or( mr.email=? and m.ms_from = ?)) order by m.id";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
-            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers);
-            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlVerify))
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
         {
             preparedStatement1.setString(1, emailUser1);
             preparedStatement1.setString(2, emailUser2);
+            preparedStatement1.setString(3, emailUser2);
+            preparedStatement1.setString(4, emailUser1);
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next())
             {
-                preparedStatement2.setInt(1, resultSet.getInt("id"));
-                preparedStatement2.setString(2, emailUser1);
-                preparedStatement2.setString(3, emailUser2);
-                ResultSet resultSet1 = preparedStatement2.executeQuery();
-                if (resultSet1.next())
-                    resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+                MessageDTO messageDTO1= new MessageDTO(
+                        resultSet.getString("ms_from"),
+                        List.of(resultSet.getString("email")),resultSet.getString("text")
+                        ,LocalDate.parse(resultSet.getString("date")));
+                messageDTO1.setId(resultSet.getInt("id"));
+
+                MessageDTO messageDTO2;
+                if(resultSet.getString("reply_to")==null){
+                    messageDTO2=null;
+                }
+                else {
+                    messageDTO2=findOne(resultSet.getInt("reply_to"));
+                }
+
+                resultList.add(new ReplyMessage(messageDTO1, messageDTO2));
             }
         }
         catch (SQLException throwables) {

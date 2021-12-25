@@ -5,7 +5,9 @@ import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.domain.Tuple;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
+import javafx.application.Platform;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -26,6 +28,7 @@ public class StatisticsController {
 
     public DatePicker dateStart;
     public DatePicker dateStop;
+    public ProgressBar progressBar;
     private SuperService service;
     private User loggedUser;
 
@@ -94,24 +97,27 @@ public class StatisticsController {
                 stream.endText();
             }
             else {
+                float size=1/(float)userMessages.size();
                 stream.beginText();
                 stream.moveTextPositionByAmount(x,y);
                 stream.drawString("You have been sending and receive messages with:");
                 stream.endText();
                 x+=20;
                 for (Tuple<User, Integer> userMessage:userMessages){
-                   stream.beginText();
-                   y-=20;
-                   stream.moveTextPositionByAmount(x,y);
-                   stream.drawString("* "+userMessage.getLeft().getLastName()+" "+userMessage.getLeft().getFirstName()+" in number of "+userMessage.getRight());
-                   stream.endText();
+                    stream.beginText();
+                    y-=20;
+                    stream.moveTextPositionByAmount(x,y);
+                    stream.drawString("* "+userMessage.getLeft().getLastName()+" "+userMessage.getLeft().getFirstName()+" in number of "+userMessage.getRight());
+                    stream.endText();
                 }
             }
             stream.close();
             savePDFFile(doc);
-        }
 
+        }
     }
+
+
 
     /**
      * saves a pdf Document (must not be close)
@@ -129,4 +135,5 @@ public class StatisticsController {
         }
         doc.close();
     }
+
 }

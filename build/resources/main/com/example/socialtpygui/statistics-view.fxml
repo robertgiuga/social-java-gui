@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="491.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.StatisticsController">
@@ -10,5 +11,6 @@
       <Button layoutX="54.0" layoutY="246.0" mnemonicParsing="false" text="Button" />
       <DatePicker fx:id="dateStart" layoutX="61.0" layoutY="45.0" />
       <DatePicker fx:id="dateStop" layoutX="61.0" layoutY="106.0" />
+      <ProgressBar fx:id="progressBar" layoutX="61.0" layoutY="161.0" prefWidth="200.0" progress="0.03" />
    </children>
 </AnchorPane>

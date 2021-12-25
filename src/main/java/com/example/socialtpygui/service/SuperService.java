@@ -687,6 +687,7 @@ public class SuperService implements Observable {
             }
         });
         return friendships;
+        //TODO tests for this
     }
 
     /**
@@ -713,5 +714,6 @@ public class SuperService implements Observable {
         } );
 
         return userMessage;
+        //TODO tests for this
     }
 }
