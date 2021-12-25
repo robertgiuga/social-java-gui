@@ -69,4 +69,18 @@ public class EventService {
      * @return all events.
      */
     public Iterable<EventDTO> findAll() {return repositoryEvent.findAll();}
+
+    /**
+     * @param eventId Integer
+     * @return number of participants from a group with id "groupId"
+     */
+    public int numberOfParticipantsFromAnEvent(int eventId){return repositoryEvent.numberOfParticipantsFromAnEvent(eventId);}
+
+    /**
+     * Verify if a user is enrolled in an event with id "groupId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is enrolled, false otherwise
+     */
+    public boolean isUserEnrolledInAnEvent(String email, int eventId){return repositoryEvent.isUserEnrolledInAnEvent(email, eventId);}
 }

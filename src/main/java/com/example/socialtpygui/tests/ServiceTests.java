@@ -68,6 +68,8 @@ public class ServiceTests {
         testSaveRemoveEvents();
         testAddRemoveParticipants();
         testFindAllEvents();
+        testNumberOfParticipantsFromAnEvent();
+        testIsUserEnrolledInAnEvent();
     }
 
     private static void testAddUser() {
@@ -858,5 +860,33 @@ public class ServiceTests {
         idList.add(list.get(1).getId());
         assert idList.contains(1);
         assert idList.contains(2);
+    }
+
+    private static void testNumberOfParticipantsFromAnEvent()
+    {
+        assert service.numberOfParticipantsFromAnEvent(1) == 4;
+        assert service.numberOfParticipantsFromAnEvent(2) ==3;
+        try{
+        service.numberOfParticipantsFromAnEvent(5);
+        assert false;
+        }catch (NonExistingException ignored){assert  true;}
+    }
+
+    private static void testIsUserEnrolledInAnEvent()
+    {
+        assert service.isUserEnrolledInAnEvent("gg@gmail.com",1);
+        assert !service.isUserEnrolledInAnEvent("aand@hotmail.com",1);
+        try {
+            service.isUserEnrolledInAnEvent("dasdas",1);
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.isUserEnrolledInAnEvent("fdr@gmail.com",1);
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+        try {
+            service.isUserEnrolledInAnEvent("gg@gmail.com",13);
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
     }
 }

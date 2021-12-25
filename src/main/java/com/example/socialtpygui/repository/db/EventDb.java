@@ -191,4 +191,46 @@ public class EventDb implements Repository<Integer, EventDTO> {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @param eventId Integer
+     * @return number of participants from a group with id "groupId"
+     */
+    public int numberOfParticipantsFromAnEvent(int eventId){
+        String sql = "select count(*) from user_event where id_event = ?";
+        int numberOfParticipants = 0;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            numberOfParticipants = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfParticipants;
+    }
+
+    /**
+     * Verify if a user is enrolled in an event with id "groupId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is enrolled, false otherwise
+     */
+    public boolean isUserEnrolledInAnEvent(String email, int eventId){
+        String sql = "select count(*) from user_event where email = ? and id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            if (count == 1) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

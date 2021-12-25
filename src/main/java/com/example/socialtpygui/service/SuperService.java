@@ -767,4 +767,28 @@ public class SuperService implements Observable {
      */
     public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
 
+    /**
+     * @param eventId Integer
+     * @return number of participants from a group with id "groupId"
+     */
+    public int numberOfParticipantsFromAnEvent(int eventId)
+    {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        return eventService.numberOfParticipantsFromAnEvent(eventId);
+    }
+
+    /**
+     * Verify if a user is enrolled in an event with id "groupId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is enrolled, false otherwise
+     */
+    public boolean isUserEnrolledInAnEvent(String email, int eventId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        return eventService.isUserEnrolledInAnEvent(email, eventId);
+    }
+
 }

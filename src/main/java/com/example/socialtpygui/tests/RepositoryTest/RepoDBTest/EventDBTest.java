@@ -24,6 +24,8 @@ public class EventDBTest {
         testSaveRemove();
         testAddRemoveParticipants();
         testFindAll();
+        testNumberOfParticipantsFromAnEvent();
+        testIsUserEnrolledInAnEvent();
     }
 
     private static void testFindOne()
@@ -86,6 +88,18 @@ public class EventDBTest {
         assert idList.contains(2);
     }
 
+    private static void testNumberOfParticipantsFromAnEvent()
+    {
+        assert eventDb.numberOfParticipantsFromAnEvent(1) == 4;
+        assert eventDb.numberOfParticipantsFromAnEvent(2) ==3;
+        assert eventDb.numberOfParticipantsFromAnEvent(5) ==0;
+    }
+
+    private static void testIsUserEnrolledInAnEvent()
+    {
+        assert eventDb.isUserEnrolledInAnEvent("gg@gmail.com",1);
+        assert !eventDb.isUserEnrolledInAnEvent("aand@hotmail.com",1);
+    }
 
 
 }
