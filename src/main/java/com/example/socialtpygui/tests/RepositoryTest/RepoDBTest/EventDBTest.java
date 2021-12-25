@@ -8,8 +8,6 @@ import com.example.socialtpygui.repository.db.EventDb;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 public class EventDBTest {
     private static final EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
@@ -26,6 +24,8 @@ public class EventDBTest {
         testFindAll();
         testNumberOfParticipantsFromAnEvent();
         testIsUserEnrolledInAnEvent();
+        testIsNotifiedFromEvent();
+        testUpdateNotificationEvent();
     }
 
     private static void testFindOne()
@@ -60,7 +60,7 @@ public class EventDBTest {
             list.add(userDTO.getId());
         }
         assert  ! (list.contains("aand@hotmail.com"));
-        eventDb.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1);
+        eventDb.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1, null);
         list.clear();
         for (UserDTO userDTO : eventDb.findOne(1).getParticipants())
         {
@@ -101,5 +101,18 @@ public class EventDBTest {
         assert !eventDb.isUserEnrolledInAnEvent("aand@hotmail.com",1);
     }
 
+    private static void testIsNotifiedFromEvent()
+    {
+        assert eventDb.timeNotifiedFromEvent("gg@gmail.com",1) == null;
+        assert  eventDb.timeNotifiedFromEvent("aand@hotmail.com",2).equals("60");
+    }
 
+    private static void testUpdateNotificationEvent()
+    {
+        assert eventDb.timeNotifiedFromEvent("gc@gmail.com", 1) == null;
+        eventDb.updateNotificationEvent(1, "gc@gmail.com", "60");
+        assert eventDb.timeNotifiedFromEvent("gc@gmail.com", 1).equals("60");
+        eventDb.updateNotificationEvent(1, "gc@gmail.com", null);
+        assert eventDb.timeNotifiedFromEvent("gc@gmail.com", 1) == null;
+    }
 }

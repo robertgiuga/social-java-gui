@@ -52,8 +52,8 @@ public class EventService {
      * @param eventId Integer
      * @return user if the user was added and null if the user was not added
      */
-    public User addParticipants(User user, int eventId) {
-        return  repositoryEvent.addParticipants(user, eventId);
+    public User addParticipants(User user, int eventId, String notification) {
+        return  repositoryEvent.addParticipants(user, eventId, notification);
     }
 
     /**
@@ -83,4 +83,20 @@ public class EventService {
      * @return true, if the user is enrolled, false otherwise
      */
     public boolean isUserEnrolledInAnEvent(String email, int eventId){return repositoryEvent.isUserEnrolledInAnEvent(email, eventId);}
+
+    /**
+     * Verify if a use is notified by an event with id "eventId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is notified, false otherwise
+     */
+    public String timeNotifiedFromEvent(String email, int eventId) {return repositoryEvent.timeNotifiedFromEvent(email, eventId); }
+
+    /**
+     * Modify notification to an event with id "eventId"
+     * @param eventId Integer
+     * @param email String
+     * @param notification String
+     */
+    public void updateNotificationEvent(int eventId, String email, String notification){repositoryEvent.updateNotificationEvent(eventId, email, notification);}
 }

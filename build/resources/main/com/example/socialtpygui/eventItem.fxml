@@ -3,6 +3,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -77,7 +78,7 @@
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <CheckBox fx:id="checkBoxParticipateEvent" layoutX="436.0" layoutY="32.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="17.0">
+      <CheckBox fx:id="checkBoxParticipateEvent" layoutX="436.0" layoutY="32.0" mnemonicParsing="false" onAction="#handlerCheckBoxParticipateEvent" prefHeight="21.0" prefWidth="17.0">
          <font>
             <Font size="15.0" />
          </font>
@@ -87,25 +88,33 @@
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <RadioButton layoutX="325.0" layoutY="133.0" mnemonicParsing="false" text="1 minute" textFill="WHITE">
+      <RadioButton fx:id="ratioBtn1min" layoutX="325.0" layoutY="133.0" mnemonicParsing="false" onAction="#handler1minRadioBtn" text="1 minute" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="notification" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="ratioBtn5min" layoutX="325.0" layoutY="175.0" mnemonicParsing="false" onAction="#handler5minRadioBtn" text="5 minute" textFill="WHITE" toggleGroup="$notification">
          <font>
             <Font size="15.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="325.0" layoutY="175.0" mnemonicParsing="false" text="5 minute" textFill="WHITE">
+      <RadioButton fx:id="ratioBtn1hour" layoutX="325.0" layoutY="213.0" mnemonicParsing="false" onAction="#handler1hourRadioBtn" text="1 hour" textFill="WHITE" toggleGroup="$notification">
          <font>
             <Font size="15.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="325.0" layoutY="213.0" mnemonicParsing="false" text="1 hour" textFill="WHITE">
+      <RadioButton fx:id="ratioBtn1day" layoutX="325.0" layoutY="255.0" mnemonicParsing="false" onAction="#handler1dayRadioBtn" text="1 day" textFill="WHITE" toggleGroup="$notification">
          <font>
             <Font size="15.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="325.0" layoutY="255.0" mnemonicParsing="false" text="1 day" textFill="WHITE">
+      <CheckBox fx:id="notificationCheckBox" layoutX="423.0" layoutY="97.0" mnemonicParsing="false" onAction="#handlerNotificationCheckBox">
          <font>
             <Font size="15.0" />
          </font>
-      </RadioButton>
+      </CheckBox>
    </children>
 </AnchorPane>

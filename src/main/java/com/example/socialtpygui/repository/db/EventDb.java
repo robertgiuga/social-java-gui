@@ -159,13 +159,14 @@ public class EventDb implements Repository<Integer, EventDTO> {
      * @param eventId Integer
      * @return user if the user was added and null if the user was not added
      */
-    public User addParticipants(User user, int eventId)
+    public User addParticipants(User user, int eventId, String notification)
     {
-        String sql = "insert into user_event(id_event, email) values (?, ?)";
+        String sql = "insert into user_event(id_event, email, notification) values (?, ?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, eventId);
             preparedStatement.setString(2, user.getId());
+            preparedStatement.setString(3, notification);
             preparedStatement.executeUpdate();
             return user;
         } catch (SQLException e) {
@@ -231,6 +232,48 @@ public class EventDb implements Repository<Integer, EventDTO> {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * Verify if a use is notified by an event with id "eventId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is notified, false otherwise
+     */
+    public String timeNotifiedFromEvent(String email, int eventId)
+    {
+        String sql = "select notification from user_event where email = ? and id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String notif = resultSet.getString("notification");
+            if (notif != null) return notif;
+        } catch (SQLException e) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Modify notification to an event with id "eventId"
+     * @param eventId Integer
+     * @param email String
+     * @param notification String
+     */
+    public void updateNotificationEvent(int eventId, String email, String notification){
+        String sql = "update user_event set notification = ? where email = ? and id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, notification);
+            preparedStatement.setString(2, email);
+            preparedStatement.setInt(3, eventId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
