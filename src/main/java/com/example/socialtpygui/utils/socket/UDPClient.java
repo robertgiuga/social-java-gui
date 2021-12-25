@@ -1,4 +1,4 @@
-package com.example.socialtpygui.socket;
+package com.example.socialtpygui.utils.socket;
 
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ChangeEventType;

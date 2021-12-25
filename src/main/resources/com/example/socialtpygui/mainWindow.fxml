@@ -39,7 +39,7 @@
                               <Image url="@icons/add-friend.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="eventsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="288.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+                        <ImageView fx:id="eventsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="288.0" layoutY="13.0" onMouseClicked="#handlerEventBtnMW" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
                            <image>
                               <Image url="@icons/calendar.png" />
                            </image>

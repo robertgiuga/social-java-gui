@@ -1,4 +1,4 @@
-package com.example.socialtpygui.socket;
+package com.example.socialtpygui.utils.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,8 +1,8 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.socket.TCPClient;
-import com.example.socialtpygui.socket.UDPClient;
+import com.example.socialtpygui.utils.socket.TCPClient;
+import com.example.socialtpygui.utils.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.LoadView;
 import com.example.socialtpygui.service.SuperService;

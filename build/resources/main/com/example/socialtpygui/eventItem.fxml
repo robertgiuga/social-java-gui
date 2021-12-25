@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPaneEventItem" prefHeight="397.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.EventItemController">
+   <children>
+      <Label fx:id="titleEventLabel" layoutX="215.0" layoutY="14.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="103.0" layoutY="50.0" text="Details" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="20.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/group.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="numberOfParticipantsLabel" layoutX="227.0" layoutY="94.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/time.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="timeEventLabel" layoutX="227.0" layoutY="150.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="206.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/location.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="locationEventLabel" layoutX="227.0" layoutY="210.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/description.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="descriptionEventLabel" layoutX="227.0" layoutY="270.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="previousEventImageView" fitHeight="35.0" fitWidth="35.0" layoutX="42.0" layoutY="337.0" onMouseClicked="#handlerPreviousEvent" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/left.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="nextEventImageView" fitHeight="35.0" fitWidth="35.0" layoutX="436.0" layoutY="337.0" onMouseClicked="#handlerNextEvent" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/right.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

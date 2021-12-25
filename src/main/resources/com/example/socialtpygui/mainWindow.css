@@ -165,3 +165,10 @@
     -fx-background-color: #242E3D;
 }
 
+#anchorPaneEventItem{
+    -fx-background: #242E3D;
+}
+
+#anchorPaneCreateEvent{
+    -fx-background: #242E3D;
+}

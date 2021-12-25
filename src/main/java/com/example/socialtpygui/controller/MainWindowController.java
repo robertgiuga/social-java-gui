@@ -1,12 +1,17 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.socket.TCPClient;
-import com.example.socialtpygui.socket.UDPClient;
+import com.example.socialtpygui.domain.EventDTO;
+import com.example.socialtpygui.domain.UserDTO;
+import com.example.socialtpygui.domainEvent.EventCursor;
+import com.example.socialtpygui.domainEvent.LoadView;
+import com.example.socialtpygui.utils.socket.TCPClient;
+import com.example.socialtpygui.utils.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,6 +31,8 @@ import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainWindowController {
 
@@ -63,6 +70,7 @@ public class MainWindowController {
 
     private User loggedUser;
     private UDPClient udpThread;
+    private int currentEventIndex = 0;
 
     public void load(SuperService service, User loggedUser, UDPClient udpThread){
         leftPane.setVisible(false);
@@ -176,4 +184,17 @@ public class MainWindowController {
             borderPane.setDisable(true);
         }
     }
+
+    public void handlerEventBtnMW(MouseEvent mouseEvent) throws IOException {
+            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventView.fxml"));
+            AnchorPane panel = fxmlLoader.load();
+            EventController eventController = fxmlLoader.getController();
+            eventController.setService(this.service);
+            Pane view = new Pane(panel);
+            borderPane.setCenter(view);
+    }
+
+
+
+
 }
