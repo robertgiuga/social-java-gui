@@ -186,3 +186,10 @@
     -fx-border-radius: 18 18 18 18;
     -fx-background-color: #242E3D;
 }
+
+#addEventButton{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}

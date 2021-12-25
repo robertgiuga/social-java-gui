@@ -773,7 +773,6 @@ public class SuperService implements Observable {
      */
     public int numberOfParticipantsFromAnEvent(int eventId)
     {
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.numberOfParticipantsFromAnEvent(eventId);
     }
 
@@ -787,7 +786,6 @@ public class SuperService implements Observable {
     {
         userValidator.validateEmail(email);
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.isUserEnrolledInAnEvent(email, eventId);
     }
 

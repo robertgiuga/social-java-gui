@@ -190,6 +190,7 @@ public class MainWindowController {
             AnchorPane panel = fxmlLoader.load();
             EventController eventController = fxmlLoader.getController();
             eventController.setService(this.service);
+            eventController.setLoggedUser(loggedUser);
             Pane view = new Pane(panel);
             borderPane.setCenter(view);
     }

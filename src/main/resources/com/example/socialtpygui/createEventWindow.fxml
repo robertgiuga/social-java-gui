@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -8,48 +9,49 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneCreateEvent" prefHeight="397.0" prefWidth="494.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.CreateEventWindowController">
+<AnchorPane fx:id="anchorPaneCreateEvent" prefHeight="382.0" prefWidth="494.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.CreateEventWindowController">
    <children>
-      <TextField layoutX="196.0" layoutY="73.0" prefHeight="32.0" prefWidth="218.0" promptText="Event name">
+      <TextField fx:id="nameEventTextField" layoutX="136.0" layoutY="74.0" prefHeight="32.0" prefWidth="218.0" promptText="Event name">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="136.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="79.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/time.png" />
          </image>
       </ImageView>
-      <DatePicker layoutX="196.0" layoutY="124.0" prefHeight="32.0" prefWidth="218.0" promptText="Date" />
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="136.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
+      <DatePicker fx:id="dateEventTextField" layoutX="136.0" layoutY="125.0" prefHeight="32.0" prefWidth="218.0" promptText="Date" />
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="79.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/location.png" />
          </image>
       </ImageView>
-      <TextField layoutX="196.0" layoutY="183.0" prefHeight="32.0" prefWidth="218.0" promptText="Location">
+      <TextField fx:id="locationEventTextField" layoutX="138.0" layoutY="183.0" prefHeight="32.0" prefWidth="218.0" promptText="Location">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="136.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="79.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/description.png" />
          </image>
       </ImageView>
-      <TextField alignment="TOP_LEFT" layoutX="196.0" layoutY="242.0" prefHeight="107.0" prefWidth="218.0" promptText="Description">
+      <TextField fx:id="descriptionEventTextField" alignment="TOP_LEFT" layoutX="138.0" layoutY="242.0" prefHeight="107.0" prefWidth="218.0" promptText="Description">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Label layoutX="59.0" layoutY="14.0" text="Create Event" textFill="WHITE">
+      <Label layoutX="31.0" layoutY="14.0" text="Create Event" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="136.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="79.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/right-arrow.png" />
          </image>
       </ImageView>
+      <Button fx:id="addEventButton" layoutX="434.0" layoutY="342.0" mnemonicParsing="false" onMouseClicked="#handlerAddEventBtn" text="Add" textFill="WHITE" />
    </children>
 </AnchorPane>
