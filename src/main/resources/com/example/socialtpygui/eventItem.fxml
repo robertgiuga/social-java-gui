@@ -1,59 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorPaneEventItem" prefHeight="397.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.EventItemController">
    <children>
-      <Label fx:id="titleEventLabel" layoutX="215.0" layoutY="14.0" text="Label" textFill="WHITE">
+      <Label fx:id="titleEventLabel" layoutX="68.0" layoutY="29.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="25.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="103.0" layoutY="50.0" text="Details" textFill="WHITE">
-         <font>
-            <Font name="System Bold Italic" size="20.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="25.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/group.png" />
          </image>
       </ImageView>
-      <Label fx:id="numberOfParticipantsLabel" layoutX="227.0" layoutY="94.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+      <Label fx:id="numberOfParticipantsLabel" layoutX="68.0" layoutY="77.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="25.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/time.png" />
          </image>
       </ImageView>
-      <Label fx:id="timeEventLabel" layoutX="227.0" layoutY="150.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+      <Label fx:id="timeEventLabel" layoutX="68.0" layoutY="137.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="206.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="25.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/location.png" />
          </image>
       </ImageView>
-      <Label fx:id="locationEventLabel" layoutX="227.0" layoutY="210.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+      <Label fx:id="locationEventLabel" layoutX="68.0" layoutY="197.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="179.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="25.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/description.png" />
          </image>
       </ImageView>
-      <Label fx:id="descriptionEventLabel" layoutX="227.0" layoutY="270.0" prefHeight="27.0" prefWidth="267.0" text="Label" textFill="WHITE">
+      <Label fx:id="descriptionEventLabel" layoutX="68.0" layoutY="253.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
@@ -68,5 +66,46 @@
             <Image url="@icons/right.png" />
          </image>
       </ImageView>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="25.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/right-arrow.png" />
+         </image>
+      </ImageView>
+      <Line endX="-25.33331298828125" endY="-59.0000114440918" layoutX="261.0" layoutY="74.0" startX="-25.33331298828125" startY="219.66665649414062" stroke="WHITE" />
+      <Label layoutX="317.0" layoutY="26.0" text="Participate?" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <CheckBox layoutX="436.0" layoutY="32.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="17.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </CheckBox>
+      <Label layoutX="302.0" layoutY="90.0" prefHeight="27.0" prefWidth="131.0" text="Notification" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <RadioButton layoutX="325.0" layoutY="133.0" mnemonicParsing="false" text="1 minute" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="325.0" layoutY="175.0" mnemonicParsing="false" text="5 minute" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="325.0" layoutY="213.0" mnemonicParsing="false" text="1 hour" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="325.0" layoutY="255.0" mnemonicParsing="false" text="1 day" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
    </children>
 </AnchorPane>

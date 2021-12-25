@@ -10,8 +10,8 @@
          <top>
             <AnchorPane prefHeight="57.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="createEventBtn" layoutX="434.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#handlerCreateEventBtn" text="Create" />
-                  <Button fx:id="exploreEventBtn" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#handlerExploreEventBtn" text="Explore" />
+                  <Button fx:id="createEventBtn" layoutX="434.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#handlerCreateEventBtn" text="Create" textFill="WHITE" />
+                  <Button fx:id="exploreEventBtn" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#handlerExploreEventBtn" text="Explore" textFill="WHITE" />
                </children>
             </AnchorPane>
          </top>
