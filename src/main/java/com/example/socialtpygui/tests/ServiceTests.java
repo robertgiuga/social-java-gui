@@ -773,7 +773,7 @@ public class ServiceTests {
     private static void testSaveRemoveEvents(){
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
-        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert");
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com");
         assert service.sizeEvent() == 2;
         service.saveEvent(eventDTO);
         assert service.sizeEvent() == 3;

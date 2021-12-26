@@ -9,28 +9,19 @@ public class EventDTO extends Entity<Integer>{
     private String location;
     private List<UserDTO> participants;
     private String name;
-    private String notification;
+    private String creator;
 
     public String getName() {
         return name;
     }
 
-    public EventDTO(String description, LocalDate date, String location, List<UserDTO> participants, String name) {
+    public EventDTO(String description, LocalDate date, String location, List<UserDTO> participants, String name, String creator) {
         this.description = description;
         this.date = date;
         this.location = location;
         this.participants = participants;
         this.name = name;
-        this.notification = null;
-    }
-
-    public EventDTO(String description, LocalDate date, String location, List<UserDTO> participants, String name, String notification) {
-        this.description = description;
-        this.date = date;
-        this.location = location;
-        this.participants = participants;
-        this.name = name;
-        this.notification = notification;
+        this.creator = creator;
     }
 
     public String getDescription() {
@@ -49,9 +40,7 @@ public class EventDTO extends Entity<Integer>{
         return participants;
     }
 
-    public String getNotification() {return this.notification; }
-
-    public void setNotification(String notification) {
-        this.notification = notification;
+    public String getCreator() {
+        return creator;
     }
 }

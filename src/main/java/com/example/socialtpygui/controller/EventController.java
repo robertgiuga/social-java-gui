@@ -4,7 +4,9 @@ import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.EventCursor;
+import com.example.socialtpygui.domainEvent.LoadView;
 import com.example.socialtpygui.service.SuperService;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -27,9 +29,11 @@ public class EventController {
     private int currentEventIndex = 0;
     private User loggedUser;
 
-
-    public void handlerExploreEventBtn(MouseEvent mouseEvent) throws IOException {
-        loadEventFilter();
+    /**
+     * Load all Events,
+     * @throws IOException .
+     */
+    public void loadExploreEventView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventItem.fxml"));
         AnchorPane panel = fxmlLoader.load();
         EventItemController eventItemController = fxmlLoader.getController();
@@ -37,22 +41,48 @@ public class EventController {
         eventItemController.setLoggedUser(loggedUser);
         List<EventDTO> list = new ArrayList<>();
         service.findAllEvents().forEach(list::add);
-        eventItemController.load(list.get(0));
+        if (service.sizeEvent() != 0) {eventItemController.load(list.get(0));}
+        else {
+            loadCreateEvent();}
         Pane view = new Pane(panel);
         borderPaneMainEventWindow.setCenter(view);
     }
 
+    /**
+     * Handler for exploreBtn, load all events.
+     * @param mouseEvent MouseEvent
+     * @throws IOException .
+     */
+    public void handlerExploreEventBtn(MouseEvent mouseEvent) throws IOException {
+        if (service.sizeEvent() != 0) {
+            loadCursorEventFilter();
+            loadExploreEventView();
+        }
+    }
+
+    /**
+     * Set service
+     * @param service SuperService
+     */
     public void setService(SuperService service) {
         this.service = service;
     }
 
-    public void loadEventFilter()
+    /**
+     * Filter for Event(fireEvent).
+     */
+    public void loadCursorEventFilter()
     {
-        borderPaneMainEventWindow.addEventFilter(EventCursor.NEXT_EVENT, this::handlerForEventCursor);
-        borderPaneMainEventWindow.addEventFilter(EventCursor.PREVIOUS_EVENT, this::handlerForEventCursor);
+        borderPaneMainEventWindow.addEventFilter(EventCursor.ANY, this::handlerForEvent);
+        borderPaneMainEventWindow.addEventFilter(LoadView.LOAD_EVENTS, this::handlerForEvent);
     }
 
-    private void handlerForEventCursor(EventCursor t){
+    /**
+     * Handler for event(fireEvent), if the event is EventCursor.NEXT_EVENT, next event, and if the event is ventCursor.PREVIOUS_EVENT, previous
+     * event
+     * @param t Event
+     */
+    private void handlerForEvent(Event t){
         if (t.getEventType().equals(EventCursor.NEXT_EVENT))
         {
             if ((service.sizeEvent()!= 0) && (this.currentEventIndex >= 0) && (this.currentEventIndex < service.sizeEvent()-1))
@@ -60,6 +90,13 @@ public class EventController {
                 this.currentEventIndex++;
                 try {
                     loadEventItem();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (service.sizeEvent() == 0){
+                try {
+                    loadCreateEvent();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -75,11 +112,38 @@ public class EventController {
                     e.printStackTrace();
                 }
             }
-
+            else if (service.sizeEvent() == 0){
+                try {
+                    loadCreateEvent();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if (t.getEventType().equals(LoadView.LOAD_EVENTS)){
+            if (service.sizeEvent() == 0){
+                try {
+                    loadCreateEvent();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    loadExploreEventView();
+                    this.currentEventIndex = 0;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    private void loadEventItem() throws IOException {
+    /**
+     * Load a eventItem.
+     * @throws IOException .
+     */
+    public void loadEventItem() throws IOException {
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventItem.fxml"));
             AnchorPane panel = fxmlLoader.load();
             EventItemController eventItemController = fxmlLoader.getController();
@@ -92,7 +156,24 @@ public class EventController {
             borderPaneMainEventWindow.setCenter(view);
     }
 
+    /**
+     * Handler for create event, load create event window.
+     * @param mouseEvent MouseEvent
+     * @throws IOException .
+     */
     public void handlerCreateEventBtn(MouseEvent mouseEvent) throws IOException {
+       loadCreateEvent();
+    }
+
+    /**
+     * Set logged user.
+     * @param loggedUser User
+     */
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
+
+    public void loadCreateEvent() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("createEventWindow.fxml"));
         AnchorPane panel = fxmlLoader.load();
         CreateEventWindowController controller = fxmlLoader.getController();
@@ -102,7 +183,6 @@ public class EventController {
         borderPaneMainEventWindow.setCenter(view);
     }
 
-    public void setLoggedUser(User loggedUser) {
-        this.loggedUser = loggedUser;
-    }
+
+
 }

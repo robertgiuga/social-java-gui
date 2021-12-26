@@ -694,7 +694,6 @@ public class SuperService implements Observable {
      * @throws NonExistingException if the event does not exist
      */
     public EventDTO removeEvent(Integer eventId) {
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.remove(eventId);
     }
 
@@ -814,4 +813,15 @@ public class SuperService implements Observable {
         eventService.updateNotificationEvent(eventId, email, notification);
     }
 
+    /**
+     * @param email String
+     * @param groupId Integer
+     * @return true, if the user with email "email" is the creator of the group, false otherwise
+     */
+    public boolean isEventCreator(String email, int groupId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return eventService.isEventCreator(email, groupId);
+    }
 }

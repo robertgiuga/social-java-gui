@@ -24,13 +24,14 @@ public class EventDb implements Repository<Integer, EventDTO> {
 
     @Override
     public EventDTO findOne(Integer eventId) {
-        String sql = "select name, description, date, location, user_event.email, users.first_name, users.last_name from event inner join user_event on event.id = user_event.id_event inner join users on users.email = user_event.email where event.id = ?";
+        String sql = "select creator, name, description, date, location, user_event.email, users.first_name, users.last_name from event inner join user_event on event.id = user_event.id_event inner join users on users.email = user_event.email where event.id = ?";
         List<UserDTO> list = new ArrayList<>();
         String name = null;
         EventDTO eventDTO = null;
         String description = null;
         String location = null;
         LocalDate date = null;
+        String creator = null;
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, eventId);
@@ -41,13 +42,14 @@ public class EventDb implements Repository<Integer, EventDTO> {
                 name = resultSet.getString("name");
                 description = resultSet.getString("description");
                 date = LocalDate.parse(resultSet.getString("date"));
+                creator = resultSet.getString("creator");
                 String first_name = resultSet.getString("first_name");
                 String last_name = resultSet.getString("last_name");
                 String email = resultSet.getString("email");
                 UserDTO userDTO = new UserDTO(email, first_name, last_name);
                 list.add(userDTO);
             }
-            if (list.size() != 0) {eventDTO = new EventDTO(description, date, location, list, name);}
+            if (list.size() != 0) {eventDTO = new EventDTO(description, date, location, list, name, creator);}
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,6 +72,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
                 String name = resultSet.getString("name");
                 String  description = resultSet.getString("description");
                 LocalDate date = LocalDate.parse(resultSet.getString("date"));
+                String creator = resultSet.getString("creator");
                 int id = resultSet.getInt("id");
                 preparedStatement1.setInt(1, id);
                 ResultSet resultSet1 = preparedStatement1.executeQuery();
@@ -81,7 +84,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
                     UserDTO userDTO = new UserDTO(first_name, last_name, email);
                     list.add(userDTO);
                 }
-                EventDTO eventDTO = new EventDTO(description, date, location, list, name);
+                EventDTO eventDTO = new EventDTO(description, date, location, list, name,creator);
                 eventDTO.setId(id);
                 events.add(eventDTO);
                 list.clear();
@@ -94,7 +97,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
 
     @Override
     public EventDTO save(EventDTO event) {
-        String sqlInsertIntoEvent = "insert into event(description, date, location, name) values (?, ?, ?, ?) returning id";
+        String sqlInsertIntoEvent = "insert into event(description, date, location, name, creator) values (?, ?, ?, ?, ?) returning id";
         String sqlInsertIntoEventUser = "insert into user_event(id_event, email) values (?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlInsertIntoEvent);
@@ -103,6 +106,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
             preparedStatement1.setDate(2, Date.valueOf(event.getDate()));
             preparedStatement1.setString(3, event.getLocation());
             preparedStatement1.setString(4, event.getName());
+            preparedStatement1.setString(5, event.getCreator());
             ResultSet resultSet = preparedStatement1.executeQuery();
             resultSet.next();
             int id = resultSet.getInt(1);
@@ -248,6 +252,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
             preparedStatement.setString(1, email);
             preparedStatement.setInt(2, eventId);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             String notif = resultSet.getString("notification");
             if (notif != null) return notif;
         } catch (SQLException e) {
@@ -273,7 +278,27 @@ public class EventDb implements Repository<Integer, EventDTO> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * @param email String
+     * @param groupId Integer
+     * @return true, if the user with email "email" is the creator of the group, false otherwise
+     */
+    public boolean isEventCreator(String email, int groupId){
+        String sql = "select count(*) from event where id = ? and creator = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+           PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, groupId);
+            preparedStatement.setString(2, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            if (count != 0) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

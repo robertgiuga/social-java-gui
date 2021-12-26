@@ -23,6 +23,11 @@ public class CreateEventWindowController {
     private SuperService service;
     private User loggedUser;
 
+    /**
+     * Handler for add button, if one text field is empty throw alert, if the date from date picker is before LocalDate.now()
+     * throw alert, else add event and clear all text fields and data picker.
+     * @param mouseEvent MouseEvent
+     */
     public void handlerAddEventBtn(MouseEvent mouseEvent) {
         if ((descriptionEventTextField.getText().length() == 0) || (locationEventTextField.getText().length() == 0) || (dateEventTextField.getValue() == null) || nameEventTextField.getText().length() == 0){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -36,15 +41,23 @@ public class CreateEventWindowController {
         }
         else{
             List<UserDTO> list = new ArrayList<>(); list.add(new UserDTO(loggedUser));
-            service.saveEvent(new EventDTO(descriptionEventTextField.getText(), dateEventTextField.getValue(), locationEventTextField.getText(), list, nameEventTextField.getText()));
+            service.saveEvent(new EventDTO(descriptionEventTextField.getText(), dateEventTextField.getValue(), locationEventTextField.getText(), list, nameEventTextField.getText(), loggedUser.getId()));
             descriptionEventTextField.clear(); locationEventTextField.clear(); nameEventTextField.clear(); dateEventTextField.getEditor().clear();
         }
     }
 
+    /**
+     * Set service
+     * @param service SuperService
+     */
     public void setService(SuperService service) {
         this.service = service;
     }
 
+    /**
+     * Set logged user
+     * @param loggedUser User
+     */
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
     }

@@ -99,4 +99,11 @@ public class EventService {
      * @param notification String
      */
     public void updateNotificationEvent(int eventId, String email, String notification){repositoryEvent.updateNotificationEvent(eventId, email, notification);}
+
+    /**
+     * @param email String
+     * @param groupId Integer
+     * @return true, if the user with email "email" is the creator of the group, false otherwise
+     */
+    public boolean isEventCreator(String email, int groupId){return repositoryEvent.isEventCreator(email, groupId);}
 }
