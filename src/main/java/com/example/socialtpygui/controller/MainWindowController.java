@@ -1,8 +1,8 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.socket.TCPClient;
-import com.example.socialtpygui.socket.UDPClient;
+import com.example.socialtpygui.utils.socket.TCPClient;
+import com.example.socialtpygui.utils.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
@@ -48,16 +48,14 @@ public class MainWindowController {
 
     @FXML
     private Button exitBtnMW;
-
     @FXML
     private Button minimizeBtnMW;
-
     @FXML
     private Button extindBtnMW;
-
+    @FXML
+    private Button statisticsBtn;
 
     Pane friendsView=null;
-
 
     private SuperService service;
 
@@ -158,16 +156,13 @@ public class MainWindowController {
 
     }
 
-    public void handlerForBgClick(MouseEvent event) {
-       // leftPane.setVisible(false);
-        //borderPane.setDisable(false);
-    }
+
     private void slidebarDisbale(){
         leftPane.setVisible(false);
         borderPane.setDisable(false);
     }
 
-    public void handlerMenuShow(ActionEvent event) {
+    public void handlerMenuShow() {
         if(leftPane.isVisible()) {
             slidebarDisbale();
         }
@@ -175,5 +170,20 @@ public class MainWindowController {
             leftPane.setVisible(true);
             borderPane.setDisable(true);
         }
+
+    }
+
+    public void handlerForBgClick(MouseEvent event) {
+    }
+
+    public void handelerStatisticsBtn(MouseEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("statistics-view.fxml"));
+
+        AnchorPane pane = fxmlLoader.load();
+        StatisticsController controller = fxmlLoader.getController();
+        controller.load(service, loggedUser);
+        borderPane.setCenter(pane);
+
+
     }
 }

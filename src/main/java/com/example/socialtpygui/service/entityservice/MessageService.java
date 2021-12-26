@@ -3,14 +3,10 @@ package com.example.socialtpygui.service.entityservice;
 import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
-import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.repository.db.MessageDb;
-import com.example.socialtpygui.service.validators.NonExistingException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 public class MessageService {
@@ -42,7 +38,7 @@ public class MessageService {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessages(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetweenTwoUsers(String id1, String id2)
     {
         return messageRepository.findAllMessageBetweenTwoUsers(id1, id2);
     }
