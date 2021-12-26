@@ -6,10 +6,7 @@ import com.example.socialtpygui.service.SuperService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -135,6 +132,11 @@ public class StatisticsController {
             savePDFFile(doc);
 
         }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Please select dates");
+            alert.show();
+        }
     }
 
 
@@ -214,6 +216,16 @@ public class StatisticsController {
                 savePDFFile(doc);
 
             }
+            else{
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Please select a friend");
+                alert.show();
+            }
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Please select dates");
+            alert.show();
         }
 
     }
