@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="40.0" prefWidth="290.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.FriendReportController">
+   <children>
+      <Label fx:id="nameLbl" layoutX="25.0" layoutY="11.0" text="Name" />
+      <RadioButton fx:id="radioBtn" layoutX="227.0" layoutY="11.0" mnemonicParsing="false" />
+   </children>
+</AnchorPane>

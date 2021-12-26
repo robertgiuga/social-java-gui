@@ -182,7 +182,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         this.email2User = email;
         this.groupId = null;
         scrollPaneShowConv.setVvalue(1.0f);
-        service.getMessages(loggedUser.getId(), email).forEach(replyMessage->{
+        service.getMessagesBetween2Users(loggedUser.getId(), email).forEach(replyMessage->{
             try{
                 Pane item = createItem(replyMessage);
                 lastConvMsjId= replyMessage.getId();

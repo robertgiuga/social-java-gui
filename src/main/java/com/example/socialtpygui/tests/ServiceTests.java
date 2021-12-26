@@ -72,6 +72,23 @@ public class ServiceTests {
         testIsUserEnrolledInAnEvent();
         testIsNotifiedFromEvent();
         testUpdateNotificationEvent();
+        testGetMessagesInDate();
+        testGetMessagesBetween2UsersInDate();
+    }
+
+    private static void testGetMessagesBetween2UsersInDate() {
+        List<ReplyMessage> messages = service.getMessagesBetween2UsersInDate("gg@gmail.com","snj@gmail.com",LocalDate.parse("2021-11-01"),LocalDate.parse("2021-12-01"));
+        assert messages.size()==1;
+        ReplyMessage msj = messages.get(0);
+        assert msj.getId()==5;
+    }
+
+    private static void testGetMessagesInDate() {
+        List<Tuple<User, Integer>> messages = service.getMessagesInDate("gg@gmail.com",LocalDate.parse("2021-11-01"),LocalDate.parse("2021-12-01"));
+        assert messages.contains(new Tuple<>(service.findOneUser("snj@gmail.com"),1));
+        assert messages.contains(new Tuple<>(service.findOneUser("jon1@yahoo.com"),1));
+
+
     }
 
     private static void testAddUser() {
@@ -337,7 +354,7 @@ public class ServiceTests {
     }
 
     private static void testGetMessages() {
-        List<ReplyMessage> replyMessageList = service.getMessages("aand@hotmail.com", "snj@gmail.com");
+        List<ReplyMessage> replyMessageList = service.getMessagesBetween2Users("aand@hotmail.com", "snj@gmail.com");
         List<Integer> idList = new ArrayList<>();
         for (ReplyMessage replyMessage : replyMessageList) idList.add(replyMessage.getId());
         assert (replyMessageList.size() == 3);

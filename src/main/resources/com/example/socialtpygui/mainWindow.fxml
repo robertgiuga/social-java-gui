@@ -60,7 +60,7 @@
                         <Image url="@icons/friends.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="statisticsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="24.0" layoutY="341.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="statisticsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="24.0" layoutY="341.0" onMouseClicked="#handelerStatisticsBtn" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/statistics.png" />
                      </image>

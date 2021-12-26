@@ -14,6 +14,7 @@ repositories {
 
 ext {
     junitVersion = '5.8.1'
+    pdfboxVersion = '2.0.25'
 }
 
 sourceCompatibility = '17'
@@ -44,6 +45,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation 'org.postgresql:postgresql:42.3.1'
+
+    implementation 'org.apache.pdfbox:pdfbox:2.0.25'
 }
 
 test {
