@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="anchorPaneShowConvView" prefHeight="357.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
    <children>
-      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" layoutY="12.0" prefHeight="294.0" prefWidth="481.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="12.0">
+      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" hbarPolicy="NEVER" layoutY="12.0" prefHeight="294.0" prefWidth="481.0" vvalue="1.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="12.0">
          <content>
             <GridPane fx:id="gridShowMessages" prefHeight="275.0" prefWidth="482.0">
                <columnConstraints>
@@ -26,7 +26,7 @@
          </content>
       </ScrollPane>
       <TextField fx:id="messageText" focusTraversable="false" layoutX="14.0" layoutY="299.0" onKeyPressed="#handlerKeyPressed" prefHeight="32.0" prefWidth="358.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" />
-      <Button fx:id="buttonSend" focusTraversable="false" layoutX="391.0" layoutY="299.0" mnemonicParsing="false" onAction="#pressedSendButton" prefHeight="26.0" prefWidth="80.0" text="Send" textFill="#c9e9d8" AnchorPane.bottomAnchor="8.8" AnchorPane.rightAnchor="14.0">
+      <Button fx:id="buttonSend" focusTraversable="false" layoutX="391.0" layoutY="299.0" mnemonicParsing="false" onAction="#pressedSendButton" prefHeight="26.0" prefWidth="80.0" text="Send" textFill="WHITE" AnchorPane.bottomAnchor="8.8" AnchorPane.rightAnchor="14.0">
          <font>
             <Font size="15.0" />
          </font>

@@ -29,6 +29,8 @@ public class MessageDBTest {
         testGetGroupMessages();
         testUserInGroup();
         testNumberOfUserFromAGroup();
+        testGetConvMessagesGreaterThan();
+        testGetGroupMessagesGreaterThen();
     }
 
     private static void testFindOne()
@@ -149,6 +151,18 @@ public class MessageDBTest {
     {
         assert (messageDBTest.numberOfUserFromAGroup(1) == 4);
         assert (messageDBTest.numberOfUserFromAGroup(2) == 3);
+    }
+
+    private static void testGetConvMessagesGreaterThan(){
+        List<ReplyMessage> msj= messageDBTest.getConvMessagesGreaterThan("snj@gmail.com","aand@hotmail.com",6);
+        assert msj.get(0).getFrom().equals("aand@hotmail.com");
+        assert msj.get(0).getId()>6;
+    }
+
+    private static void testGetGroupMessagesGreaterThen(){
+        List<ReplyMessage> msj= messageDBTest.getGroupMessagesGreaterThen(1,1);
+        assert msj.get(0).getFrom().equals("gg@gmail.com");
+        assert msj.get(0).getId()>1;
     }
 
 }

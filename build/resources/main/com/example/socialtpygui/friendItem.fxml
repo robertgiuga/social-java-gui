@@ -7,15 +7,15 @@
 
 <AnchorPane fx:id="anchorPaneFriendItem" prefHeight="55.0" prefWidth="494.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.FriendItemController">
    <children>
-      <Label fx:id="nameLbl" layoutX="14.0" layoutY="15.0" prefHeight="25.0" prefWidth="169.0" text="nameLbl" textFill="#c9e9d8">
+      <Label fx:id="nameLbl" layoutX="14.0" layoutY="15.0" prefHeight="25.0" prefWidth="169.0" text="nameLbl" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Label>
-      <Button fx:id="deleteBtn" layoutX="352.0" layoutY="11.0" mnemonicParsing="false" onAction="#handlerDeleteButton" prefHeight="25.0" prefWidth="122.0" style="-fx-background-color: #242E3D; -fx-border-color: #c9e9d8;" text="Remove friend" textFill="#c9e9d8">
+      <Button fx:id="deleteBtn" layoutX="352.0" layoutY="11.0" mnemonicParsing="false" onAction="#handlerDeleteButton" prefHeight="25.0" prefWidth="122.0" style="-fx-background-color: #242E3D; -fx-border-color: #c9e9d8;" text="Remove friend" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Label fx:id="dateLbl" layoutX="184.0" layoutY="20.0" text="text" textFill="#c9e9d8">
+      <Label fx:id="dateLbl" layoutX="184.0" layoutY="20.0" text="text" textFill="WHITE">
          <font>
             <Font size="10.0" />
          </font>

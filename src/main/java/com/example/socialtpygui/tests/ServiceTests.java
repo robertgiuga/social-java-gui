@@ -2,10 +2,7 @@ package com.example.socialtpygui.tests;
 
 
 import com.example.socialtpygui.domain.*;
-import com.example.socialtpygui.repository.db.FriendshipDb;
-import com.example.socialtpygui.repository.db.MessageDb;
-import com.example.socialtpygui.repository.db.FriendshipRequestDb;
-import com.example.socialtpygui.repository.db.UserDb;
+import com.example.socialtpygui.repository.db.*;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.entityservice.*;
 import com.example.socialtpygui.service.validators.MessageValidator;
@@ -32,7 +29,9 @@ public class ServiceTests {
     private static NetworkService networkService = new NetworkService(userDb, friendshipDb);
     private static MessageService messageService = new MessageService(messageDb);
     private static FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);
-    private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator);
+    private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static EventService eventService = new EventService(eventDb);
+    private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator,eventService);
 
 
     private ServiceTests() {
@@ -65,6 +64,10 @@ public class ServiceTests {
         testGetGroup();
         testAddRemoveUserToGroup();
         testGetGroupMessages();
+        testFindOneEvent();
+        testSaveRemoveEvents();
+        testAddRemoveParticipants();
+        testFindAllEvents();
         testGetMessagesInDate();
         testGetMessagesBetween2UsersInDate();
     }
@@ -74,7 +77,6 @@ public class ServiceTests {
         assert messages.size()==1;
         ReplyMessage msj = messages.get(0);
         assert msj.getId()==5;
-
     }
 
     private static void testGetMessagesInDate() {
@@ -759,5 +761,118 @@ public class ServiceTests {
     private static void testGetGroupMessages() {
         List<ReplyMessage> list = messageService.getGroupMessages(1);
         assert (list.size() == 1);
+    }
+
+
+
+
+
+    private static void testFindOneEvent()
+    {
+        assert service.findOneEvent(1).getParticipants().size() == 4;
+        assert service.findOneEvent(1).getName().equals("Untold");
+        assert service.findOneEvent(1).getDescription().equals("Festival");
+        assert service.findOneEvent(1).getLocation().equals("Cluj");
+        try {
+            service.findOneEvent(12);
+            assert false;
+        }catch (NonExistingException e){
+            assert true;
+        }
+
+    }
+
+    private static void testSaveRemoveEvents(){
+        List<UserDTO> list = new ArrayList<>();
+        list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert");
+        assert service.sizeEvent() == 2;
+        service.saveEvent(eventDTO);
+        assert service.sizeEvent() == 3;
+        int id = eventDTO.getId();
+        assert service.findOneEvent(id) != null;
+        service.removeEvent(id);
+        assert service.sizeEvent() == 2;
+        try{
+        service.findOneEvent(id);
+        assert false;
+        }catch (NonExistingException e){
+            assert true;
+        }
+        try{
+            service.removeEvent(3);
+            assert false;
+        }catch (NonExistingException e)
+        {
+            assert true;
+        }
+    }
+
+    private static void testAddRemoveParticipants()
+    {
+        List<String> list = new ArrayList<>();
+        for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
+        {
+            list.add(userDTO.getId());
+        }
+        assert  ! (list.contains("aand@hotmail.com"));
+        service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1);
+        list.clear();
+        for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
+        {
+            list.add(userDTO.getId());
+        }
+        assert   (list.contains("aand@hotmail.com"));
+        service.removeParticipants("aand@hotmail.com", 1);
+        list.clear();
+        for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
+        {
+            list.add(userDTO.getId());
+        }
+        assert   ! (list.contains("aand@hotmail.com"));
+        try{
+            service.addParticipants(new User("s", "s","aansad@hotmail.com", "p"), 1);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+        try{
+            service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 3);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+        try{
+            service.removeParticipants("aansad@hotmail.com", 1);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+        try{
+            service.removeParticipants("aand@hotmail.com", 3);
+            assert false;
+        } catch (NonExistingException e)
+        {
+            assert true;
+        }
+
+    }
+
+    private static void testFindAllEvents(){
+        Iterable<EventDTO> list1 = service.findAllEvents();
+        List<EventDTO> list = new ArrayList<>();
+        list1.forEach(list::add);
+        assert list.size() == 2;
+        List<Integer> idList = new ArrayList<>();
+        idList.add(list.get(0).getId());
+        idList.add(list.get(1).getId());
+        assert idList.contains(1);
+        assert idList.contains(2);
     }
 }

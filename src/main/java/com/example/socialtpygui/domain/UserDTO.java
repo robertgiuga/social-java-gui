@@ -12,6 +12,12 @@ public class UserDTO extends Entity<String> {
         this.lastName = user.getLastName();
     }
 
+    public UserDTO(String id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     /**
      *
      * @return the id to a user

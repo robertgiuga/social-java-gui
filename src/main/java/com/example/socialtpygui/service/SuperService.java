@@ -29,19 +29,22 @@ public class SuperService implements Observable {
     protected NetworkService networkService;
     protected MessageService messageService;
     protected MessageValidator messageValidator;
+    protected EventService eventService;
 
     private Observer observer;
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
                         FriendshipService friendshipService, UserService userService,
-                        UserValidator userValidator,MessageValidator messageValidator) {
+                        UserValidator userValidator,MessageValidator messageValidator,
+                        EventService eventService) {
         this.userService = userService;
         this.userValidator=userValidator;
         this.friendshipService = friendshipService;
         this.networkService = networkService;
         this.messageService = messageService;
         this.messageValidator= messageValidator;
+        this.eventService = eventService;
     }
 
     /**
@@ -664,6 +667,7 @@ public class SuperService implements Observable {
     }
 
     /**
+<<<<<<< HEAD
      * gets the friendships of a user in a Date interval
      * @param id the email of the user
      * @param dateStart the start date for searching
@@ -740,4 +744,105 @@ public class SuperService implements Observable {
 
         return messageService.getMessagesBetweenTwoUsers(id1, id2).stream().filter(replyMessage -> replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0).collect(Collectors.toList());
     }
+    
+    /**
+     * Find one event with id "eventId".
+     * @param eventId Integer
+     * @return null if the event does not exist and the eventDTO if the event exist
+     * @throws NonExistingException if the event does not exist
+     */
+    public EventDTO findOneEvent(Integer eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        return eventService.findOne(eventId);
+    }
+
+    /**
+     * Save an event.
+     * @param event EventDTO
+     * @return event if was saved and null otherwise
+     */
+    public EventDTO saveEvent(EventDTO event) {
+        return eventService.save(event);
+    }
+
+    /**
+     * Remove a event.
+     * @param eventId Integer
+     * @return null
+     * @throws NonExistingException if the event does not exist
+     */
+    public EventDTO removeEvent(Integer eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        return eventService.remove(eventId);
+    }
+
+    /**
+     * @return the number of events
+     */
+    public int sizeEvent() {
+        return eventService.size();
+    }
+
+    /**
+     * Add a user(participant) to user_event table.
+     * @param user User
+     * @param eventId Integer
+     * @return user if the user was added and null if the user was not added
+     * @throws NonExistingException if the user does not exist or the event does not exist
+     */
+    public User addParticipants(User user, int eventId) {
+        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+        if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
+        return  eventService.addParticipants(user, eventId);
+    }
+
+    /**
+     * Remove a user(participant) from user_event table
+     * @param email String
+     * @param eventId Integer
+     * @throws NonExistingException if the user does not exist or the event does not exist
+     */
+    public void removeParticipants(String email, int eventId) {
+        if (eventService.findOne(eventId) == null) {
+            throw new NonExistingException("Event with id " + eventId + " does not exist!");
+        }
+        if (userService.findOne(email) == null) {
+            throw new NonExistingException("User does not exist!");
+        }
+        eventService.removeParticipants(email, eventId);
+    }
+
+    /**
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
+     */
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID){
+        if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
+        if(lastMsjID<0)
+            throw new ValidationException("there should be no negative id message");
+        return messageService.getGroupMessagesGreaterThen(groupId,lastMsjID);
+    }
+
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId){
+        userValidator.validateEmail(email1);
+        userValidator.validateEmail(email2);
+        if(lastMsjId<0)
+            throw new ValidationException("there should be no negative id message");
+        return messageService.getConvMessagesGreaterThan(email1,email2,lastMsjId);
+    }
+
+    /**
+     * @return all events.
+     */
+    public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
+
 }
