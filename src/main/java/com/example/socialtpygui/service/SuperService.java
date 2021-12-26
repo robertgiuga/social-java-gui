@@ -251,7 +251,7 @@ public class SuperService implements Observable {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessages(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetween2Users(String id1, String id2)
     {
         userValidator.validateEmail(id1);
         userValidator.validateEmail(id2);
@@ -262,7 +262,7 @@ public class SuperService implements Observable {
         if(userService.findOne(id2)==null)
             throw new NonExistingException("User "+id2+" does not exist!");
 
-        return messageService.getMessages(id1, id2);
+        return messageService.getMessagesBetweenTwoUsers(id1, id2);
     }
 
     /**
@@ -676,6 +676,8 @@ public class SuperService implements Observable {
             throw new ValidationException("Date invalid!");
         if(dateStart.compareTo(dateStop)>0)
             throw new ValidationException("Data start must be less than stop date!");
+        if(userService.findOne(id)==null)
+            throw new NonExistingException("User "+id+" does not exist!");
 
         List<FriendShipDTO> friendships=new ArrayList<>();
         UserDTO currentUser= new UserDTO(userService.findOne(id));
@@ -687,7 +689,7 @@ public class SuperService implements Observable {
             }
         });
         return friendships;
-        //TODO tests for this
+
     }
 
     /**
@@ -695,7 +697,7 @@ public class SuperService implements Observable {
      * @param id the id to send messages for
      * @param dateStart the minim date
      * @param dateStop the maxim date
-     * @return a list of replayMessages
+     * @return a list of Tuple<User, Integer> representing the user with which had messages and the nr of messages
      */
     public List<Tuple<User , Integer>> getMessagesInDate(String id, LocalDate dateStart, LocalDate dateStop){
         userValidator.validateEmail(id);
@@ -703,10 +705,12 @@ public class SuperService implements Observable {
             throw new ValidationException("Date invalid!");
         if(dateStart.compareTo(dateStop)>0)
             throw new ValidationException("Data start must be less than stop date!");
+        if(userService.findOne(id)==null)
+            throw new NonExistingException("User "+id+" does not exist!");
 
         List<Tuple<User,Integer>> userMessage= new ArrayList<>();
         messageService.getAllConversation(id).forEach(s ->{
-            long a= messageService.getMessages(id,s).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
+            long a= messageService.getMessagesBetweenTwoUsers(id,s).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
                     .count();
             if(a>0)
                 userMessage.add(new Tuple<User,Integer>(userService.findOne(s), (int) a));
@@ -714,6 +718,26 @@ public class SuperService implements Observable {
         } );
 
         return userMessage;
-        //TODO tests for this
+
+    }
+
+    /**
+     *  gets messages between 2 users in a date interval
+     * @param id1 the email of user1
+     * @param id2 the enail of user 2
+     * @param dateStart .
+     * @param dateStop .
+     * @return a ReplayMessage List
+     */
+    public List<ReplyMessage>  getMessagesBetween2UsersInDate(String id1, String id2,LocalDate dateStart, LocalDate dateStop)
+    {
+        userValidator.validateEmail(id1);
+        userValidator.validateEmail(id2);
+        if(userService.findOne(id1)==null)
+            throw new NonExistingException("User "+id1+" does not exist!");
+        if(userService.findOne(id2)==null)
+            throw new NonExistingException("User "+id2+" does not exist!");
+
+        return messageService.getMessagesBetweenTwoUsers(id1, id2).stream().filter(replyMessage -> replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0).collect(Collectors.toList());
     }
 }

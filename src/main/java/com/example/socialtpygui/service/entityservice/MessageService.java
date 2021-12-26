@@ -37,7 +37,7 @@ public class MessageService {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessages(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetweenTwoUsers(String id1, String id2)
     {
         return messageRepository.findAllMessageBetweenTwoUsers(id1, id2);
     }

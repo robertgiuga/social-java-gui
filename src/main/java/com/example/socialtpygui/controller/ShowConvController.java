@@ -9,7 +9,6 @@ import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -152,7 +151,7 @@ public class ShowConvController {
         this.email = email;
         this.groupId = null;
         scrollPaneShowConv.setVvalue(1.0f);
-        service.getMessages(loggedUser.getId(), email).forEach(replyMessage->{
+        service.getMessagesBetween2Users(loggedUser.getId(), email).forEach(replyMessage->{
             try{
                 Pane item = createItem(replyMessage);
                 item.getChildren().forEach(node->{

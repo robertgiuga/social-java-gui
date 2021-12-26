@@ -2,15 +2,50 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="491.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.StatisticsController">
    <children>
-      <Button layoutX="280.0" layoutY="71.0" mnemonicParsing="false" onAction="#handlerRaport1Btn" text="raport1" />
-      <Button layoutX="54.0" layoutY="246.0" mnemonicParsing="false" text="Button" />
-      <DatePicker fx:id="dateStart" layoutX="61.0" layoutY="45.0" />
-      <DatePicker fx:id="dateStop" layoutX="61.0" layoutY="106.0" />
-      <ProgressBar fx:id="progressBar" layoutX="61.0" layoutY="161.0" prefWidth="200.0" progress="0.03" />
+      <Button layoutX="52.0" layoutY="194.0" mnemonicParsing="false" onAction="#handlerRaport1Btn" text="Create it!" />
+      <Button layoutX="94.0" layoutY="303.0" mnemonicParsing="false" onAction="#handlerRaport2Btn" text="Create it" />
+      <DatePicker fx:id="dateStart" layoutX="37.0" layoutY="110.0" />
+      <DatePicker fx:id="dateStop" layoutX="284.0" layoutY="110.0" />
+      <Label layoutX="41.0" layoutY="14.0" text="Create your pdf reports!" textFill="WHITE">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="30.0" layoutY="60.0" text="First you need to select the date interval" textFill="#f7f6f6">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="40.0" layoutY="88.0" text="From:" textFill="WHITE" />
+      <Label layoutX="284.0" layoutY="88.0" text="to:" textFill="WHITE" />
+      <Label layoutX="30.0" layoutY="162.0" text="First report, about your new friends and with whom you've been chatting " textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="27.0" layoutY="245.0" text="Second report, about your conversation with a particular friend :)" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="52.0" layoutY="272.0" text="Select your friend first :" textFill="WHITE" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="191.0" layoutY="266.0" prefHeight="121.0" prefWidth="294.0">
+         <content>
+            <GridPane fx:id="gridPane" prefHeight="121.0" prefWidth="292.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+            </GridPane>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
