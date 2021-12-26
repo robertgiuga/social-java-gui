@@ -48,13 +48,10 @@ public class MainWindowController {
 
     @FXML
     private Button exitBtnMW;
-
     @FXML
     private Button minimizeBtnMW;
-
     @FXML
     private Button extindBtnMW;
-
     @FXML
     private Button statisticsBtn;
 
@@ -160,16 +157,6 @@ public class MainWindowController {
     }
 
 
-    public void handelerStatisticsbtn(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("statistics-view.fxml"));
-
-        AnchorPane pane = fxmlLoader.load();
-        StatisticsController controller = fxmlLoader.getController();
-        controller.load(service, loggedUser);
-
-        borderPane.setCenter(pane);
-    }
-
     private void slidebarDisbale(){
         leftPane.setVisible(false);
         borderPane.setDisable(false);
@@ -187,5 +174,16 @@ public class MainWindowController {
     }
 
     public void handlerForBgClick(MouseEvent event) {
+    }
+
+    public void handelerStatisticsBtn(MouseEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("statistics-view.fxml"));
+
+        AnchorPane pane = fxmlLoader.load();
+        StatisticsController controller = fxmlLoader.getController();
+        controller.load(service, loggedUser);
+        borderPane.setCenter(pane);
+
+
     }
 }

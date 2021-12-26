@@ -12,32 +12,9 @@
 
 <StackPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handlerForBgClick" prefHeight="520.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MainWindowController">
    <children>
-   <AnchorPane>
-   <children>
-   <AnchorPane>
-      <children>
-            <Button fx:id="friendsBtn" layoutX="35.0" layoutY="325.0" mnemonicParsing="false" onAction="#handlerFriendsButton" prefHeight="32.0" prefWidth="136.0" text="Friends" textFill="#242e3d">
-               <font>
-                  <Font size="15.0" />
-               </font></Button>
-            <Button fx:id="statisticsBtn" layoutX="35.0" layoutY="372.0" mnemonicParsing="false" onAction="#handelerStatisticsbtn" prefHeight="32.0" prefWidth="136.0" text="Statistics" textFill="#242e3d">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Button>
-            <Button fx:id="logoutBtn" layoutX="35.0" layoutY="466.0" mnemonicParsing="false" onAction="#handlerLogOutBtn" prefHeight="32.0" prefWidth="136.0" text="LogOut" textFill="#242e3d">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Button>
-            <Button fx:id="settingBtn" layoutX="35.0" layoutY="419.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="136.0" text="Settings" textFill="#242e3d">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Button>
-   </children>
-   </AnchorPane>
-      <BorderPane fx:id="borderPane" layoutX="6.0" prefHeight="520.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="mainPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="500.0">
+         <children>
+            <BorderPane fx:id="borderPane" layoutX="6.0" prefHeight="520.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
                   <AnchorPane fx:id="topPane" prefHeight="44.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                      <children>
@@ -83,7 +60,7 @@
                         <Image url="@icons/friends.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="statisticsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="24.0" layoutY="341.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="statisticsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="24.0" layoutY="341.0" onMouseClicked="#handelerStatisticsBtn" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/statistics.png" />
                      </image>
