@@ -62,7 +62,7 @@ public class LogInController {
 
             mainWindowController.load(service,user,client1);
 
-            Scene scene = new Scene(panel, 500, 520);
+            Scene scene = new Scene(panel, 650, 600);
 
             panel.setOnMousePressed(event->{
                 xCord = event.getSceneX();

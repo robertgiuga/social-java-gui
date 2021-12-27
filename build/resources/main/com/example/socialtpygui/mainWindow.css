@@ -165,3 +165,9 @@
     -fx-background-color: #242E3D;
 }
 
+#anchorPaneFriendItem{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-effect: dropshadow(three-pass-box, white, 10, 0, 0, 0);
+}
