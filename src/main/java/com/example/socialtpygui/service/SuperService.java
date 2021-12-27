@@ -772,7 +772,6 @@ public class SuperService implements Observable {
      * @throws NonExistingException if the event does not exist
      */
     public EventDTO removeEvent(Integer eventId) {
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.remove(eventId);
     }
 
@@ -790,10 +789,9 @@ public class SuperService implements Observable {
      * @return user if the user was added and null if the user was not added
      * @throws NonExistingException if the user does not exist or the event does not exist
      */
-    public User addParticipants(User user, int eventId) {
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+    public User addParticipants(User user, int eventId, String notification) {
         if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
-        return  eventService.addParticipants(user, eventId);
+        return  eventService.addParticipants(user, eventId, notification);
     }
 
     /**
@@ -845,4 +843,51 @@ public class SuperService implements Observable {
      */
     public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
 
+    /**
+     * @param eventId Integer
+     * @return number of participants from a group with id "groupId"
+     */
+    public int numberOfParticipantsFromAnEvent(int eventId)
+    {
+        return eventService.numberOfParticipantsFromAnEvent(eventId);
+    }
+
+    /**
+     * Verify if a user is enrolled in an event with id "groupId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is enrolled, false otherwise
+     */
+    public boolean isUserEnrolledInAnEvent(String email, int eventId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return eventService.isUserEnrolledInAnEvent(email, eventId);
+    }
+
+    /**
+     * Verify if a use is notified by an event with id "eventId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is notified, false otherwise
+     */
+    public String timeNotifiedFromEvent(String email, int eventId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return eventService.timeNotifiedFromEvent(email, eventId);
+    }
+
+    /**
+     * Modify notification to an event with id "eventId"
+     * @param eventId Integer
+     * @param email String
+     * @param notification String
+     */
+    public void updateNotificationEvent(int eventId, String email, String notification)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        eventService.updateNotificationEvent(eventId, email, notification);
+    }
 }

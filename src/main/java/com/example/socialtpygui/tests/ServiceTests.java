@@ -68,6 +68,10 @@ public class ServiceTests {
         testSaveRemoveEvents();
         testAddRemoveParticipants();
         testFindAllEvents();
+        testNumberOfParticipantsFromAnEvent();
+        testIsUserEnrolledInAnEvent();
+        testIsNotifiedFromEvent();
+        testUpdateNotificationEvent();
         testGetMessagesInDate();
         testGetMessagesBetween2UsersInDate();
     }
@@ -83,6 +87,7 @@ public class ServiceTests {
         List<Tuple<User, Integer>> messages = service.getMessagesInDate("gg@gmail.com",LocalDate.parse("2021-11-01"),LocalDate.parse("2021-12-01"));
         assert messages.contains(new Tuple<>(service.findOneUser("snj@gmail.com"),1));
         assert messages.contains(new Tuple<>(service.findOneUser("jon1@yahoo.com"),1));
+
 
     }
 
@@ -785,7 +790,7 @@ public class ServiceTests {
     private static void testSaveRemoveEvents(){
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
-        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert");
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com");
         assert service.sizeEvent() == 2;
         service.saveEvent(eventDTO);
         assert service.sizeEvent() == 3;
@@ -799,13 +804,6 @@ public class ServiceTests {
         }catch (NonExistingException e){
             assert true;
         }
-        try{
-            service.removeEvent(3);
-            assert false;
-        }catch (NonExistingException e)
-        {
-            assert true;
-        }
     }
 
     private static void testAddRemoveParticipants()
@@ -816,7 +814,7 @@ public class ServiceTests {
             list.add(userDTO.getId());
         }
         assert  ! (list.contains("aand@hotmail.com"));
-        service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1);
+        service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1, null);
         list.clear();
         for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
         {
@@ -831,20 +829,13 @@ public class ServiceTests {
         }
         assert   ! (list.contains("aand@hotmail.com"));
         try{
-            service.addParticipants(new User("s", "s","aansad@hotmail.com", "p"), 1);
+            service.addParticipants(new User("s", "s","aansad@hotmail.com", "p"), 1, null);
             assert false;
         } catch (NonExistingException e)
         {
             assert true;
         }
 
-        try{
-            service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 3);
-            assert false;
-        } catch (NonExistingException e)
-        {
-            assert true;
-        }
 
         try{
             service.removeParticipants("aansad@hotmail.com", 1);
@@ -874,5 +865,56 @@ public class ServiceTests {
         idList.add(list.get(1).getId());
         assert idList.contains(1);
         assert idList.contains(2);
+    }
+
+    private static void testNumberOfParticipantsFromAnEvent()
+    {
+        assert service.numberOfParticipantsFromAnEvent(1) == 4;
+        assert service.numberOfParticipantsFromAnEvent(2) ==3;
+    }
+
+    private static void testIsUserEnrolledInAnEvent()
+    {
+        assert service.isUserEnrolledInAnEvent("gg@gmail.com",1);
+        assert !service.isUserEnrolledInAnEvent("aand@hotmail.com",1);
+        try {
+            service.isUserEnrolledInAnEvent("dasdas",1);
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.isUserEnrolledInAnEvent("fdr@gmail.com",1);
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testIsNotifiedFromEvent()
+    {
+        assert service.timeNotifiedFromEvent("gg@gmail.com",1) == null;
+        assert  service.timeNotifiedFromEvent("aand@hotmail.com",2).equals("60");
+        try {
+            service.timeNotifiedFromEvent("dasdas",1);
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.timeNotifiedFromEvent("fdr@gmail.com",1);
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testUpdateNotificationEvent()
+    {
+        assert service.timeNotifiedFromEvent("gc@gmail.com", 1) == null;
+        service.updateNotificationEvent(1, "gc@gmail.com", "60");
+        assert service.timeNotifiedFromEvent("gc@gmail.com", 1).equals("60");
+        service.updateNotificationEvent(1, "gc@gmail.com", null);
+        assert service.timeNotifiedFromEvent("gc@gmail.com", 1) == null;
+        try {
+            service.updateNotificationEvent(1, "dasdas",null);
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.updateNotificationEvent(1,"fdr@gmail.com",null);
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
     }
 }

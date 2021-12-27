@@ -165,3 +165,38 @@
     -fx-background-color: #242E3D;
 }
 
+#anchorPaneEventItem{
+    -fx-background: #242E3D;
+}
+
+#anchorPaneCreateEvent{
+    -fx-background: #242E3D;
+}
+
+#exploreEventBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#createEventBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#addEventButton{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#removeEventBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}

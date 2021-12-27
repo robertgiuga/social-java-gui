@@ -8,8 +8,6 @@ import com.example.socialtpygui.repository.db.EventDb;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 public class EventDBTest {
     private static final EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
@@ -24,6 +22,10 @@ public class EventDBTest {
         testSaveRemove();
         testAddRemoveParticipants();
         testFindAll();
+        testNumberOfParticipantsFromAnEvent();
+        testIsUserEnrolledInAnEvent();
+        testIsNotifiedFromEvent();
+        testUpdateNotificationEvent();
     }
 
     private static void testFindOne()
@@ -39,7 +41,7 @@ public class EventDBTest {
     private static void testSaveRemove(){
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
-        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert");
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com");
         assert eventDb.size() == 2;
         eventDb.save(eventDTO);
         assert eventDb.size() == 3;
@@ -58,7 +60,7 @@ public class EventDBTest {
             list.add(userDTO.getId());
         }
         assert  ! (list.contains("aand@hotmail.com"));
-        eventDb.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1);
+        eventDb.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1, null);
         list.clear();
         for (UserDTO userDTO : eventDb.findOne(1).getParticipants())
         {
@@ -86,6 +88,31 @@ public class EventDBTest {
         assert idList.contains(2);
     }
 
+    private static void testNumberOfParticipantsFromAnEvent()
+    {
+        assert eventDb.numberOfParticipantsFromAnEvent(1) == 4;
+        assert eventDb.numberOfParticipantsFromAnEvent(2) ==3;
+        assert eventDb.numberOfParticipantsFromAnEvent(5) ==0;
+    }
 
+    private static void testIsUserEnrolledInAnEvent()
+    {
+        assert eventDb.getUserEnrollment("gg@gmail.com",1);
+        assert !eventDb.getUserEnrollment("aand@hotmail.com",1);
+    }
 
+    private static void testIsNotifiedFromEvent()
+    {
+        assert eventDb.getTimeNotifiedFromEvent("gg@gmail.com",1) == null;
+        assert  eventDb.getTimeNotifiedFromEvent("aand@hotmail.com",2).equals("60");
+    }
+
+    private static void testUpdateNotificationEvent()
+    {
+        assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1) == null;
+        eventDb.updateNotificationTimeEvent(1, "gc@gmail.com", "60");
+        assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1).equals("60");
+        eventDb.updateNotificationTimeEvent(1, "gc@gmail.com", null);
+        assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1) == null;
+    }
 }

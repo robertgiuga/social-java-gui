@@ -61,6 +61,7 @@ public class MainWindowController {
 
     private User loggedUser;
     private UDPClient udpThread;
+    private int currentEventIndex = 0;
 
     public void load(SuperService service, User loggedUser, UDPClient udpThread){
         leftPane.setVisible(false);
@@ -186,4 +187,25 @@ public class MainWindowController {
 
 
     }
+
+    /**
+     * Load eventView window.
+     * @param mouseEvent MouseEvent
+     * @throws IOException .
+     */
+    public void handlerEventBtnMW(MouseEvent mouseEvent) throws IOException {
+            FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventView.fxml"));
+            AnchorPane panel = fxmlLoader.load();
+            EventController eventController = fxmlLoader.getController();
+            eventController.setService(this.service);
+            eventController.setLoggedUser(loggedUser);
+            if (service.sizeEvent() != 0) {eventController.loadEventItem(); eventController.loadCursorEventFilter();}
+            else {eventController.loadCreateEvent();}
+            Pane view = new Pane(panel);
+            borderPane.setCenter(view);
+    }
+
+
+
+
 }
