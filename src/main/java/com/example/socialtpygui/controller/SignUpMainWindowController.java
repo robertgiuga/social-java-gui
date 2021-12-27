@@ -9,8 +9,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-
-
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class SignUpMainWindowController {
@@ -80,7 +82,18 @@ public class SignUpMainWindowController {
     /**
      * @return text from textFieldPassword
      */
-    public String getTextFieldPassword(){return passwordFieldSignUp.getText();}
+    public String getTextFieldPassword()
+    {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(passwordFieldSignUp.getText().getBytes(StandardCharsets.UTF_8));
+            BigInteger noHash = new BigInteger(1, hash);
+            return noHash.toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return passwordFieldSignUp.getText();
+    }
 
 
 }
