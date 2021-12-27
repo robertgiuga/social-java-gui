@@ -30,7 +30,7 @@ public class EventController {
     private User loggedUser;
 
     /**
-     * Load all Events,
+     * Load first Event.
      * @throws IOException .
      */
     public void loadExploreEventView() throws IOException {

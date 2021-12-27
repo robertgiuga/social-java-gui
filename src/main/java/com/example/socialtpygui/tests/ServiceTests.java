@@ -804,13 +804,6 @@ public class ServiceTests {
         }catch (NonExistingException e){
             assert true;
         }
-        try{
-            service.removeEvent(3);
-            assert false;
-        }catch (NonExistingException e)
-        {
-            assert true;
-        }
     }
 
     private static void testAddRemoveParticipants()

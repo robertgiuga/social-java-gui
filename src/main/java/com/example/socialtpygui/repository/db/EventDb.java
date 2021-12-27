@@ -222,7 +222,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
      * @param eventId Integer
      * @return true, if the user is enrolled, false otherwise
      */
-    public boolean isUserEnrolledInAnEvent(String email, int eventId){
+    public boolean getUserEnrollment(String email, int eventId){
         String sql = "select count(*) from user_event where email = ? and id_event = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -239,12 +239,11 @@ public class EventDb implements Repository<Integer, EventDTO> {
     }
 
     /**
-     * Verify if a use is notified by an event with id "eventId"
      * @param email String
      * @param eventId Integer
-     * @return true, if the user is notified, false otherwise
+     * @return time notification if the user with id "email" is notified, else null
      */
-    public String timeNotifiedFromEvent(String email, int eventId)
+    public String getTimeNotifiedFromEvent(String email, int eventId)
     {
         String sql = "select notification from user_event where email = ? and id_event = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
@@ -262,12 +261,12 @@ public class EventDb implements Repository<Integer, EventDTO> {
     }
 
     /**
-     * Modify notification to an event with id "eventId"
+     * Modify notification time to an event with id "eventId"
      * @param eventId Integer
      * @param email String
      * @param notification String
      */
-    public void updateNotificationEvent(int eventId, String email, String notification){
+    public void updateNotificationTimeEvent(int eventId, String email, String notification){
         String sql = "update user_event set notification = ? where email = ? and id_event = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -279,26 +278,4 @@ public class EventDb implements Repository<Integer, EventDTO> {
             e.printStackTrace();
         }
     }
-
-    /**
-     * @param email String
-     * @param groupId Integer
-     * @return true, if the user with email "email" is the creator of the group, false otherwise
-     */
-    public boolean isEventCreator(String email, int groupId){
-        String sql = "select count(*) from event where id = ? and creator = ?";
-        try(Connection connection = DriverManager.getConnection(url, username, password);
-           PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, groupId);
-            preparedStatement.setString(2, email);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-            if (count != 0) return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
 }

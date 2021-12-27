@@ -82,7 +82,7 @@ public class EventService {
      * @param eventId Integer
      * @return true, if the user is enrolled, false otherwise
      */
-    public boolean isUserEnrolledInAnEvent(String email, int eventId){return repositoryEvent.isUserEnrolledInAnEvent(email, eventId);}
+    public boolean isUserEnrolledInAnEvent(String email, int eventId){return repositoryEvent.getUserEnrollment(email, eventId);}
 
     /**
      * Verify if a use is notified by an event with id "eventId"
@@ -90,7 +90,7 @@ public class EventService {
      * @param eventId Integer
      * @return true, if the user is notified, false otherwise
      */
-    public String timeNotifiedFromEvent(String email, int eventId) {return repositoryEvent.timeNotifiedFromEvent(email, eventId); }
+    public String timeNotifiedFromEvent(String email, int eventId) {return repositoryEvent.getTimeNotifiedFromEvent(email, eventId); }
 
     /**
      * Modify notification to an event with id "eventId"
@@ -98,12 +98,6 @@ public class EventService {
      * @param email String
      * @param notification String
      */
-    public void updateNotificationEvent(int eventId, String email, String notification){repositoryEvent.updateNotificationEvent(eventId, email, notification);}
+    public void updateNotificationEvent(int eventId, String email, String notification){repositoryEvent.updateNotificationTimeEvent(eventId, email, notification);}
 
-    /**
-     * @param email String
-     * @param groupId Integer
-     * @return true, if the user with email "email" is the creator of the group, false otherwise
-     */
-    public boolean isEventCreator(String email, int groupId){return repositoryEvent.isEventCreator(email, groupId);}
 }

@@ -97,22 +97,22 @@ public class EventDBTest {
 
     private static void testIsUserEnrolledInAnEvent()
     {
-        assert eventDb.isUserEnrolledInAnEvent("gg@gmail.com",1);
-        assert !eventDb.isUserEnrolledInAnEvent("aand@hotmail.com",1);
+        assert eventDb.getUserEnrollment("gg@gmail.com",1);
+        assert !eventDb.getUserEnrollment("aand@hotmail.com",1);
     }
 
     private static void testIsNotifiedFromEvent()
     {
-        assert eventDb.timeNotifiedFromEvent("gg@gmail.com",1) == null;
-        assert  eventDb.timeNotifiedFromEvent("aand@hotmail.com",2).equals("60");
+        assert eventDb.getTimeNotifiedFromEvent("gg@gmail.com",1) == null;
+        assert  eventDb.getTimeNotifiedFromEvent("aand@hotmail.com",2).equals("60");
     }
 
     private static void testUpdateNotificationEvent()
     {
-        assert eventDb.timeNotifiedFromEvent("gc@gmail.com", 1) == null;
-        eventDb.updateNotificationEvent(1, "gc@gmail.com", "60");
-        assert eventDb.timeNotifiedFromEvent("gc@gmail.com", 1).equals("60");
-        eventDb.updateNotificationEvent(1, "gc@gmail.com", null);
-        assert eventDb.timeNotifiedFromEvent("gc@gmail.com", 1) == null;
+        assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1) == null;
+        eventDb.updateNotificationTimeEvent(1, "gc@gmail.com", "60");
+        assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1).equals("60");
+        eventDb.updateNotificationTimeEvent(1, "gc@gmail.com", null);
+        assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1) == null;
     }
 }
