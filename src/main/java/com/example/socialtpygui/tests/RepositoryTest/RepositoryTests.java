@@ -1,10 +1,7 @@
 package com.example.socialtpygui.tests.RepositoryTest;
 
 
-import com.example.socialtpygui.tests.RepositoryTest.RepoDBTest.EventDBTest;
-import com.example.socialtpygui.tests.RepositoryTest.RepoDBTest.FriendshipDBTest;
-import com.example.socialtpygui.tests.RepositoryTest.RepoDBTest.MessageDBTest;
-import com.example.socialtpygui.tests.RepositoryTest.RepoDBTest.UserDBTest;
+import com.example.socialtpygui.tests.RepositoryTest.RepoDBTest.*;
 
 public class RepositoryTests {
 
@@ -13,5 +10,6 @@ public class RepositoryTests {
         FriendshipDBTest.runTests();
         MessageDBTest.runTests();
         EventDBTest.runTests();
+        PostDBTest.runTests();
     }
 }
