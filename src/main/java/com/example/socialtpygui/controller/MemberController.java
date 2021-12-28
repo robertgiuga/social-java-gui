@@ -7,13 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 public class MemberController {
 
     @FXML
     private Label nameLbl;
     @FXML
-    private Button removeBtn;
+    private ImageView removeBtn;
 
     private int groupId;
     private String id;

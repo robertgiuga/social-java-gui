@@ -4,11 +4,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" onMouseClicked="#handlerMouseClicked" prefHeight="45.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchFriendConvItemController">
+<AnchorPane fx:id="anchorPane" onMouseClicked="#handlerMouseClicked" prefHeight="60.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchFriendConvItemController">
    <children>
-      <Label fx:id="nameLbl" layoutX="14.0" layoutY="8.0" prefHeight="29.0" prefWidth="407.0" text="Label" textFill="WHITE">
+      <Label fx:id="nameLbl" layoutX="14.0" layoutY="15.0" prefHeight="29.0" prefWidth="407.0" text="Label" textFill="WHITE">
          <font>
-            <Font size="15.0" />
+            <Font name="System Bold Italic" size="17.0" />
          </font></Label>
    </children>
 </AnchorPane>

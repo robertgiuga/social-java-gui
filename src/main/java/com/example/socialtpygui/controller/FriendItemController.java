@@ -5,13 +5,14 @@ import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 import java.util.Arrays;
 
 public class FriendItemController {
 
     @FXML
-    private Button deleteBtn;
+    private ImageView deleteBtn;
     @FXML
     private Label nameLbl;
     @FXML

@@ -143,8 +143,6 @@
     -fx-background-color: #242E3D;
 }
 
-
-
 #messageText{
     -fx-background-radius: 18 18 18 18;
     -fx-border-radius: 18 18 18 18;
@@ -166,8 +164,62 @@
 }
 
 #anchorPaneFriendItem{
-    -fx-border-color: #C9E9D8;
+    fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
     -fx-background-radius: 18 18 18 18;
     -fx-border-radius: 18 18 18 18;
-    -fx-effect: dropshadow(three-pass-box, white, 10, 0, 0, 0);
+}
+
+#paneShowConvItem{
+    -fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#leftColomnGridPaneShowConv{
+    -fx-alignment: left;
+}
+
+#scrollPaneMembers{
+    -fx-border-color: #425570;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#scrollPanePossibleMembers{
+    -fx-border-color: #425570;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#searchBarGroupSetting{
+    -fx-border-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#anchorPaneRequestItem{
+    -fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#nameGroupLbl{
+    -fx-border-color: #242E3D;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#friendsPane{
+    -fx-border-color: #1C2430;
+    -fx-background-color: #242E3D;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#scrollPaneCreateGroupWindow{
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
 }
