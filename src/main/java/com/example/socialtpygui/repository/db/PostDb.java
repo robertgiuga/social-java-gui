@@ -28,13 +28,12 @@ public class PostDb implements Repository<Integer, Post> {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            Post post = new Post(resultSet.getString("text"), resultSet.getString("from"), LocalDate.parse(resultSet.getDate("date").toString()));
+            Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
             post.setId(resultSet.getInt("id"));
             return post;
         } catch (SQLException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class PostDb implements Repository<Integer, Post> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                Post post = new Post(resultSet.getString("text"), resultSet.getString("from"), LocalDate.parse(resultSet.getDate("date").toString()));
+                Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
                 post.setId(resultSet.getInt("id"));
                 set.add(post);
             }
@@ -57,7 +56,7 @@ public class PostDb implements Repository<Integer, Post> {
 
     @Override
     public Post save(Post post){
-        String sql = "insert into post (text, from, date) values (?, ?, ?) returning id";
+        String sql = "insert into post (text, user_from, date) values (?, ?, ?) returning id";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, post.getDescription());
@@ -168,9 +167,9 @@ public class PostDb implements Repository<Integer, Post> {
      */
     public List<Post> getAllPostFromFriends(String email){
         List<Post> list = new ArrayList<>();
-        String sql = "select distinct post.id, post.from, post.text, post.date from post inner join friendship on " +
-                "(((friendship.email1 = ?) and (friendship.email2 = post.from)) or ((friendship.email1 = " +
-                "post.from) and (friendship.email2 = ?)) or (post.from = ?)) order by date desc";
+        String sql = "select distinct post.id, post.user_from, post.text, post.date from post inner join friendship on " +
+                "(((friendship.email1 = ?) and (friendship.email2 = post.user_from)) or ((friendship.email1 = " +
+                "post.user_from) and (friendship.email2 = ?)) or (post.user_from = ?)) order by date desc";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
@@ -178,7 +177,7 @@ public class PostDb implements Repository<Integer, Post> {
             preparedStatement.setString(3, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                Post post = new Post(resultSet.getString("text"), resultSet.getString("from"), LocalDate.parse(resultSet.getDate("date").toString()));
+                Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
                 post.setId(resultSet.getInt("id"));
                 list.add(post);
             }
