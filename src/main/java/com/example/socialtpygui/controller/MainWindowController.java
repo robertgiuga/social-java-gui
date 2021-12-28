@@ -206,6 +206,14 @@ public class MainWindowController {
     }
 
 
-
-
+    public void handlerFeedBtn(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("post-view.fxml"));
+        AnchorPane panel = fxmlLoader.load();
+        PostViewController controller = fxmlLoader.getController();
+        controller.setService(service);
+        controller.setLoggedUser(loggedUser);
+        controller.load();
+        Pane view = new Pane(panel);
+        borderPane.setCenter(view);
+    }
 }

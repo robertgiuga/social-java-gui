@@ -29,7 +29,7 @@
                <bottom>
                   <AnchorPane fx:id="bottomPane" prefHeight="36.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ImageView fx:id="feedViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="25.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+                        <ImageView fx:id="feedViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="25.0" layoutY="13.0" onMouseClicked="#handlerFeedBtn" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
                            <image>
                               <Image url="@icons/feed.png" />
                            </image>
