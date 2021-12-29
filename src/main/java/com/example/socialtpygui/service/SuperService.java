@@ -985,5 +985,11 @@ public class SuperService implements Observable {
         return postService.getAllPostFromFriends(email);
     }
 
+    /**
+     * @param idPost Integer
+     * @return number of like from a post
+     */
+    public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
+
 
 }

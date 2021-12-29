@@ -219,3 +219,8 @@
     -fx-background-color: #242E3D;
     -fx-border-color: #C9E9D8;
 }
+
+#postTextField{
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}

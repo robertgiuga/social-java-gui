@@ -186,4 +186,23 @@ public class PostDb implements Repository<Integer, Post> {
         }
         return list;
     }
+
+    /**
+     * @param idPost Integer
+     * @return number of like from a post
+     */
+    public int numberOfLikes(int idPost) {
+        String sql = "select count(*) from like_post where id_post = ?";
+        int count = 0;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idPost);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            count = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 }
