@@ -7,7 +7,12 @@ import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
+import com.example.socialtpygui.utils.HashStringSHA_256;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -86,8 +91,13 @@ public class UserService {
         User user= repositoryUser.findOne(id);
         if (user==null)
             throw new ValidationException("User does not exist!");
-        if (!user.getPassword().equals(password))
-            throw new ValidationException("Password is incorrect!");
+        try {
+            String hashStr = HashStringSHA_256.hashString(password);
+            if (!user.getPassword().equals(hashStr))
+                throw new ValidationException("Password is incorrect!");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         return user;
     }
 

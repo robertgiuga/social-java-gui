@@ -1,5 +1,6 @@
 package com.example.socialtpygui.controller;
 import com.example.socialtpygui.domainEvent.LoadView;
+import com.example.socialtpygui.utils.HashStringSHA_256;
 import com.example.socialtpygui.utils.JavaMailUtil;
 import com.example.socialtpygui.utils.RandomString;
 import javafx.fxml.FXML;
@@ -9,8 +10,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-
-
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class SignUpMainWindowController {
@@ -80,7 +83,16 @@ public class SignUpMainWindowController {
     /**
      * @return text from textFieldPassword
      */
-    public String getTextFieldPassword(){return passwordFieldSignUp.getText();}
+    public String getTextFieldPassword()
+    {
+
+        try {
+            return HashStringSHA_256.hashString(passwordFieldSignUp.getText());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return passwordFieldSignUp.getText();
+    }
 
 
 }
