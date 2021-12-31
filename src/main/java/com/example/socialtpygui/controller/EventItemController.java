@@ -29,7 +29,7 @@ public class EventItemController {
     private RadioButton ratioBtn1min, ratioBtn5min, ratioBtn1hour, ratioBtn1day;
 
     @FXML
-    Button removeEventBtn;
+    private ImageView removeEventBtn;
 
     private EventDTO eventDTO;
     private SuperService service;

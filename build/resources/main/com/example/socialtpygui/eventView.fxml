@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <AnchorPane prefHeight="451.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.EventController">
    <children>
-      <BorderPane fx:id="borderPaneMainEventWindow" prefHeight="451.0" prefWidth="500.0">
+      <BorderPane fx:id="borderPaneMainEventWindow" prefHeight="500.0" prefWidth="650.0">
          <top>
             <AnchorPane prefHeight="57.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="createEventBtn" layoutX="434.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#handlerCreateEventBtn" text="Create" textFill="WHITE" />
-                  <Button fx:id="exploreEventBtn" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#handlerExploreEventBtn" text="Explore" textFill="WHITE" />
+                  <ImageView fx:id="exploreEventBtn" fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#handlerExploreEventBtn" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/explore.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="createEventBtn" fitHeight="30.0" fitWidth="30.0" layoutX="606.0" layoutY="14.0" onMouseClicked="#handlerCreateEventBtn" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/pen.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </top>

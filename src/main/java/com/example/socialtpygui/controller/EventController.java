@@ -9,7 +9,9 @@ import com.example.socialtpygui.service.SuperService;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -23,7 +25,7 @@ public class EventController {
     @FXML
     private BorderPane borderPaneMainEventWindow;
     @FXML
-    private Button exploreEventBtn, createEventBtn;
+    private ImageView exploreEventBtn, createEventBtn;
 
     private SuperService service;
     private int currentEventIndex = 0;

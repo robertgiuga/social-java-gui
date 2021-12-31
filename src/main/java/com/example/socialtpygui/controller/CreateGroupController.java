@@ -14,6 +14,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,30 +27,6 @@ public class CreateGroupController {
     private SuperService service;
     private User loggedUser;
 
-
-    /**
-     * create a group with the data from the view
-     * puttings as the participants the loggedUser and the one selected
-     * @param event
-     */
-    public void handelerCreateGroupBtn(ActionEvent event) {
-        if(nameGroupLbl.getText().length()>0){
-            List<String> participants = new ArrayList<>();
-            participants.add(loggedUser.getId());
-            friendsPane.getChildren().forEach(node -> {
-                Pane item =(Pane)node;
-                item.getChildren().forEach(node1 ->{
-                    if(node1 instanceof CheckBox)
-                        if(((CheckBox) node1).isSelected()){
-                            participants.add(node1.getId());
-                        }
-                });
-            });
-            GroupDTO groupDTO= new GroupDTO(-1,nameGroupLbl.getText(),participants);
-            Group newgroup =service.addGroup(groupDTO);
-            friendsPane.fireEvent(new ItemSelected(ItemSelected.GROUP_LOAD_MSJ,String.valueOf(newgroup.getId())));
-        }
-    }
 
     /**
      * adds in the gridPane the friends of the user, creating a possibleParticipant view
@@ -72,5 +49,29 @@ public class CreateGroupController {
                 e.printStackTrace();
             }
         });
+    }
+
+    /**
+     * create a group with the data from the view
+     * puttings as the participants the loggedUser and the one selected
+     * @param mouseEvent
+     */
+    public void handelerCreateGroupBtn(javafx.scene.input.MouseEvent mouseEvent) {
+        if(nameGroupLbl.getText().length()>0){
+            List<String> participants = new ArrayList<>();
+            participants.add(loggedUser.getId());
+            friendsPane.getChildren().forEach(node -> {
+                Pane item =(Pane)node;
+                item.getChildren().forEach(node1 ->{
+                    if(node1 instanceof CheckBox)
+                        if(((CheckBox) node1).isSelected()){
+                            participants.add(node1.getId());
+                        }
+                });
+            });
+            GroupDTO groupDTO= new GroupDTO(-1,nameGroupLbl.getText(),participants);
+            Group newgroup =service.addGroup(groupDTO);
+            friendsPane.fireEvent(new ItemSelected(ItemSelected.GROUP_LOAD_MSJ,String.valueOf(newgroup.getId())));
+        }
     }
 }

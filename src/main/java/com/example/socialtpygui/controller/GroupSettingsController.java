@@ -14,8 +14,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -26,7 +28,7 @@ import java.util.List;
 
 public class GroupSettingsController {
     @FXML
-    private Button backBtn, leaveBtn;
+    private ImageView backBtn, leaveBtn;
     @FXML
     private GridPane gridMembers;
     @FXML
@@ -100,9 +102,9 @@ public class GroupSettingsController {
 
     /**
      * Leave from a group and fire LoadConvList event for load all conversation
-     * @param actionEvent ActionEvent
+     * @param mouseEvent ActionEvent
      */
-    public void handlerLeaveGroup(ActionEvent actionEvent) {
+    public void handlerLeaveGroup(MouseEvent mouseEvent) {
         service.removeUserFromGroup(this.loggerUser.getId(), groupId);
         leaveBtn.fireEvent(new LoadConvList(LoadConvList.LOAD_CONV));
     }

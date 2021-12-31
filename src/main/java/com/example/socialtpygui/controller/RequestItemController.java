@@ -3,17 +3,19 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 import java.time.LocalDate;
 
 public class RequestItemController {
     @FXML
-    private Button acceptBtn;
+    private ImageView acceptBtn;
 
     @FXML
-    private Button declineBtn;
+    private ImageView declineBtn;
 
     @FXML
     private Label requestLabel;
