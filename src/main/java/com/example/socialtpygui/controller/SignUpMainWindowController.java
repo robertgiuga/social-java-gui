@@ -1,5 +1,6 @@
 package com.example.socialtpygui.controller;
 import com.example.socialtpygui.domainEvent.LoadView;
+import com.example.socialtpygui.utils.HashStringSHA_256;
 import com.example.socialtpygui.utils.JavaMailUtil;
 import com.example.socialtpygui.utils.RandomString;
 import javafx.fxml.FXML;
@@ -84,11 +85,9 @@ public class SignUpMainWindowController {
      */
     public String getTextFieldPassword()
     {
+
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(passwordFieldSignUp.getText().getBytes(StandardCharsets.UTF_8));
-            BigInteger noHash = new BigInteger(1, hash);
-            return noHash.toString(16);
+            return HashStringSHA_256.hashString(passwordFieldSignUp.getText());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

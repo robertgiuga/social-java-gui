@@ -7,6 +7,7 @@ import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
+import com.example.socialtpygui.utils.HashStringSHA_256;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -91,10 +92,7 @@ public class UserService {
         if (user==null)
             throw new ValidationException("User does not exist!");
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            BigInteger noHash = new BigInteger(1, hash);
-            String hashStr = noHash.toString(16);
+            String hashStr = HashStringSHA_256.hashString(password);
             if (!user.getPassword().equals(hashStr))
                 throw new ValidationException("Password is incorrect!");
         } catch (NoSuchAlgorithmException e) {
