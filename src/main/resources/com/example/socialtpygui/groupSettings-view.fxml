@@ -47,7 +47,7 @@
       </ScrollPane>
       <ImageView fx:id="backBtn" fitHeight="30.0" fitWidth="30.0" layoutX="16.0" layoutY="14.0" onMouseClicked="#handlerBackButton" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@icons/left.png" />
+            <Image url="@icons/leftf.png" />
          </image>
       </ImageView>
       <ImageView fx:id="leaveBtn" fitHeight="30.0" fitWidth="30.0" layoutX="31.0" layoutY="328.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#handlerLeaveGroup" pickOnBounds="true" preserveRatio="true">

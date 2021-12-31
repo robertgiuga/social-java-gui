@@ -24,13 +24,14 @@ public class EventDb implements Repository<Integer, EventDTO> {
 
     @Override
     public EventDTO findOne(Integer eventId) {
-        String sql = "select name, description, date, location, user_event.email, users.first_name, users.last_name from event inner join user_event on event.id = user_event.id_event inner join users on users.email = user_event.email where event.id = ?";
+        String sql = "select creator, name, description, date, location, user_event.email, users.first_name, users.last_name from event inner join user_event on event.id = user_event.id_event inner join users on users.email = user_event.email where event.id = ?";
         List<UserDTO> list = new ArrayList<>();
         String name = null;
         EventDTO eventDTO = null;
         String description = null;
         String location = null;
         LocalDate date = null;
+        String creator = null;
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, eventId);
@@ -41,13 +42,14 @@ public class EventDb implements Repository<Integer, EventDTO> {
                 name = resultSet.getString("name");
                 description = resultSet.getString("description");
                 date = LocalDate.parse(resultSet.getString("date"));
+                creator = resultSet.getString("creator");
                 String first_name = resultSet.getString("first_name");
                 String last_name = resultSet.getString("last_name");
                 String email = resultSet.getString("email");
                 UserDTO userDTO = new UserDTO(email, first_name, last_name);
                 list.add(userDTO);
             }
-            if (list.size() != 0) {eventDTO = new EventDTO(description, date, location, list, name);}
+            if (list.size() != 0) {eventDTO = new EventDTO(description, date, location, list, name, creator);}
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,6 +72,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
                 String name = resultSet.getString("name");
                 String  description = resultSet.getString("description");
                 LocalDate date = LocalDate.parse(resultSet.getString("date"));
+                String creator = resultSet.getString("creator");
                 int id = resultSet.getInt("id");
                 preparedStatement1.setInt(1, id);
                 ResultSet resultSet1 = preparedStatement1.executeQuery();
@@ -81,7 +84,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
                     UserDTO userDTO = new UserDTO(first_name, last_name, email);
                     list.add(userDTO);
                 }
-                EventDTO eventDTO = new EventDTO(description, date, location, list, name);
+                EventDTO eventDTO = new EventDTO(description, date, location, list, name,creator);
                 eventDTO.setId(id);
                 events.add(eventDTO);
                 list.clear();
@@ -94,7 +97,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
 
     @Override
     public EventDTO save(EventDTO event) {
-        String sqlInsertIntoEvent = "insert into event(description, date, location, name) values (?, ?, ?, ?) returning id";
+        String sqlInsertIntoEvent = "insert into event(description, date, location, name, creator) values (?, ?, ?, ?, ?) returning id";
         String sqlInsertIntoEventUser = "insert into user_event(id_event, email) values (?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlInsertIntoEvent);
@@ -103,6 +106,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
             preparedStatement1.setDate(2, Date.valueOf(event.getDate()));
             preparedStatement1.setString(3, event.getLocation());
             preparedStatement1.setString(4, event.getName());
+            preparedStatement1.setString(5, event.getCreator());
             ResultSet resultSet = preparedStatement1.executeQuery();
             resultSet.next();
             int id = resultSet.getInt(1);
@@ -159,13 +163,14 @@ public class EventDb implements Repository<Integer, EventDTO> {
      * @param eventId Integer
      * @return user if the user was added and null if the user was not added
      */
-    public User addParticipants(User user, int eventId)
+    public User addParticipants(User user, int eventId, String notification)
     {
-        String sql = "insert into user_event(id_event, email) values (?, ?)";
+        String sql = "insert into user_event(id_event, email, notification) values (?, ?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, eventId);
             preparedStatement.setString(2, user.getId());
+            preparedStatement.setString(3, notification);
             preparedStatement.executeUpdate();
             return user;
         } catch (SQLException e) {
@@ -186,6 +191,88 @@ public class EventDb implements Repository<Integer, EventDTO> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, eventId);
             preparedStatement.setString(2, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param eventId Integer
+     * @return number of participants from a group with id "groupId"
+     */
+    public int numberOfParticipantsFromAnEvent(int eventId){
+        String sql = "select count(*) from user_event where id_event = ?";
+        int numberOfParticipants = 0;
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            numberOfParticipants = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfParticipants;
+    }
+
+    /**
+     * Verify if a user is enrolled in an event with id "groupId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is enrolled, false otherwise
+     */
+    public boolean getUserEnrollment(String email, int eventId){
+        String sql = "select count(*) from user_event where email = ? and id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            if (count == 1) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * @param email String
+     * @param eventId Integer
+     * @return time notification if the user with id "email" is notified, else null
+     */
+    public String getTimeNotifiedFromEvent(String email, int eventId)
+    {
+        String sql = "select notification from user_event where email = ? and id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            String notif = resultSet.getString("notification");
+            if (notif != null) return notif;
+        } catch (SQLException e) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Modify notification time to an event with id "eventId"
+     * @param eventId Integer
+     * @param email String
+     * @param notification String
+     */
+    public void updateNotificationTimeEvent(int eventId, String email, String notification){
+        String sql = "update user_event set notification = ? where email = ? and id_event = ?";
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, notification);
+            preparedStatement.setString(2, email);
+            preparedStatement.setInt(3, eventId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

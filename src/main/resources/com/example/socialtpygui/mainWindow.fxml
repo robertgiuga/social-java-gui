@@ -38,7 +38,7 @@
                <bottom>
                   <AnchorPane fx:id="bottomPane" prefHeight="45.0" prefWidth="649.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ImageView fx:id="feedViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="25.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+                        <ImageView fx:id="feedViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="25.0" layoutY="13.0" onMouseClicked="#handlerFeedBtn" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
                            <image>
                               <Image url="@icons/feed.png" />
                            </image>
@@ -48,7 +48,7 @@
                               <Image url="@icons/add-friend.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="eventsViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="431.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+                        <ImageView fx:id="eventsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="413.0" layoutY="11.0" onMouseClicked="#handlerEventBtnMW" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="11.0">
                            <image>
                               <Image url="@icons/calendar.png" />
                            </image>
