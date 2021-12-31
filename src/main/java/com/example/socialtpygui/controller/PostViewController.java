@@ -39,15 +39,28 @@ public class PostViewController {
     private SuperService service;
     private List<Post> list = new ArrayList<>();
 
-
+    /**
+     * Set the logged user
+     * @param loggedUser User
+     */
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
     }
 
+    /**
+     * Set the service
+     * @param service SuperService
+     */
     public void setService(SuperService service) {
         this.service = service;
     }
 
+    /**
+     * Create a post-item and set post, number of likes and text from labels for this item
+     * @param post Post
+     * @return the post-item
+     * @throws IOException .
+     */
     private Pane createItem(Post post) throws IOException {
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("post-item.fxml"));
         Pane item = loader.load();
@@ -59,10 +72,11 @@ public class PostViewController {
         if (service.isPostLike(post.getId(), loggedUser.getId())) {controller.hideUnlike();}
         else {controller.hideLike();}
         return item;
-
-
     }
 
+    /**
+     * load the post and filter for fire events
+     */
     public void load()
     {
         loadLikeEventFilter();
@@ -79,11 +93,19 @@ public class PostViewController {
         });
     }
 
+    /**
+     * Filter for fire events(LikeEvent).
+     */
     public void loadLikeEventFilter()
     {
         anchorPanePostView.addEventFilter(LikeEvent.ANY, this::handlerForEvent);
     }
 
+    /**
+     * Handler for events, if the event flag is LIKE_POST use service method to like a post, if the flag is UNLIKE_POST
+     * use service method to unlike a post
+     * @param t LikeEvent
+     */
     private void handlerForEvent(LikeEvent t) {
         if (t.getEventType().equals(LikeEvent.LIKE_POST)){
             service.likeAPost(t.getIdPost(), loggedUser.getId());
@@ -93,6 +115,10 @@ public class PostViewController {
         }
     }
 
+    /**
+     * Handler for post button, public a post.
+     * @param mouseEvent MouseEvent
+     */
     public void handlerForPost(MouseEvent mouseEvent) {
         Post post = service.savePost(new Post(postTextField.getText(), loggedUser.getId(), LocalDate.now()));
         list.add(post);
