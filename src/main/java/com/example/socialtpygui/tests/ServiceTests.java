@@ -31,8 +31,9 @@ public class ServiceTests {
     private static FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);
     private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
     private static EventService eventService = new EventService(eventDb);
-    private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator,eventService);
-
+    private static PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static PostService postService = new PostService(postDb);
+    private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator,eventService, postService);
 
     private ServiceTests() {
     }
@@ -74,6 +75,12 @@ public class ServiceTests {
         testUpdateNotificationEvent();
         testGetMessagesInDate();
         testGetMessagesBetween2UsersInDate();
+        testFindOnePost();
+        testFindAllPosts();
+        testSaveRemovePost();
+        testisPostLike();
+        testLikeUnlikeAPost();
+        testGetAllPostFromFriends();
     }
 
     private static void testGetMessagesBetween2UsersInDate() {
@@ -768,10 +775,6 @@ public class ServiceTests {
         assert (list.size() == 1);
     }
 
-
-
-
-
     private static void testFindOneEvent()
     {
         assert service.findOneEvent(1).getParticipants().size() == 4;
@@ -914,6 +917,113 @@ public class ServiceTests {
         }catch (ValidationException ignored){assert true;}
         try {
             service.updateNotificationEvent(1,"fdr@gmail.com",null);
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testFindOnePost()
+    {
+        Post post = service.findOnePost(1);
+        assert post.getEmailUser().equals("snj@gmail.com");
+        assert post.getDescription().equals("Azi");
+        assert post.getDate().toString().equals("2021-12-12");
+        assert post.getId() == 1;
+    }
+
+    private static void testFindAllPosts()
+    {
+        List<Integer> listId = new ArrayList<>();
+        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        assert listId.size() == 3;
+        assert listId.contains(1);
+        assert listId.contains(2);
+        assert listId.contains(3);
+    }
+
+    private static void testSaveRemovePost()
+    {
+        List<Integer> listId = new ArrayList<>();
+        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        assert listId.size() == 3;
+        Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"));
+        Post postt = service.savePost(newPost);
+        listId.clear();
+        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        assert service.sizePost() == 4;
+        assert service.findOnePost(postt.getId()) != null;
+        service.removePost(postt.getId());
+        listId.clear();
+        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        assert service.sizePost() == 3;
+        try{
+            service.removePost(432);
+            assert false;
+        }catch (NonExistingException igonred){assert true;}
+    }
+
+    private static void testisPostLike()
+    {
+        assert service.isPostLike(2, "snj@gmail.com" );
+        assert ! service.isPostLike(1, "snj@gmail.com" );
+        try {
+            service.isPostLike(321, "gg@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+        try {
+            service.isPostLike(1, "ggm");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.isPostLike(2, "gdsg@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testLikeUnlikeAPost()
+    {
+        assert ! service.isPostLike(1, "snj@gmail.com");
+        service.likeAPost(1, "snj@gmail.com");
+        assert service.isPostLike(1, "snj@gmail.com");
+        service.unlikeAPost(1, "snj@gmail.com");
+        assert ! service.isPostLike(1, "snj@gmail.com");
+        try {
+            service.likeAPost(321, "gg@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+        try {
+            service.likeAPost(1, "ggm");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.likeAPost(2, "gdsg@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+        try {
+            service.unlikeAPost(321, "gg@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+        try {
+            service.unlikeAPost(1, "ggm");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try {
+            service.unlikeAPost(2, "gdsg@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testGetAllPostFromFriends(){
+        List<Integer> list = new ArrayList<>();
+        service.getAllPostFromFriends("snj@gmail.com").forEach(post -> {list.add(post.getId());});
+        assert list.size() == 2;
+        assert list.contains(1);
+        assert list.contains(2);
+        try{
+            service.getAllPostFromFriends("ds");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try{
+            service.getAllPostFromFriends("ggh@gmail.com");
             assert false;
         }catch (NonExistingException ignored){assert true;}
     }

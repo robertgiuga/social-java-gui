@@ -23,7 +23,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Tests.RunALL();
+        //Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
@@ -62,7 +62,9 @@ public class LogInApplication extends Application {
         MessageValidator messageValidator= new MessageValidator(userValidator);
         EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
         EventService eventService = new EventService(eventDb);
-        SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator, eventService);
+        PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
+        PostService postService = new PostService(postDb);
+        SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator, eventService, postService);
         return service;
     }
 
