@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -41,7 +42,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
     private TextField messageText;
 
     @FXML
-    private Button buttonSend;
+    private ImageView buttonSend;
 
     @FXML
     private Label messageToReply;
@@ -49,7 +50,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
     @FXML
     private AnchorPane anchorPaneShowConvView;
     @FXML
-    private Button settingsBtn;
+    private ImageView settingsBtn;
 
 
     private User loggedUser;

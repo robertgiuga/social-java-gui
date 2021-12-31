@@ -16,6 +16,7 @@ public class DomainTests {
         UserDTOTests.runTests();
         FriendshipDTOTests.runTest();
         EntityTests.runTests();
+        PostTests.runTests();
     }
 
 }

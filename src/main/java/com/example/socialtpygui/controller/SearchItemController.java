@@ -6,8 +6,11 @@ import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import org.w3c.dom.events.MouseEvent;
 
 public class SearchItemController {
 
@@ -15,10 +18,10 @@ public class SearchItemController {
     private Label nameLbl;
 
     @FXML
-    private Button addBtn;
+    private ImageView addBtn;
 
     @FXML
-    private  Button cancelBtn;
+    private  ImageView cancelBtn;
 
     private UserDTO userDTO;
     private SuperService service;
@@ -68,21 +71,21 @@ public class SearchItemController {
 
     /**
      * Send a request when the button is pushed and hide addBtn button.
-     * @param actionEvent
+     * @param mouseEvent
      */
-    public void handlerAddBtn(ActionEvent actionEvent) {
-            service.sendRequest(this.loggedUser.getId(), this.userDTO.getId());
-            addBtn.setVisible(false);
-            cancelBtn.setVisible(true);
+    public void handlerAddBtn(javafx.scene.input.MouseEvent mouseEvent) {
+        service.sendRequest(this.loggedUser.getId(), this.userDTO.getId());
+        addBtn.setVisible(false);
+        cancelBtn.setVisible(true);
     }
 
     /**
      * Cancel a request when the button is pushed and hide cancelBtn button.
-     * @param actionEvent
+     * @param mouseEvent
      */
-    public void handlerCloseBtn(ActionEvent actionEvent) {
-            service.friendshipRequestRemove(new TupleOne<>(this.loggedUser.getId(), this.userDTO.getId()));
-            addBtn.setVisible(true);
-            cancelBtn.setVisible(false);
+    public void handlerCancelBtn(javafx.scene.input.MouseEvent mouseEvent) {
+        service.friendshipRequestRemove(new TupleOne<>(this.loggedUser.getId(), this.userDTO.getId()));
+        addBtn.setVisible(true);
+        cancelBtn.setVisible(false);
     }
 }

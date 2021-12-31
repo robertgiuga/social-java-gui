@@ -30,6 +30,7 @@ public class SuperService implements Observable {
     protected MessageService messageService;
     protected MessageValidator messageValidator;
     protected EventService eventService;
+    protected PostService postService;
 
     private Observer observer;
 
@@ -37,7 +38,7 @@ public class SuperService implements Observable {
     public SuperService(MessageService messageService, NetworkService networkService,
                         FriendshipService friendshipService, UserService userService,
                         UserValidator userValidator,MessageValidator messageValidator,
-                        EventService eventService) {
+                        EventService eventService, PostService postService) {
         this.userService = userService;
         this.userValidator=userValidator;
         this.friendshipService = friendshipService;
@@ -45,6 +46,7 @@ public class SuperService implements Observable {
         this.messageService = messageService;
         this.messageValidator= messageValidator;
         this.eventService = eventService;
+        this.postService = postService;
     }
 
     /**
@@ -772,7 +774,6 @@ public class SuperService implements Observable {
      * @throws NonExistingException if the event does not exist
      */
     public EventDTO removeEvent(Integer eventId) {
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
         return eventService.remove(eventId);
     }
 
@@ -790,10 +791,9 @@ public class SuperService implements Observable {
      * @return user if the user was added and null if the user was not added
      * @throws NonExistingException if the user does not exist or the event does not exist
      */
-    public User addParticipants(User user, int eventId) {
-        if (eventService.findOne(eventId) == null) {throw new NonExistingException("Event with id " + eventId + " does not exist!");}
+    public User addParticipants(User user, int eventId, String notification) {
         if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
-        return  eventService.addParticipants(user, eventId);
+        return  eventService.addParticipants(user, eventId, notification);
     }
 
     /**
@@ -844,5 +844,152 @@ public class SuperService implements Observable {
      * @return all events.
      */
     public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
+
+    /**
+     * @param eventId Integer
+     * @return number of participants from a group with id "groupId"
+     */
+    public int numberOfParticipantsFromAnEvent(int eventId)
+    {
+        return eventService.numberOfParticipantsFromAnEvent(eventId);
+    }
+
+    /**
+     * Verify if a user is enrolled in an event with id "groupId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is enrolled, false otherwise
+     */
+    public boolean isUserEnrolledInAnEvent(String email, int eventId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return eventService.isUserEnrolledInAnEvent(email, eventId);
+    }
+
+    /**
+     * Verify if a use is notified by an event with id "eventId"
+     * @param email String
+     * @param eventId Integer
+     * @return true, if the user is notified, false otherwise
+     */
+    public String timeNotifiedFromEvent(String email, int eventId)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return eventService.timeNotifiedFromEvent(email, eventId);
+    }
+
+    /**
+     * Modify notification to an event with id "eventId"
+     * @param eventId Integer
+     * @param email String
+     * @param notification String
+     */
+    public void updateNotificationEvent(int eventId, String email, String notification)
+    {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        eventService.updateNotificationEvent(eventId, email, notification);
+    }
+
+    /**
+     * Find one post with id "id"
+     * @param id Integer
+     * @return if the post exist, return the post, else return null
+     */
+    public Post findOnePost(Integer id) {
+        return postService.findOne(id);
+    }
+
+    /**
+     * @return all posts.
+     */
+    public Iterable<Post> findAllPosts() {
+        return postService.findAll();
+    }
+
+    /**
+     * Save a post.
+     * @param post Post
+     * @return post, if was saved, null otherwise
+     */
+    public Post savePost(Post post){
+        return postService.save(post);
+    }
+
+    /**
+     * Remove a post
+     * @param id Integer
+     * @return null
+     * @throws NonExistingException if the post with id "id" does not exist
+     */
+    public Post removePost(Integer id) {
+        return postService.remove(id);
+    }
+
+    /**
+     * @return number of posts
+     */
+    public int sizePost() {
+        return postService.size();
+    }
+
+    /**
+     * Like a post, add in like_post table
+     * @param idPost Integer
+     * @param email String
+     * @throws NonExistingException if the post with id "idPost" does not exist
+     * @throws ValidationException if the user with email "email" does not exist
+     */
+    public void likeAPost(int idPost, String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        postService.likeAPost(idPost, email);
+    }
+
+    /**
+     * Take the like back, remove from like_post table
+     * @param idPost Integer
+     * @param email String
+     * @throws NonExistingException if the post with id "idPost" does not exist
+     * @throws ValidationException if the user with email "email" does not exist
+     */
+    public void unlikeAPost(int idPost, String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        postService.unlikeAPost(idPost, email);
+    }
+
+    /**
+     * @param idPost Integer
+     * @param email String
+     * @return true, if the user with email "email" like the post with id "idPost", false otherwise
+     * @throws NonExistingException if the post with id "idPost" does not exist
+     * @throws ValidationException if the user with email "email" does not exist
+     */
+    public boolean isPostLike(int idPost, String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return postService.isPostLike(idPost, email);
+    }
+
+    /**
+     * @param email String
+     * @return all posts from the friends of user with email "email and his/her posts"
+     * @throws ValidationException if the user with email "email" does not exist
+     */
+    public List<Post> getAllPostFromFriends(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return postService.getAllPostFromFriends(email);
+    }
+
+    /**
+     * @param idPost Integer
+     * @return number of like from a post
+     */
+    public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
+
 
 }

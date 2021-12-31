@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -25,7 +26,7 @@ public class MessageController {
     @FXML
     private BorderPane convPane;
     @FXML
-    private Button createGroupBtn;
+    private ImageView createGroupBtn;
 
 
     private SuperService service;

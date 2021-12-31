@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPaneEventItem" prefHeight="458.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.EventItemController">
+   <children>
+      <Label fx:id="titleEventLabel" layoutX="102.0" layoutY="29.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="51.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/group.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="numberOfParticipantsLabel" layoutX="102.0" layoutY="94.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="51.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/time.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="timeEventLabel" layoutX="102.0" layoutY="176.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="51.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/location.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="locationEventLabel" layoutX="102.0" layoutY="254.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="51.0" layoutY="327.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/description.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="descriptionEventLabel" layoutX="102.0" layoutY="331.0" prefHeight="27.0" prefWidth="161.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="previousEventImageView" fitHeight="35.0" fitWidth="35.0" layoutX="43.0" layoutY="403.0" onMouseClicked="#handlerPreviousEvent" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/left.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="nextEventImageView" fitHeight="35.0" fitWidth="35.0" layoutX="565.0" layoutY="403.0" onMouseClicked="#handlerNextEvent" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/right.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="51.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/right-arrow.png" />
+         </image>
+      </ImageView>
+      <Line endX="-25.33331298828125" endY="-59.0000114440918" layoutX="342.0" layoutY="86.0" startX="-25.333282470703125" startY="302.6666564941406" stroke="WHITE" />
+      <Label layoutX="383.0" layoutY="29.0" text="Participate?" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <CheckBox fx:id="checkBoxParticipateEvent" layoutX="516.0" layoutY="32.0" mnemonicParsing="false" onAction="#handlerCheckBoxParticipateEvent" prefHeight="21.0" prefWidth="17.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </CheckBox>
+      <Label layoutX="424.0" layoutY="94.0" prefHeight="27.0" prefWidth="131.0" text="Notification" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="ratioBtn1min" layoutX="485.0" layoutY="168.0" mnemonicParsing="false" onAction="#handler1minRadioBtn" text="1 minute" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="notification" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="ratioBtn5min" layoutX="485.0" layoutY="217.0" mnemonicParsing="false" onAction="#handler5minRadioBtn" text="5 minute" textFill="WHITE" toggleGroup="$notification">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="ratioBtn1hour" layoutX="485.0" layoutY="267.0" mnemonicParsing="false" onAction="#handler1hourRadioBtn" text="1 hour" textFill="WHITE" toggleGroup="$notification">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="ratioBtn1day" layoutX="485.0" layoutY="316.0" mnemonicParsing="false" onAction="#handler1dayRadioBtn" text="1 day" textFill="WHITE" toggleGroup="$notification">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </RadioButton>
+      <CheckBox fx:id="notificationCheckBox" layoutX="559.0" layoutY="97.0" mnemonicParsing="false" onAction="#handlerNotificationCheckBox">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </CheckBox>
+      <ImageView fx:id="removeEventBtn" fitHeight="30.0" fitWidth="30.0" layoutX="302.0" layoutY="405.0" onMouseClicked="#handlerRemoverEvent" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/delete.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
