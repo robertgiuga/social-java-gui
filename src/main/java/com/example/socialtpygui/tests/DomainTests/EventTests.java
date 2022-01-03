@@ -3,6 +3,7 @@ package com.example.socialtpygui.tests.DomainTests;
 import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.UserDTO;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,10 @@ public class EventTests {
      * test if the get and set methods are working well
      */
     private static void testGet(){
+        Time time = new Time(22,10,0);
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gg@gmail.com", "gulea", "cristian"));
-        EventDTO eventDTO = new EventDTO("party", LocalDate.parse("2020-02-02"), "Cluj", list,"Untold","gg@gmail.com");
+        EventDTO eventDTO = new EventDTO("party", LocalDate.parse("2020-02-02"), "Cluj", list,"Untold","gg@gmail.com", time);
         assert eventDTO.getDate().toString().equals("2020-02-02");
         assert eventDTO.getDescription().equals("party");
         assert eventDTO.getLocation().equals("Cluj");

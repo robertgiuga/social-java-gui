@@ -60,7 +60,7 @@ public class EventItemController {
         this.eventDTO = eventDTO;
         titleEventLabel.setText(eventDTO.getName());
         numberOfParticipantsLabel.setText(String.valueOf(0));
-        timeEventLabel.setText(eventDTO.getDate().toString());
+        timeEventLabel.setText(eventDTO.getDate().toString()+ "\n"+ eventDTO.getTime());
         locationEventLabel.setText(eventDTO.getLocation());
         descriptionEventLabel.setText(eventDTO.getDescription());
         numberOfParticipantsLabel.setText(String.valueOf(service.numberOfParticipantsFromAnEvent(eventDTO.getId())));

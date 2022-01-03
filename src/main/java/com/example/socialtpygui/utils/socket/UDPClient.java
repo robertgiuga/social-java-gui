@@ -4,6 +4,7 @@ import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ChangeEventType;
 import com.example.socialtpygui.utils.events.NewMessageEvent;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.net.*;
@@ -40,11 +41,17 @@ public class UDPClient extends Thread{
                         Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_MSJ)));
                         break;
                     case 3:
-                        System.out.println("*");
+                        //for group msj
                         Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_GROUP_MSJ)));
                         break;
                     case 4:
                         //for events
+                        System.out.println("+");
+                        Platform.runLater(() -> {
+                            Alert alert= new Alert(Alert.AlertType.INFORMATION);
+                            alert.setContentText("You got an event going!");
+                            alert.show();
+                        });
                         break;
                     case 0:
                         run=false;

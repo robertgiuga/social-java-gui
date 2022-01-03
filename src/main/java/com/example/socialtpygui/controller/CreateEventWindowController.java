@@ -5,16 +5,17 @@ import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateEventWindowController {
+    public Spinner<Integer> hourSpiner;
+    public Spinner<Integer> minSpiner;
     @FXML
     private TextField descriptionEventTextField, locationEventTextField, nameEventTextField;
     @FXML
@@ -40,8 +41,9 @@ public class CreateEventWindowController {
             alert.show();
         }
         else{
+            Time time = new Time(hourSpiner.getValue(),minSpiner.getValue(),0);
             List<UserDTO> list = new ArrayList<>(); list.add(new UserDTO(loggedUser));
-            service.saveEvent(new EventDTO(descriptionEventTextField.getText(), dateEventTextField.getValue(), locationEventTextField.getText(), list, nameEventTextField.getText(), loggedUser.getId()));
+            service.saveEvent(new EventDTO(descriptionEventTextField.getText(), dateEventTextField.getValue(), locationEventTextField.getText(), list, nameEventTextField.getText(), loggedUser.getId(), time));
             descriptionEventTextField.clear(); locationEventTextField.clear(); nameEventTextField.clear(); dateEventTextField.getEditor().clear();
         }
     }
@@ -51,6 +53,12 @@ public class CreateEventWindowController {
      * @param service SuperService
      */
     public void setService(SuperService service) {
+        SpinnerValueFactory<Integer> hourValue = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,23);
+        hourValue.setValue(1);
+        SpinnerValueFactory<Integer> minValue = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59);
+        minValue.setValue(0);
+        hourSpiner.setValueFactory(hourValue);
+        minSpiner.setValueFactory(minValue);
         this.service = service;
     }
 
