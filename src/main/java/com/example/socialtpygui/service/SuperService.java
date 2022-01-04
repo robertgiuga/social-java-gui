@@ -32,7 +32,7 @@ public class SuperService implements Observable {
     protected EventService eventService;
     protected PostService postService;
 
-    private Observer observer;
+    private List<Observer> observer= new ArrayList<>(2);
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
@@ -513,13 +513,22 @@ public class SuperService implements Observable {
 
     @Override
     public void addObserver(Observer e) {
-        observer=e;
+        if(observer.size()==0)
+            observer.add(e);
+        else
+        if(observer.size()==1) {
+            observer.add(e);
+        }
+        else {
+            observer.remove(1);
+            observer.add(e);
+        }
     }
 
     @Override
     public void notifyObservers(Event t) {
         if(observer != null)
-            observer.update(t);
+            observer.forEach(observer1 -> observer1.update(t));
     }
 
     /**
