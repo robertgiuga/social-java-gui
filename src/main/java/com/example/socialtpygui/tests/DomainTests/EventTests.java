@@ -31,7 +31,7 @@ public class EventTests {
         assert eventDTO.getLocation().equals("Cluj");
         assert eventDTO.getName().equals("Untold");
         assert eventDTO.getParticipants().size() == 1;
-
+        assert eventDTO.getTime().equals(time);
 
 
     }

@@ -1,6 +1,8 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.EventDTO;
+import com.example.socialtpygui.domain.UserEventDTO;
 import com.example.socialtpygui.utils.events.ChangeEventType;
 import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observer;
@@ -30,6 +32,9 @@ import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.List;
 
 public class MainWindowController implements Observer<EventCustom> {
 
@@ -225,10 +230,24 @@ public class MainWindowController implements Observer<EventCustom> {
 
     @Override
     public void update(EventCustom eventCustom) {
+        System.out.println("--");
         if(eventCustom.getType().equals(ChangeEventType.EVENT_NOTIFY)){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("you got an event going!");
-            alert.show();
+            List<UserEventDTO> events= service.getUserIdsEvents(loggedUser.getId());
+            events.forEach(userEventDTO -> {
+                if(userEventDTO.getNotifyTime()!=null){
+                    System.out.println(userEventDTO.getId());
+                    EventDTO event= service.findOneEvent(userEventDTO.getId());
+                    Time now = new Time(LocalTime.now().getHour(),LocalTime.now().getMinute()+Integer.parseInt(userEventDTO.getNotifyTime()),0);
+                    System.out.println(event.getTime());
+                    System.out.println(now);
+                    if(event.getTime().equals(now)){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setContentText("you got"+ event.getName() +" (event) going in " +userEventDTO.getNotifyTime() +" min !");
+                        alert.show();
+                        service.updateNotificationEvent(event.getId(),loggedUser.getId(),null);
+                    }
+                }
+            });
         }
     }
 }

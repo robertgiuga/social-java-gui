@@ -1000,5 +1000,13 @@ public class SuperService implements Observable {
      */
     public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
 
-
+    /**
+     * gets the enrolled events of a user
+     * @param id the user id
+     * @return a list of UserEventDTO
+     */
+    public List<UserEventDTO> getUserIdsEvents(String id){
+        userValidator.validateEmail(id);
+        return eventService.getUserIdsEvents(id);
+    }
 }

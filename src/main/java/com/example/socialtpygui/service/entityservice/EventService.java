@@ -2,7 +2,10 @@ package com.example.socialtpygui.service.entityservice;
 
 import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserEventDTO;
 import com.example.socialtpygui.repository.db.EventDb;
+
+import java.util.List;
 
 public class EventService {
     EventDb repositoryEvent;
@@ -100,4 +103,12 @@ public class EventService {
      */
     public void updateNotificationEvent(int eventId, String email, String notification){repositoryEvent.updateNotificationTimeEvent(eventId, email, notification);}
 
+    /**
+     * gets the enrolled events of a user
+     * @param id the user id
+     * @return a list of UserEventDTO
+     */
+    public List<UserEventDTO> getUserIdsEvents(String id) {
+        return repositoryEvent.getUserIdsEvents(id);
+    }
 }

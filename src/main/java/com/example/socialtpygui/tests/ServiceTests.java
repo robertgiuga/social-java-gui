@@ -81,6 +81,13 @@ public class ServiceTests {
         testisPostLike();
         testLikeUnlikeAPost();
         testGetAllPostFromFriends();
+        testUserIdsEvents();
+    }
+
+    private static void testUserIdsEvents() {
+        List <UserEventDTO> events = service.getUserIdsEvents("gg@gmail.com");
+        assert events.contains(new UserEventDTO(1,null));
+        assert events.contains(new UserEventDTO(2,null));
     }
 
     private static void testGetMessagesBetween2UsersInDate() {
