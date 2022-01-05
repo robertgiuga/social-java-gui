@@ -8,11 +8,10 @@ import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ChangeEventType;
-import com.example.socialtpygui.utils.events.NewMessageEvent;
+import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -25,11 +24,9 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class ShowConvController implements Observer<NewMessageEvent> {
+public class ShowConvController implements Observer<EventCustom> {
     private SuperService service;
 
     @FXML
@@ -292,16 +289,11 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         scrollPaneShowConv.setContent(item);
     }
 
-    /**
-     * gets Utils.events for loading new messages
-     * one for private conv and one for group
-     * @param newMessageEvent the event witch is sent
-     */
     @Override
-    public void update(NewMessageEvent newMessageEvent) {
+    public void update(EventCustom eventCustom) {
         scrollPaneShowConv.setVvalue(1.0f);
         System.out.println("update");
-        if(newMessageEvent.getEventType().equals(ChangeEventType.NEW_MSJ)) {
+        if(eventCustom.getType().equals(ChangeEventType.NEW_MSJ)) {
             service.getConvMessagesGreaterThan(loggedUser.getId(), email2User,lastConvMsjId ).forEach(replyMessage -> {
                 try {
                     Pane item = createItem(replyMessage);
@@ -319,7 +311,7 @@ public class ShowConvController implements Observer<NewMessageEvent> {
                 }
             });
         }
-        else if(groupId!=null&&newMessageEvent.getEventType().equals(ChangeEventType.NEW_GROUP_MSJ)){
+        else if(groupId!=null&&eventCustom.getType().equals(ChangeEventType.NEW_GROUP_MSJ)){
             System.out.println("reload msj");
             service.getGroupMessagesGreaterThen(groupId, lastGroupMsjId).forEach(replyMessage -> {
                 try{
@@ -343,6 +335,5 @@ public class ShowConvController implements Observer<NewMessageEvent> {
         gridShowMessages.autosize();
         scrollPaneShowConv.autosize();
         scrollPaneShowConv.setVvalue(1.0f);
-
     }
 }
