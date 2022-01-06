@@ -4,6 +4,8 @@ import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.repository.db.EventDb;
 
+import java.time.LocalDate;
+
 public class EventService {
     EventDb repositoryEvent;
 
@@ -100,4 +102,11 @@ public class EventService {
      */
     public void updateNotificationEvent(int eventId, String email, String notification){repositoryEvent.updateNotificationTimeEvent(eventId, email, notification);}
 
+    /**
+     * @param date LocalDate
+     * @return number of events in a specify date
+     */
+    public int getTodayEvents(LocalDate date){
+        return repositoryEvent.getTodayEvents(date);
+    }
 }

@@ -185,12 +185,11 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
      */
     public Iterable<Friendship> getFriendRequest(String email) {
         List<Friendship> requests = new ArrayList<>();
-        String sql = "select * from friendship_request where email1=? or email2=?";
+        String sql = "select * from friendship_request where email2=?";
 
         try(Connection connection = DriverManager.getConnection(url, username, password)){
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, email);
-            statement.setString(2, email);
             ResultSet resultSet = statement.executeQuery();
 
             while(resultSet.next()){
@@ -205,5 +204,26 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
             System.out.println(e.getMessage());
         }
         return requests;
+    }
+
+    /**
+     * @param email String
+     * @return number of new messages(message where in friendship_request table seen column is false)
+     */
+    public int getNumberNewRequests(String email){
+        String sql = "select count(*) from  friendship_request where email2 = ? and seen  = false";
+        int numberOfNewRequests = 0;
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql))
+        {
+            preparedStatement1.setString(1, email);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            resultSet.next();
+            numberOfNewRequests = resultSet.getInt(1);
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return numberOfNewRequests;
     }
 }

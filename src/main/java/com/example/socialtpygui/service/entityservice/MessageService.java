@@ -198,4 +198,12 @@ public class MessageService {
     public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId) {
         return messageRepository.getConvMessagesGreaterThan(email1,email2,lastMsjId);
     }
+
+    /**
+     * @param email String
+     * @return number of new messages(message where in message_recipient table seen column is false)
+     */
+    public int getNumberNewMessage(String email){
+        return messageRepository.getNumberNewMessage(email);
+    }
 }

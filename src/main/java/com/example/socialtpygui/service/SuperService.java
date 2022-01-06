@@ -991,5 +991,32 @@ public class SuperService implements Observable {
      */
     public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
 
+    /**
+     * @param email String
+     * @return number of new messages(message where in message_recipient table seen column is false)
+     * @throws ValidationException if the user with email "email" does not exist
+     */
+    public int getNumberNewMessage(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return messageService.getNumberNewMessage(email);
+    }
 
+    /**
+     * @param email String
+     * @return number of new requests(message where in friendship_request table seen column is false)
+     */
+    public int getNumberNewRequests(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return friendshipService.getNumberNewRequests(email);
+    }
+
+    /**
+     * @param date LocalDate
+     * @return number of events in a specify date
+     */
+    public int getTodayEvents(LocalDate date){
+        return eventService.getTodayEvents(date);
+    }
 }

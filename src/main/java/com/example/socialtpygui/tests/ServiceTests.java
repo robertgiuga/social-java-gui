@@ -81,6 +81,9 @@ public class ServiceTests {
         testisPostLike();
         testLikeUnlikeAPost();
         testGetAllPostFromFriends();
+        testGetNumberNewMessage();
+        testGetNumberNewRequests();
+        testGetTodayEvents();
     }
 
     private static void testGetMessagesBetween2UsersInDate() {
@@ -700,10 +703,6 @@ public class ServiceTests {
             assert true;
         }
 
-        Iterable<FriendShipDTO> usersDTO = service.getFriendRequest("andr@gamail.com");
-        long size = StreamSupport.stream(usersDTO.spliterator(), false).count();
-        assert (size == 2);
-
         try {
             service.getRequests("gc@gmail.com");
             assert false;
@@ -1026,5 +1025,40 @@ public class ServiceTests {
             service.getAllPostFromFriends("ggh@gmail.com");
             assert false;
         }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testGetNumberNewMessage()
+    {
+        assert service.getNumberNewMessage("snj@gmail.com") == 2;
+        assert service.getNumberNewMessage("aand@hotmail.com") == 1;
+        assert service.getNumberNewMessage("jon1@yahoo.com") == 0;
+        try{
+            service.getNumberNewMessage("ds");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try{
+            service.getNumberNewMessage("ggh@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+
+    }
+
+    private static void testGetNumberNewRequests()
+    {
+        assert service.getNumberNewRequests("jon1@yahoo.com") == 1;
+        assert service.getNumberNewRequests("snj@gmail.com") == 1;
+        try{
+            service.getNumberNewRequests("ds");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try{
+            service.getNumberNewRequests("ggh@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testGetTodayEvents(){
+        assert service.getTodayEvents(LocalDate.parse("2021-01-01")) == 1;
+        assert service.getTodayEvents(LocalDate.parse("2021-02-02")) == 1;
     }
 }

@@ -229,5 +229,12 @@ public class FriendshipService {
         return repositoryFriendshipRequest.getFriendRequest(email);
     }
 
+    /**
+     * @param email String
+     * @return number of new requests(message where in friendship_request table seen column is false)
+     */
+    public int getNumberNewRequests(String email){
+        return repositoryFriendshipRequest.getNumberNewRequests(email);
+    }
 }
 

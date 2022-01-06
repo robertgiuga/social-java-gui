@@ -26,6 +26,7 @@ public class EventDBTest {
         testIsUserEnrolledInAnEvent();
         testIsNotifiedFromEvent();
         testUpdateNotificationEvent();
+        testGetTodayEvents();
     }
 
     private static void testFindOne()
@@ -114,5 +115,10 @@ public class EventDBTest {
         assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1).equals("60");
         eventDb.updateNotificationTimeEvent(1, "gc@gmail.com", null);
         assert eventDb.getTimeNotifiedFromEvent("gc@gmail.com", 1) == null;
+    }
+
+    private static void testGetTodayEvents(){
+        assert eventDb.getTodayEvents(LocalDate.parse("2021-01-01")) == 1;
+        assert eventDb.getTodayEvents(LocalDate.parse("2021-02-02")) == 1;
     }
 }

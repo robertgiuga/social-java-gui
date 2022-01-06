@@ -278,4 +278,23 @@ public class EventDb implements Repository<Integer, EventDTO> {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @param date LocalDate
+     * @return number of events in a specify date
+     */
+    public int getTodayEvents(LocalDate date){
+        String sql = "select count(*) from event where date = ?";
+        int numberEvents = 0;
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setDate(1, Date.valueOf(date));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            numberEvents = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberEvents;
+    }
 }
