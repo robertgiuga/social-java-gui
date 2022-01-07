@@ -32,7 +32,7 @@ public class SuperService implements Observable {
     protected EventService eventService;
     protected PostService postService;
 
-    private Observer observer;
+    private List<Observer> observer= new ArrayList<>(2);
 
 
     public SuperService(MessageService messageService, NetworkService networkService,
@@ -514,13 +514,22 @@ public class SuperService implements Observable {
 
     @Override
     public void addObserver(Observer e) {
-        observer=e;
+        if(observer.size()==0)
+            observer.add(e);
+        else
+        if(observer.size()==1) {
+            observer.add(e);
+        }
+        else {
+            observer.remove(1);
+            observer.add(e);
+        }
     }
 
     @Override
     public void notifyObservers(Event t) {
         if(observer != null)
-            observer.update(t);
+            observer.forEach(observer1 -> observer1.update(t));
     }
 
     /**
@@ -993,6 +1002,7 @@ public class SuperService implements Observable {
     public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
 
     /**
+<<<<<<< HEAD
      * @param email String
      * @return number of new messages(message where in message_recipient table seen column is false)
      * @throws ValidationException if the user with email "email" does not exist
@@ -1035,9 +1045,21 @@ public class SuperService implements Observable {
      * Update table friendship_request, make column seen true where email2 is "email"
      * @param email String
      */
-    public void updateSeenRequestToTrue(String email){
+    public void updateSeenRequestToTrue(String email) {
         userValidator.validateEmail(email);
-        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        if (userService.findOne(email) == null) {
+            throw new NonExistingException("User does not exist!");
+        }
         friendshipService.updateSeenRequestToTrue(email);
+    }
+
+    /**
+     * gets the enrolled events of a user
+     * @param id the user id
+     * @return a list of UserEventDTO
+     */
+    public List<UserEventDTO> getUserIdsEvents(String id){
+        userValidator.validateEmail(id);
+        return eventService.getUserIdsEvents(id);
     }
 }

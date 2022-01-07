@@ -5,6 +5,7 @@ import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.repository.db.EventDb;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,10 @@ public class EventDBTest {
     }
 
     private static void testSaveRemove(){
+        Time time = new Time(22,10,0);
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
-        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com");
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com", time);
         assert eventDb.size() == 2;
         eventDb.save(eventDTO);
         assert eventDb.size() == 3;

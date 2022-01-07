@@ -84,6 +84,13 @@ public class ServiceTests {
         testGetNumberNewMessage();
         testGetNumberNewRequests();
         testGetTodayEvents();
+        testUserIdsEvents();
+    }
+
+    private static void testUserIdsEvents() {
+        List <UserEventDTO> events = service.getUserIdsEvents("gg@gmail.com");
+        assert events.contains(new UserEventDTO(1,null));
+        assert events.contains(new UserEventDTO(2,null));
     }
 
     private static void testGetMessagesBetween2UsersInDate() {
@@ -790,9 +797,10 @@ public class ServiceTests {
     }
 
     private static void testSaveRemoveEvents(){
+        Time time = new Time(22,10,0);
         List<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO("gc@gmail.com", "Cristian", "Gulea"));
-        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com");
+        EventDTO eventDTO = new EventDTO("Muzica", LocalDate.parse("2021-09-09"), "Mures", list, "Concert","gg@gmail.com", time);
         assert service.sizeEvent() == 2;
         service.saveEvent(eventDTO);
         assert service.sizeEvent() == 3;

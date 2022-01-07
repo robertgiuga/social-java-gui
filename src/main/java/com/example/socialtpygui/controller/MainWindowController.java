@@ -2,6 +2,11 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.PageDTO;
+import com.example.socialtpygui.domain.EventDTO;
+import com.example.socialtpygui.domain.UserEventDTO;
+import com.example.socialtpygui.utils.events.ChangeEventType;
+import com.example.socialtpygui.utils.events.EventCustom;
+import com.example.socialtpygui.utils.observer.Observer;
 import com.example.socialtpygui.utils.socket.TCPClient;
 import com.example.socialtpygui.utils.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
@@ -11,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -28,8 +34,11 @@ import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.List;
 
-public class MainWindowController {
+public class MainWindowController implements Observer<EventCustom> {
 
     public AnchorPane leftPane;
     public Button meniuBtn;
@@ -75,6 +84,8 @@ public class MainWindowController {
         this.udpThread= udpThread;
         this.pageDTO = pageDTO;
         loadNotification();
+        service.addObserver(this);
+
     }
 
 
@@ -228,6 +239,7 @@ public class MainWindowController {
         borderPane.setCenter(view);
     }
 
+
     public void loadNotification(){
         if (pageDTO.getNumberOfNewMessages() != 0)
         {countNewMessage.setText(String.valueOf(pageDTO.getNumberOfNewMessages()));}
@@ -239,4 +251,27 @@ public class MainWindowController {
     }
 
 
+
+    @Override
+    public void update(EventCustom eventCustom) {
+        System.out.println("--");
+        if(eventCustom.getType().equals(ChangeEventType.EVENT_NOTIFY)){
+            List<UserEventDTO> events= service.getUserIdsEvents(loggedUser.getId());
+            events.forEach(userEventDTO -> {
+                if(userEventDTO.getNotifyTime()!=null){
+                    System.out.println(userEventDTO.getId());
+                    EventDTO event= service.findOneEvent(userEventDTO.getId());
+                    Time now = new Time(LocalTime.now().getHour(),LocalTime.now().getMinute()+Integer.parseInt(userEventDTO.getNotifyTime()),0);
+                    System.out.println(event.getTime());
+                    System.out.println(now);
+                    if(event.getTime().equals(now)){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setContentText("you got"+ event.getName() +" (event) going in " +userEventDTO.getNotifyTime() +" min !");
+                        alert.show();
+                        service.updateNotificationEvent(event.getId(),loggedUser.getId(),null);
+                    }
+                }
+            });
+        }
+    }
 }

@@ -2,7 +2,7 @@ package com.example.socialtpygui.utils.socket;
 
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ChangeEventType;
-import com.example.socialtpygui.utils.events.NewMessageEvent;
+import com.example.socialtpygui.utils.events.EventCustom;
 import javafx.application.Platform;
 
 import java.io.IOException;
@@ -37,14 +37,16 @@ public class UDPClient extends Thread{
                 switch (code){
                     case 2:
                         //for msj
-                        Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_MSJ)));
+                        Platform.runLater(() ->service.notifyObservers(new EventCustom(ChangeEventType.NEW_MSJ)));
                         break;
                     case 3:
-                        System.out.println("*");
-                        Platform.runLater(() ->service.notifyObservers(new NewMessageEvent(ChangeEventType.NEW_GROUP_MSJ)));
+                        //for group msj
+                        Platform.runLater(() ->service.notifyObservers(new EventCustom(ChangeEventType.NEW_GROUP_MSJ)));
                         break;
                     case 4:
                         //for events
+                        System.out.println("+");
+                        Platform.runLater(() -> service.notifyObservers(new EventCustom(ChangeEventType.EVENT_NOTIFY)));
                         break;
                     case 0:
                         run=false;
