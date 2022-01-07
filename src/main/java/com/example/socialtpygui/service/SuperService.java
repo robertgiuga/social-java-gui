@@ -679,7 +679,6 @@ public class SuperService implements Observable {
     }
 
     /**
-<<<<<<< HEAD
      * gets the friendships of a user in a Date interval
      * @param id the email of the user
      * @param dateStart the start date for searching
@@ -1002,7 +1001,6 @@ public class SuperService implements Observable {
     public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
 
     /**
-<<<<<<< HEAD
      * @param email String
      * @return number of new messages(message where in message_recipient table seen column is false)
      * @throws ValidationException if the user with email "email" does not exist
