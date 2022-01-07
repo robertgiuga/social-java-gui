@@ -31,6 +31,7 @@ public class MessageDBTest {
         testNumberOfUserFromAGroup();
         testGetConvMessagesGreaterThan();
         testGetGroupMessagesGreaterThen();
+        testGetNumberNewMessage();
     }
 
     private static void testFindOne()
@@ -165,4 +166,10 @@ public class MessageDBTest {
         assert msj.get(0).getId()>1;
     }
 
+    private static  void testGetNumberNewMessage()
+    {
+        assert messageDBTest.getNumberNewMessage("snj@gmail.com") == 2;
+        assert messageDBTest.getNumberNewMessage("aand@hotmail.com") == 1;
+        assert messageDBTest.getNumberNewMessage("jon1@yahoo.com") == 0;
+    }
 }

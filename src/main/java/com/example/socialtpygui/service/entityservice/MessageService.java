@@ -198,4 +198,20 @@ public class MessageService {
     public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId) {
         return messageRepository.getConvMessagesGreaterThan(email1,email2,lastMsjId);
     }
+
+    /**
+     * @param email String
+     * @return number of new messages(unseen message)
+     */
+    public int getNumberNewMessage(String email){
+        return messageRepository.getNumberNewMessage(email);
+    }
+
+    /**
+     * Seen new message
+     * @param email String
+     */
+    public void updateSeenMessageToTrue(String email){
+        messageRepository.setToSeenNewMessage(email);
+    }
 }

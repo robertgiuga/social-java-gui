@@ -640,5 +640,41 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return resultList;
     }
+
+    /**
+     * @param email String
+     * @return number of new requests(message where in message_recipient table seen column is false)
+     */
+    public int getNumberNewMessage(String email){
+        String sql = "select count(*) from message_recipient where email = ? and seen  = false";
+        int numberOfNewMessages = 0;
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql))
+        {
+            preparedStatement1.setString(1, email);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            resultSet.next();
+            numberOfNewMessages = resultSet.getInt(1);
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return numberOfNewMessages;
+    }
+
+    /**
+     * Seen new message
+     * @param email String
+     */
+    public void setToSeenNewMessage(String email){
+        String sql = "update message_recipient set seen = true where email = ? and seen = false";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

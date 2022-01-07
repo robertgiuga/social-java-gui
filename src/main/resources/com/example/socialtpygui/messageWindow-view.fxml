@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane prefHeight="470.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MessageController">
+<AnchorPane prefHeight="428.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.MessageController">
    <children>
       <TextField fx:id="searchFriendBar" layoutX="25.0" layoutY="14.0" maxWidth="-Infinity" onKeyPressed="#handlerSearchBarKeyPressed" prefHeight="26.0" prefWidth="230.0" promptText="Search Friend" />
       <BorderPane fx:id="convPane" layoutX="7.0" layoutY="41.0" prefHeight="266.0" prefWidth="490.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />

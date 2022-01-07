@@ -23,7 +23,7 @@ public class FriendsController implements Observer<ViewItemEvent> {
     private GridPane gridPane;
 
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
     private List<UserDTO> friends;
 
     /**
@@ -48,7 +48,7 @@ public class FriendsController implements Observer<ViewItemEvent> {
     /**
      * loads all the friends of the logged user in the gridPane
      */
-    public void load(SuperService service, User loggedUser) {
+    public void load(SuperService service, UserDTO loggedUser) {
         this.service= service;
         this.loggedUser=loggedUser;
         service.addObserver(this);

@@ -40,7 +40,7 @@ public class GroupSettingsController {
     @FXML
     private AnchorPane settingsPane;
 
-    User loggerUser;
+    UserDTO loggerUser;
     private int groupId;
     private SuperService service;
     List<UserDTO> participants;
@@ -77,7 +77,7 @@ public class GroupSettingsController {
      * loads the participants of the group and add users in participants list.
      * @param groupId
      */
-    public void load(SuperService service, int groupId, User loggedUser) {
+    public void load(SuperService service, int groupId, UserDTO loggedUser) {
         catchEvent();
         groupNameLabel.setText(service.getGroup(groupId).getNameGroup());
         this.groupId = groupId;

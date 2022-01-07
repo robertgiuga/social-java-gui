@@ -81,6 +81,9 @@ public class ServiceTests {
         testisPostLike();
         testLikeUnlikeAPost();
         testGetAllPostFromFriends();
+        testGetNumberNewMessage();
+        testGetNumberNewRequests();
+        testGetTodayEvents();
         testUserIdsEvents();
     }
 
@@ -707,10 +710,6 @@ public class ServiceTests {
             assert true;
         }
 
-        Iterable<FriendShipDTO> usersDTO = service.getFriendRequest("andr@gamail.com");
-        long size = StreamSupport.stream(usersDTO.spliterator(), false).count();
-        assert (size == 2);
-
         try {
             service.getRequests("gc@gmail.com");
             assert false;
@@ -825,7 +824,7 @@ public class ServiceTests {
             list.add(userDTO.getId());
         }
         assert  ! (list.contains("aand@hotmail.com"));
-        service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1, null);
+        service.addParticipants(new UserDTO(new User("s", "s","aand@hotmail.com", "p")), 1, null);
         list.clear();
         for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
         {
@@ -840,7 +839,7 @@ public class ServiceTests {
         }
         assert   ! (list.contains("aand@hotmail.com"));
         try{
-            service.addParticipants(new User("s", "s","aansad@hotmail.com", "p"), 1, null);
+            service.addParticipants(new UserDTO(new User("s", "s","aansad@hotmail.com", "p")), 1, null);
             assert false;
         } catch (NonExistingException e)
         {
@@ -1034,5 +1033,40 @@ public class ServiceTests {
             service.getAllPostFromFriends("ggh@gmail.com");
             assert false;
         }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testGetNumberNewMessage()
+    {
+        assert service.getNumberNewMessage("snj@gmail.com") == 2;
+        assert service.getNumberNewMessage("aand@hotmail.com") == 1;
+        assert service.getNumberNewMessage("jon1@yahoo.com") == 0;
+        try{
+            service.getNumberNewMessage("ds");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try{
+            service.getNumberNewMessage("ggh@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+
+    }
+
+    private static void testGetNumberNewRequests()
+    {
+        assert service.getNumberNewRequests("jon1@yahoo.com") == 1;
+        assert service.getNumberNewRequests("snj@gmail.com") == 1;
+        try{
+            service.getNumberNewRequests("ds");
+            assert false;
+        }catch (ValidationException ignored){assert true;}
+        try{
+            service.getNumberNewRequests("ggh@gmail.com");
+            assert false;
+        }catch (NonExistingException ignored){assert true;}
+    }
+
+    private static void testGetTodayEvents(){
+        assert service.getTodayEvents(LocalDate.parse("2021-01-01")) == 1;
+        assert service.getTodayEvents(LocalDate.parse("2021-02-02")) == 1;
     }
 }

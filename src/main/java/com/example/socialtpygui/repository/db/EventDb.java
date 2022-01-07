@@ -170,7 +170,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
      * @param eventId Integer
      * @return user if the user was added and null if the user was not added
      */
-    public User addParticipants(User user, int eventId, String notification)
+    public UserDTO addParticipants(UserDTO user, int eventId, String notification)
     {
         String sql = "insert into user_event(id_event, email, notification) values (?, ?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
@@ -284,6 +284,25 @@ public class EventDb implements Repository<Integer, EventDTO> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @param date LocalDate
+     * @return number of events in a specify date
+     */
+    public int getTodayEvents(LocalDate date) {
+        String sql = "select count(*) from event where date = ?";
+        int numberEvents = 0;
+        try (Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setDate(1, Date.valueOf(date));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            numberEvents = resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberEvents;
     }
 
     /**

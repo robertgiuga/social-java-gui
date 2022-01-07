@@ -21,6 +21,7 @@ public class FriendshipRequestDBTest {
         testSaveRemoveSize();
         testfriendshipRequestDate();
         testGetFriendRequest();
+        testGetNumberNewRequests();
     }
 
     private static void testFindOne(){
@@ -66,10 +67,16 @@ public class FriendshipRequestDBTest {
     private static void testGetFriendRequest(){
         Iterable<Friendship> friendships = friendshipRequestDb.getFriendRequest("andr@gamail.com");
         long size = StreamSupport.stream(friendships.spliterator(), false).count();
-        assert (size == 2);
+        assert (size == 0);
 
         friendships = friendshipRequestDb.getFriendRequest("an@gamail.com");
         size = StreamSupport.stream(friendships.spliterator(), false).count();
         assert (size == 0);
+    }
+
+    private static void testGetNumberNewRequests()
+    {
+        assert friendshipRequestDb.getNumberNewRequests("jon1@yahoo.com") == 1;
+        assert friendshipRequestDb.getNumberNewRequests("snj@gmail.com") == 1;
     }
 }

@@ -229,5 +229,20 @@ public class FriendshipService {
         return repositoryFriendshipRequest.getFriendRequest(email);
     }
 
+    /**
+     * @param email String
+     * @return number of new requests(unseen request)
+     */
+    public int getNumberNewRequests(String email){
+        return repositoryFriendshipRequest.getNumberNewRequests(email);
+    }
+
+    /**
+     * Seen new requests
+     * @param email String
+     */
+    public void updateSeenRequestToTrue(String email){
+        repositoryFriendshipRequest.setToSeenNewRequest(email);
+    }
 }
 

@@ -28,10 +28,10 @@ public class StatisticsController {
     public ProgressBar progressBar;
     public GridPane gridPane;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
     ToggleGroup toggleGroup;
 
-    public void load(SuperService service, User loggedUser){
+    public void load(SuperService service, UserDTO loggedUser){
         this.service=service;
         this.loggedUser=loggedUser;
         toggleGroup= new ToggleGroup();

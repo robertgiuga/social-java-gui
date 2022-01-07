@@ -1,6 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.PageDTO;
 import com.example.socialtpygui.utils.socket.TCPClient;
 import com.example.socialtpygui.utils.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
@@ -48,7 +49,7 @@ public class LogInController {
         String username= usernameTxt.getText();
         String password= passwordTxt.getText();
         try {
-            User user = service.logIn(username, password);
+            PageDTO pageDTO = service.logIn(username, password);
 
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("mainWindow.fxml"));
             Stage manWindowStage= new Stage();
@@ -57,10 +58,10 @@ public class LogInController {
             MainWindowController mainWindowController= fxmlLoader.getController();
 
             TCPClient client= new TCPClient();
-            UDPClient client1= new UDPClient(service,client.createConnection(user.getId()));
+            UDPClient client1= new UDPClient(service,client.createConnection(pageDTO.getUserDTO().getId()));
             client1.start();
 
-            mainWindowController.load(service,user,client1);
+            mainWindowController.load(service,pageDTO.getUserDTO(),client1, pageDTO);
 
             Scene scene = new Scene(panel, 650, 600);
 

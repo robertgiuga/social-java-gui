@@ -230,11 +230,12 @@ public class SuperService implements Observable {
     /**
      * @param id .
      * @param password .
-     * @return the user if the id and password are correct
+     * @return PageDTO if the id and password are correct
      * @throws ValidationException if id or password is incorrect and if the user does not exist
      */
-    public User logIn(String id, String password) throws ValidationException {
-        return userService.logIn(id, password);
+    public PageDTO logIn(String id, String password) throws ValidationException {
+        User user = userService.logIn(id, password);
+        return new PageDTO(new UserDTO(user), friendshipService.getNumberNewRequests(user.getId()), messageService.getNumberNewMessage(user.getId()), eventService.getTodayEvents(LocalDate.now()));
     }
 
     /**
@@ -678,7 +679,6 @@ public class SuperService implements Observable {
     }
 
     /**
-<<<<<<< HEAD
      * gets the friendships of a user in a Date interval
      * @param id the email of the user
      * @param dateStart the start date for searching
@@ -800,7 +800,7 @@ public class SuperService implements Observable {
      * @return user if the user was added and null if the user was not added
      * @throws NonExistingException if the user does not exist or the event does not exist
      */
-    public User addParticipants(User user, int eventId, String notification) {
+    public UserDTO addParticipants(UserDTO user, int eventId, String notification) {
         if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
         return  eventService.addParticipants(user, eventId, notification);
     }
@@ -999,6 +999,57 @@ public class SuperService implements Observable {
      * @return number of like from a post
      */
     public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
+
+    /**
+     * @param email String
+     * @return number of new messages
+     * @throws ValidationException if the user with email "email" does not exist
+     */
+    public int getNumberNewMessage(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return messageService.getNumberNewMessage(email);
+    }
+
+    /**
+     * @param email String
+     * @return number of new requests
+     */
+    public int getNumberNewRequests(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        return friendshipService.getNumberNewRequests(email);
+    }
+
+    /**
+     * @param date LocalDate
+     * @return number of events in a specify date
+     */
+    public int getTodayEvents(LocalDate date){
+        return eventService.getTodayEvents(date);
+    }
+
+    /**
+     * Seen new message
+     * @param email String
+     */
+    public void updateSeenMessageToTrue(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        messageService.updateSeenMessageToTrue(email);
+    }
+
+    /**
+     * Seen new requests
+     * @param email String
+     */
+    public void updateSeenRequestToTrue(String email) {
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null) {
+            throw new NonExistingException("User does not exist!");
+        }
+        friendshipService.updateSeenRequestToTrue(email);
+    }
 
     /**
      * gets the enrolled events of a user

@@ -16,7 +16,7 @@ public class SearchController{
 
     List<UserDTO> users;
     FXMLLoader fxmlLoader;
-    User loggedUser;
+    UserDTO loggedUser;
     SuperService service;
     @FXML
     GridPane gridPane;
@@ -68,7 +68,7 @@ public class SearchController{
      * Set logged user
      * @param loggedUser
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 

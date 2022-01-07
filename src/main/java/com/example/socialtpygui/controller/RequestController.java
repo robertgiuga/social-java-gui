@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestController implements Observer<ViewItemEvent> {
-    User loggedUser;
+    UserDTO loggedUser;
     SuperService service;
 
     @FXML
@@ -29,7 +29,7 @@ public class RequestController implements Observer<ViewItemEvent> {
 
     private List<UserDTO> requests;
 
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 

@@ -294,3 +294,15 @@
 #descriptionEventTextField{
     -fx-border-color: #242E3D;
 }
+
+#countNewRequests{
+    -fx-border-color: red;
+}
+
+#countNewEvents{
+    -fx-border-color: red;
+}
+
+#countNewMessage{
+    -fx-border-color: red;
+}
