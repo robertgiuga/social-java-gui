@@ -170,7 +170,7 @@ public class EventDb implements Repository<Integer, EventDTO> {
      * @param eventId Integer
      * @return user if the user was added and null if the user was not added
      */
-    public User addParticipants(User user, int eventId, String notification)
+    public UserDTO addParticipants(UserDTO user, int eventId, String notification)
     {
         String sql = "insert into user_event(id_event, email, notification) values (?, ?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
@@ -287,7 +287,6 @@ public class EventDb implements Repository<Integer, EventDTO> {
     }
 
     /**
-<<<<<<< HEAD
      * @param date LocalDate
      * @return number of events in a specify date
      */

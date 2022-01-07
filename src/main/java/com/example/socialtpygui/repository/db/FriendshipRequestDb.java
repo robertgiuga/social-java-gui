@@ -208,7 +208,7 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
 
     /**
      * @param email String
-     * @return number of new messages(message where in friendship_request table seen column is false)
+     * @return number of new messages(unseen message)
      */
     public int getNumberNewRequests(String email){
         String sql = "select count(*) from  friendship_request where email2 = ? and seen  = false";
@@ -228,10 +228,10 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
     }
 
     /**
-     * Update table friendship_request, make column seen true where email2 is "email"
+     * Update column seen true where email2 is "email"
      * @param email String
      */
-    public void updateSeenRequestToTrue(String email){
+    public void setToSeenNewRequest(String email){
         String sql = "update friendship_request set seen = true where email2 = ? and seen = false";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

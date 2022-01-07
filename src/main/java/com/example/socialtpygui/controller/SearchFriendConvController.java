@@ -21,7 +21,7 @@ public class SearchFriendConvController {
     private GridPane gridPane;
 
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * create a new view of a Friend
@@ -44,7 +44,7 @@ public class SearchFriendConvController {
      * @param loggedUser  the user currently logged in
      * @param name the names of the Friends to search for
      */
-    public void load(SuperService service, User loggedUser,String name){
+    public void load(SuperService service, UserDTO loggedUser,String name){
         this.service=service;
         this.loggedUser=loggedUser;
 

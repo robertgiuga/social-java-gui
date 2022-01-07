@@ -2,6 +2,7 @@ package com.example.socialtpygui.service.entityservice;
 
 import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domain.UserEventDTO;
 import com.example.socialtpygui.repository.db.EventDb;
 
@@ -55,7 +56,7 @@ public class EventService {
      * @param eventId Integer
      * @return user if the user was added and null if the user was not added
      */
-    public User addParticipants(User user, int eventId, String notification) {
+    public UserDTO addParticipants(UserDTO user, int eventId, String notification) {
         return  repositoryEvent.addParticipants(user, eventId, notification);
     }
 

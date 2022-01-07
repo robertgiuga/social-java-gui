@@ -201,17 +201,17 @@ public class MessageService {
 
     /**
      * @param email String
-     * @return number of new messages(message where in message_recipient table seen column is false)
+     * @return number of new messages(unseen message)
      */
     public int getNumberNewMessage(String email){
         return messageRepository.getNumberNewMessage(email);
     }
 
     /**
-     * Update table message_recipient, make column seen true where email is "email"
+     * Seen new message
      * @param email String
      */
     public void updateSeenMessageToTrue(String email){
-        messageRepository.updateSeenMessageToTrue(email);
+        messageRepository.setToSeenNewMessage(email);
     }
 }

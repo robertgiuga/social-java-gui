@@ -22,7 +22,7 @@ public class CreateEventWindowController {
     private DatePicker dateEventTextField;
 
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * Handler for add button, if one text field is empty throw alert, if the date from date picker is before LocalDate.now()
@@ -42,7 +42,7 @@ public class CreateEventWindowController {
         }
         else{
             Time time = new Time(hourSpiner.getValue(),minSpiner.getValue(),0);
-            List<UserDTO> list = new ArrayList<>(); list.add(new UserDTO(loggedUser));
+            List<UserDTO> list = new ArrayList<>(); list.add(loggedUser);
             service.saveEvent(new EventDTO(descriptionEventTextField.getText(), dateEventTextField.getValue(), locationEventTextField.getText(), list, nameEventTextField.getText(), loggedUser.getId(), time));
             descriptionEventTextField.clear(); locationEventTextField.clear(); nameEventTextField.clear(); dateEventTextField.getEditor().clear();
         }
@@ -66,7 +66,7 @@ public class CreateEventWindowController {
      * Set logged user
      * @param loggedUser User
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 }

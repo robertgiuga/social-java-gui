@@ -25,7 +25,7 @@ public class SearchItemController {
 
     private UserDTO userDTO;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * Set the name label.
@@ -65,7 +65,7 @@ public class SearchItemController {
      * Set the user which is logged
      * @param loggedUser
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 

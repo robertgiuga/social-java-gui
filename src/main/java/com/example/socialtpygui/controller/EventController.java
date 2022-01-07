@@ -3,6 +3,7 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domainEvent.EventCursor;
 import com.example.socialtpygui.domainEvent.LoadView;
 import com.example.socialtpygui.service.SuperService;
@@ -29,7 +30,7 @@ public class EventController {
 
     private SuperService service;
     private int currentEventIndex = 0;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * Load first Event.
@@ -171,7 +172,7 @@ public class EventController {
      * Set logged user.
      * @param loggedUser User
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 

@@ -2,6 +2,7 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.domain.EventDTO;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domainEvent.EventCursor;
 import com.example.socialtpygui.domainEvent.LoadView;
 import com.example.socialtpygui.service.SuperService;
@@ -33,7 +34,7 @@ public class EventItemController {
 
     private EventDTO eventDTO;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * Handler for next event, fire EventCursor for load next event.
@@ -94,7 +95,7 @@ public class EventItemController {
      * Set logged user.
      * @param loggedUser User
      */
-    public void setLoggedUser(User loggedUser) {this.loggedUser = loggedUser;}
+    public void setLoggedUser(UserDTO loggedUser) {this.loggedUser = loggedUser;}
 
     /**
      * handler for participation check box, if the checkBox is selected and the notification checkBox is selected, add

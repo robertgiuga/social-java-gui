@@ -1,15 +1,12 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.domain.PageDTO;
-import com.example.socialtpygui.domain.EventDTO;
-import com.example.socialtpygui.domain.UserEventDTO;
+import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.utils.events.ChangeEventType;
 import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observer;
 import com.example.socialtpygui.utils.socket.TCPClient;
 import com.example.socialtpygui.utils.socket.UDPClient;
-import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.ValidationException;
 import javafx.event.ActionEvent;
@@ -73,11 +70,11 @@ public class MainWindowController implements Observer<EventCustom> {
     private SuperService service;
     private PageDTO pageDTO;
 
-    private User loggedUser;
+    private UserDTO loggedUser;
     private UDPClient udpThread;
     private int currentEventIndex = 0;
 
-    public void load(SuperService service, User loggedUser, UDPClient udpThread, PageDTO pageDTO){
+    public void load(SuperService service, UserDTO loggedUser, UDPClient udpThread, PageDTO pageDTO){
         leftPane.setVisible(false);
         this.service=service;
         this.loggedUser=loggedUser;

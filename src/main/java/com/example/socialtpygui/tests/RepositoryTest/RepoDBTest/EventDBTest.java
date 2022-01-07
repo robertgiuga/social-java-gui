@@ -63,7 +63,7 @@ public class EventDBTest {
             list.add(userDTO.getId());
         }
         assert  ! (list.contains("aand@hotmail.com"));
-        eventDb.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1, null);
+        eventDb.addParticipants(new UserDTO(new User("s", "s","aand@hotmail.com", "p")), 1, null);
         list.clear();
         for (UserDTO userDTO : eventDb.findOne(1).getParticipants())
         {

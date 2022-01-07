@@ -1,10 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
-import com.example.socialtpygui.domain.MessageDTO;
-import com.example.socialtpygui.domain.ReplyMessage;
-import com.example.socialtpygui.domain.ReplyMessageDTO;
-import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.domainEvent.DragMessage;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.utils.events.ChangeEventType;
@@ -50,7 +47,7 @@ public class ShowConvController implements Observer<EventCustom> {
     private ImageView settingsBtn;
 
 
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     private String email2User;
 
@@ -171,7 +168,7 @@ public class ShowConvController implements Observer<EventCustom> {
      * @param loggedUser .
      * @param email .
      */
-    public void load(SuperService service, User loggedUser, String email){
+    public void load(SuperService service, UserDTO loggedUser, String email){
         service.addObserver(this);
         settingsBtn.setVisible(false);
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);
@@ -209,7 +206,7 @@ public class ShowConvController implements Observer<EventCustom> {
      * @param loggedUser User
      * @param groupId Integer
      */
-    public void loadGroup(SuperService service, User loggedUser, int groupId)
+    public void loadGroup(SuperService service, UserDTO loggedUser, int groupId)
     {
         service.addObserver(this);
         anchorPaneShowConvView.addEventFilter(DragMessage.ANY, this::DragMessageHandler);

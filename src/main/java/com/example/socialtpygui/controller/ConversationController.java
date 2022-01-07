@@ -19,7 +19,7 @@ public class ConversationController {
     GridPane gridPane;
 
     SuperService service;
-    User loggedUser;
+    UserDTO loggedUser;
 
     /**
      * Create a conversationItem
@@ -61,7 +61,7 @@ public class ConversationController {
      * Set the logged user.
      * @param loggedUser
      */
-    public void setLoggedUser(User loggedUser){this.loggedUser = loggedUser;}
+    public void setLoggedUser(UserDTO loggedUser){this.loggedUser = loggedUser;}
 
 
     /**

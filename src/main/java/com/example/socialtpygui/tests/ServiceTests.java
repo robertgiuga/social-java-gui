@@ -824,7 +824,7 @@ public class ServiceTests {
             list.add(userDTO.getId());
         }
         assert  ! (list.contains("aand@hotmail.com"));
-        service.addParticipants(new User("s", "s","aand@hotmail.com", "p"), 1, null);
+        service.addParticipants(new UserDTO(new User("s", "s","aand@hotmail.com", "p")), 1, null);
         list.clear();
         for (UserDTO userDTO : service.findOneEvent(1).getParticipants())
         {
@@ -839,7 +839,7 @@ public class ServiceTests {
         }
         assert   ! (list.contains("aand@hotmail.com"));
         try{
-            service.addParticipants(new User("s", "s","aansad@hotmail.com", "p"), 1, null);
+            service.addParticipants(new UserDTO(new User("s", "s","aansad@hotmail.com", "p")), 1, null);
             assert false;
         } catch (NonExistingException e)
         {

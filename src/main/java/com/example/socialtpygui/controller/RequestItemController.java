@@ -1,6 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
@@ -25,7 +26,7 @@ public class RequestItemController {
 
     private RequestController requestController;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     @FXML
     private void handlerDeclineButton(){
@@ -53,7 +54,7 @@ public class RequestItemController {
         this.service = service;
     }
 
-    public void setLoggedUser(User loggedUser){
+    public void setLoggedUser(UserDTO loggedUser){
         this.loggedUser = loggedUser;
     }
 }

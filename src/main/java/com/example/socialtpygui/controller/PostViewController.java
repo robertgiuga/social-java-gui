@@ -2,6 +2,7 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.Post;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domainEvent.LikeEvent;
 import com.example.socialtpygui.service.SuperService;
 import javafx.event.Event;
@@ -35,7 +36,7 @@ public class PostViewController {
     @FXML
     private TextField postTextField;
 
-    private User loggedUser;
+    private UserDTO loggedUser;
     private SuperService service;
     private List<Post> list = new ArrayList<>();
 
@@ -43,7 +44,7 @@ public class PostViewController {
      * Set the logged user
      * @param loggedUser User
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 

@@ -25,7 +25,7 @@ public class CreateGroupController {
     public TextField nameGroupLbl;
     public GridPane friendsPane;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
 
     /**
@@ -33,7 +33,7 @@ public class CreateGroupController {
      * @param service
      * @param loggedUser
      */
-    public void load(SuperService service, User loggedUser){
+    public void load(SuperService service, UserDTO loggedUser){
         this.service=service;
         this.loggedUser=loggedUser;
         service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {

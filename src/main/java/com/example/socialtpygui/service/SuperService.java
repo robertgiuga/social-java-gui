@@ -230,7 +230,7 @@ public class SuperService implements Observable {
     /**
      * @param id .
      * @param password .
-     * @return the user if the id and password are correct
+     * @return PageDTO if the id and password are correct
      * @throws ValidationException if id or password is incorrect and if the user does not exist
      */
     public PageDTO logIn(String id, String password) throws ValidationException {
@@ -800,7 +800,7 @@ public class SuperService implements Observable {
      * @return user if the user was added and null if the user was not added
      * @throws NonExistingException if the user does not exist or the event does not exist
      */
-    public User addParticipants(User user, int eventId, String notification) {
+    public UserDTO addParticipants(UserDTO user, int eventId, String notification) {
         if (userService.findOne(user.getId()) == null){throw new NonExistingException("User does not exist!");}
         return  eventService.addParticipants(user, eventId, notification);
     }
@@ -1002,7 +1002,7 @@ public class SuperService implements Observable {
 
     /**
      * @param email String
-     * @return number of new messages(message where in message_recipient table seen column is false)
+     * @return number of new messages
      * @throws ValidationException if the user with email "email" does not exist
      */
     public int getNumberNewMessage(String email){
@@ -1013,7 +1013,7 @@ public class SuperService implements Observable {
 
     /**
      * @param email String
-     * @return number of new requests(message where in friendship_request table seen column is false)
+     * @return number of new requests
      */
     public int getNumberNewRequests(String email){
         userValidator.validateEmail(email);
@@ -1030,7 +1030,7 @@ public class SuperService implements Observable {
     }
 
     /**
-     * Update table message_recipient, make column seen true where email is "email"
+     * Seen new message
      * @param email String
      */
     public void updateSeenMessageToTrue(String email){
@@ -1040,7 +1040,7 @@ public class SuperService implements Observable {
     }
 
     /**
-     * Update table friendship_request, make column seen true where email2 is "email"
+     * Seen new requests
      * @param email String
      */
     public void updateSeenRequestToTrue(String email) {

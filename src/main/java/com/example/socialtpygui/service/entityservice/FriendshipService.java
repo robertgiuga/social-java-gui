@@ -231,18 +231,18 @@ public class FriendshipService {
 
     /**
      * @param email String
-     * @return number of new requests(message where in friendship_request table seen column is false)
+     * @return number of new requests(unseen request)
      */
     public int getNumberNewRequests(String email){
         return repositoryFriendshipRequest.getNumberNewRequests(email);
     }
 
     /**
-     * Update table friendship_request, make column seen true where email2 is "email"
+     * Seen new requests
      * @param email String
      */
     public void updateSeenRequestToTrue(String email){
-        repositoryFriendshipRequest.updateSeenRequestToTrue(email);
+        repositoryFriendshipRequest.setToSeenNewRequest(email);
     }
 }
 

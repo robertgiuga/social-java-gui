@@ -61,7 +61,7 @@ public class LogInController {
             UDPClient client1= new UDPClient(service,client.createConnection(pageDTO.getUserDTO().getId()));
             client1.start();
 
-            mainWindowController.load(service,new User(pageDTO.getUserDTO().getFirstName(), pageDTO.getUserDTO().getLastName(), pageDTO.getUserDTO().getId(), password),client1, pageDTO);
+            mainWindowController.load(service,pageDTO.getUserDTO(),client1, pageDTO);
 
             Scene scene = new Scene(panel, 650, 600);
 
