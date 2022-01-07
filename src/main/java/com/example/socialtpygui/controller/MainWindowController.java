@@ -1,6 +1,7 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
+import com.example.socialtpygui.domain.PageDTO;
 import com.example.socialtpygui.utils.socket.TCPClient;
 import com.example.socialtpygui.utils.socket.UDPClient;
 import com.example.socialtpygui.domain.User;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -54,20 +56,25 @@ public class MainWindowController {
     private Button extindBtnMW;
     @FXML
     private Button statisticsBtn;
+    @FXML
+    private Label countNewRequests, countNewEvents, countNewMessage;
 
     Pane friendsView=null;
 
     private SuperService service;
+    private PageDTO pageDTO;
 
     private User loggedUser;
     private UDPClient udpThread;
     private int currentEventIndex = 0;
 
-    public void load(SuperService service, User loggedUser, UDPClient udpThread){
+    public void load(SuperService service, User loggedUser, UDPClient udpThread, PageDTO pageDTO){
         leftPane.setVisible(false);
         this.service=service;
         this.loggedUser=loggedUser;
         this.udpThread= udpThread;
+        this.pageDTO = pageDTO;
+        loadNotification();
     }
 
 
@@ -104,7 +111,8 @@ public class MainWindowController {
         requestController.setService(service);
         requestController.setLoggedUser(loggedUser);
         requestController.load();
-
+        service.updateSeenRequestToTrue(this.loggedUser.getId());
+        countNewRequests.setVisible(false);
         Pane view = new Pane(panel);
 
         borderPane.setCenter(view);
@@ -116,6 +124,8 @@ public class MainWindowController {
         Pane panel= loader.load();
         MessageController messageController=loader.getController();
         messageController.load(service,loggedUser);
+        service.updateSeenMessageToTrue(loggedUser.getId());
+        countNewMessage.setVisible(false);
         borderPane.setCenter(panel);
     }
 
@@ -202,6 +212,7 @@ public class MainWindowController {
             if (service.sizeEvent() != 0) {eventController.loadEventItem(); eventController.loadCursorEventFilter();}
             else {eventController.loadCreateEvent();}
             Pane view = new Pane(panel);
+            countNewEvents.setVisible(false);
             borderPane.setCenter(view);
     }
 
@@ -216,4 +227,16 @@ public class MainWindowController {
         Pane view = new Pane(panel);
         borderPane.setCenter(view);
     }
+
+    public void loadNotification(){
+        if (pageDTO.getNumberOfNewMessages() != 0)
+        {countNewMessage.setText(String.valueOf(pageDTO.getNumberOfNewMessages()));}
+        else {countNewMessage.setVisible(false);}
+        if (pageDTO.getNumberOfNewRequests() != 0) {countNewRequests.setText(String.valueOf(pageDTO.getNumberOfNewRequests()));}
+        else {countNewRequests.setVisible(false);}
+        if (pageDTO.getNumberOfTodayEvents() != 0) {countNewEvents.setText(String.valueOf(pageDTO.getNumberOfTodayEvents()));}
+        else {countNewEvents.setVisible(false);}
+    }
+
+
 }

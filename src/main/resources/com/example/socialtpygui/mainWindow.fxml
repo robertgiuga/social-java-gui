@@ -14,7 +14,7 @@
    <children>
       <AnchorPane fx:id="mainPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="649.0">
          <children>
-            <BorderPane fx:id="borderPane" layoutX="6.0" prefHeight="520.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <BorderPane fx:id="borderPane" layoutX="6.0" prefHeight="531.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
                   <AnchorPane fx:id="topPane" prefHeight="44.0" prefWidth="500.0" style="-fx-border-color: #C9E9D8;" BorderPane.alignment="CENTER">
                      <children>
@@ -36,28 +36,43 @@
                   </AnchorPane>
                </top>
                <bottom>
-                  <AnchorPane fx:id="bottomPane" prefHeight="45.0" prefWidth="649.0" BorderPane.alignment="CENTER">
+                  <AnchorPane fx:id="bottomPane" prefHeight="56.0" prefWidth="649.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ImageView fx:id="feedViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="25.0" layoutY="13.0" onMouseClicked="#handlerFeedBtn" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+                        <ImageView fx:id="feedViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="25.0" layoutY="13.0" onMouseClicked="#handlerFeedBtn" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>
                               <Image url="@icons/feed.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="requestsViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="225.0" layoutY="5.0" onMouseClicked="#handlerRequestsButton" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+                        <ImageView fx:id="requestsViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="224.0" layoutY="13.0" onMouseClicked="#handlerRequestsButton" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>
                               <Image url="@icons/add-friend.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="eventsViewBtn" fitHeight="25.0" fitWidth="25.0" layoutX="413.0" layoutY="11.0" onMouseClicked="#handlerEventBtnMW" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="11.0">
+                        <ImageView fx:id="eventsViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="413.0" layoutY="13.0" onMouseClicked="#handlerEventBtnMW" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="16.0">
                            <image>
                               <Image url="@icons/calendar.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="messageViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="599.0" layoutY="8.0" onMouseClicked="#handlerMessageBtn" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="8.0">
+                        <ImageView fx:id="messageViewBtn" fitHeight="30.0" fitWidth="30.0" layoutX="596.0" layoutY="13.0" onMouseClicked="#handlerMessageBtn" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="15.0">
                            <image>
                               <Image url="@icons/conversation.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="countNewMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="620.0" layoutY="4.0" prefHeight="16.0" prefWidth="16.0" text="1" textAlignment="JUSTIFY" textFill="RED">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="countNewEvents" alignment="CENTER" contentDisplay="CENTER" layoutX="436.0" layoutY="4.0" prefHeight="16.0" prefWidth="16.0" text="1" textAlignment="JUSTIFY" textFill="RED">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="countNewRequests" alignment="CENTER" contentDisplay="CENTER" layoutX="246.0" layoutY="4.0" prefHeight="16.0" prefWidth="16.0" text="1" textAlignment="JUSTIFY" textFill="RED">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </bottom>

@@ -661,5 +661,20 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return numberOfNewMessages;
     }
+
+    /**
+     * Update table message_recipient, make column seen true where email is "email"
+     * @param email String
+     */
+    public void updateSeenMessageToTrue(String email){
+        String sql = "update message_recipient set seen = true where email = ? and seen = false";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

@@ -233,8 +233,9 @@ public class SuperService implements Observable {
      * @return the user if the id and password are correct
      * @throws ValidationException if id or password is incorrect and if the user does not exist
      */
-    public User logIn(String id, String password) throws ValidationException {
-        return userService.logIn(id, password);
+    public PageDTO logIn(String id, String password) throws ValidationException {
+        User user = userService.logIn(id, password);
+        return new PageDTO(new UserDTO(user), friendshipService.getNumberNewRequests(user.getId()), messageService.getNumberNewMessage(user.getId()), eventService.getTodayEvents(LocalDate.now()));
     }
 
     /**
@@ -1018,5 +1019,25 @@ public class SuperService implements Observable {
      */
     public int getTodayEvents(LocalDate date){
         return eventService.getTodayEvents(date);
+    }
+
+    /**
+     * Update table message_recipient, make column seen true where email is "email"
+     * @param email String
+     */
+    public void updateSeenMessageToTrue(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        messageService.updateSeenMessageToTrue(email);
+    }
+
+    /**
+     * Update table friendship_request, make column seen true where email2 is "email"
+     * @param email String
+     */
+    public void updateSeenRequestToTrue(String email){
+        userValidator.validateEmail(email);
+        if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
+        friendshipService.updateSeenRequestToTrue(email);
     }
 }

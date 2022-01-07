@@ -206,4 +206,12 @@ public class MessageService {
     public int getNumberNewMessage(String email){
         return messageRepository.getNumberNewMessage(email);
     }
+
+    /**
+     * Update table message_recipient, make column seen true where email is "email"
+     * @param email String
+     */
+    public void updateSeenMessageToTrue(String email){
+        messageRepository.updateSeenMessageToTrue(email);
+    }
 }

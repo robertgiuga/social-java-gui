@@ -226,4 +226,19 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
         }
         return numberOfNewRequests;
     }
+
+    /**
+     * Update table friendship_request, make column seen true where email2 is "email"
+     * @param email String
+     */
+    public void updateSeenRequestToTrue(String email){
+        String sql = "update friendship_request set seen = true where email2 = ? and seen = false";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
