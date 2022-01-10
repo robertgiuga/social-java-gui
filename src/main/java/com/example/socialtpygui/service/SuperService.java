@@ -49,15 +49,6 @@ public class SuperService implements Observable {
         this.postService = postService;
     }
 
-    /**
-     * Load the friends of the users in memory
-     * @param users the list of the users to load friends of
-     * @return the list of the users with friends loaded
-     */
-    private Iterable<User> loadUsersFriends(Iterable<User> users){
-        return friendshipService.loadUsersFriends(users);
-    }
-
 
     /**
      * Add a new user
@@ -77,7 +68,7 @@ public class SuperService implements Observable {
     public void removeUser(String id){
         User toremove = userService.removeUser(id);
         List<TupleOne<String>> removelist= new ArrayList<>();
-        friendshipService.friendshipFindAll().forEach(tup->{
+        friendshipService.friendshipFindAll(friendshipService.size()).forEach(tup->{
             User  removefrom=null;
             if(tup.getId().getRight().equals(id))
                 removefrom=userService.findOne(tup.getId().getLeft());
@@ -95,8 +86,8 @@ public class SuperService implements Observable {
     /**
      * @return all the users
      */
-    public Iterable<User> users(){
-        return friendshipService.loadUsersFriends(userService.findAll());
+    public Iterable<User> users(int pageSize){
+        return userService.findAll(pageSize);
 
     }
 
@@ -852,7 +843,7 @@ public class SuperService implements Observable {
     /**
      * @return all events.
      */
-    public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
+    public List<EventDTO> findAllEvents(int pageId) {return eventService.findAll(pageId);}
 
     /**
      * @param eventId Integer
@@ -914,8 +905,8 @@ public class SuperService implements Observable {
     /**
      * @return all posts.
      */
-    public Iterable<Post> findAllPosts() {
-        return postService.findAll();
+    public Iterable<Post> findAllPosts(int pageSize) {
+        return postService.findAll(pageSize);
     }
 
     /**

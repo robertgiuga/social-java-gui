@@ -50,7 +50,7 @@ public class UserService {
     /**
      * @return all entities
      */
-    public Iterable<User> findAll(){return repositoryUser.findAll();}
+    public Iterable<User> findAll(int pageSize){return repositoryUser.findAll(pageSize);}
 
     /**
      * @param id -the id of the entity to be returned

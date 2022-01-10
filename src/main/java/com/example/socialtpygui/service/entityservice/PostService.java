@@ -25,8 +25,8 @@ public class PostService {
     /**
      * @return all posts.
      */
-    public Iterable<Post> findAll() {
-        return postDb.findAll();
+    public Iterable<Post> findAll(int pageSize) {
+        return postDb.findAll(pageSize);
     }
 
     /**

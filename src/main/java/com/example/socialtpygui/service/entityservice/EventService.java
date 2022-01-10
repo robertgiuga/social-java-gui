@@ -72,7 +72,7 @@ public class EventService {
     /**
      * @return all events.
      */
-    public Iterable<EventDTO> findAll() {return repositoryEvent.findAll();}
+    public List<EventDTO> findAll(int pageId) {return repositoryEvent.findAll(pageId);}
 
     /**
      * @param eventId Integer

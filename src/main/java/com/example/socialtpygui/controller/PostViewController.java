@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import com.example.socialtpygui.domain.User;
@@ -125,5 +126,9 @@ public class PostViewController {
         list.add(post);
         try {gridPanePostView.addRow(gridPanePostView.getRowCount(), createItem(post));} catch (IOException e) {e.printStackTrace();}
 
+    }
+
+    public void scrollHandler(ScrollEvent scrollEvent) {
+        System.out.println(scrollPanePostView.getVvalue());
     }
 }

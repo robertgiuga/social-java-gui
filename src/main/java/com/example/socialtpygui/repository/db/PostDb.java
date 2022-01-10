@@ -2,22 +2,21 @@ package com.example.socialtpygui.repository.db;
 
 import com.example.socialtpygui.domain.Post;
 import com.example.socialtpygui.repository.Repository;
-import javafx.geometry.Pos;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PostDb implements Repository<Integer, Post> {
     private String url,username,password;
+    private int pageSize;
 
-    public PostDb(String url, String username, String password) {
+    public PostDb(String url, String username, String password, int pageSize) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
     @Override
@@ -37,9 +36,9 @@ public class PostDb implements Repository<Integer, Post> {
     }
 
     @Override
-    public Iterable<Post> findAll() {
+    public List<Post> findAll(int pageSize) {
         String sql = "select * from post";
-        Set<Post> set = new HashSet<>();
+        List<Post> set = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDBTest {
-    private static final EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static final EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
     private EventDBTest(){}
 
     /**
@@ -80,9 +80,7 @@ public class EventDBTest {
     }
 
     private static void testFindAll(){
-        Iterable<EventDTO> list1 = eventDb.findAll();
-        List<EventDTO> list = new ArrayList<>();
-        list1.forEach(list::add);
+        List<EventDTO> list = eventDb.findAll(0);
         assert list.size() == 2;
         List<Integer> idList = new ArrayList<>();
         idList.add(list.get(0).getId());

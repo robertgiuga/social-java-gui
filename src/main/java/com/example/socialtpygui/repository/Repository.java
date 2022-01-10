@@ -3,6 +3,8 @@ package com.example.socialtpygui.repository;
 import com.example.socialtpygui.domain.Entity;
 import com.example.socialtpygui.service.validators.ValidationException;
 
+import java.util.List;
+
 /**
  * CRUD operations repository interface
  * @param <ID> - type E must have an attribute of type ID
@@ -23,7 +25,7 @@ public interface Repository<ID, E extends Entity<ID>> {
     /**
      * @return all entities
      */
-    Iterable<E> findAll();
+    List<E> findAll(int pageId);
 
     /**
      * @param entity entity must be not null

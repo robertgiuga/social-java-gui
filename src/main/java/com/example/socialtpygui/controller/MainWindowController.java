@@ -215,10 +215,7 @@ public class MainWindowController implements Observer<EventCustom> {
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventView.fxml"));
             AnchorPane panel = fxmlLoader.load();
             EventController eventController = fxmlLoader.getController();
-            eventController.setService(this.service);
-            eventController.setLoggedUser(loggedUser);
-            if (service.sizeEvent() != 0) {eventController.loadEventItem(); eventController.loadCursorEventFilter();}
-            else {eventController.loadCreateEvent();}
+            eventController.load(service,loggedUser);
             Pane view = new Pane(panel);
             countNewEvents.setVisible(false);
             borderPane.setCenter(view);

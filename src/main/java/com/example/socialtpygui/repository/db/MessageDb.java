@@ -13,11 +13,13 @@ import java.util.List;
 
 public class MessageDb implements Repository<Integer, MessageDTO> {
     String url, username, password;
+    private int pageSize;
 
-    public MessageDb(String url, String username, String password) {
+    public MessageDb(String url, String username, String password, int pageSize) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
 
@@ -53,7 +55,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
 
 
     @Override
-    public Iterable<MessageDTO> findAll()
+    public List<MessageDTO> findAll(int pageSize)
     {
         return null;
     }

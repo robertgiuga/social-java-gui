@@ -34,8 +34,8 @@ public class FriendshipService {
     /**
      * @return all entites.
      */
-    public Iterable<Friendship> friendshipFindAll() {
-        return repositoryFriendship.findAll();
+    public Iterable<Friendship> friendshipFindAll(int pageSize) {
+        return repositoryFriendship.findAll(pageSize);
     }
 
     /**
@@ -66,21 +66,7 @@ public class FriendshipService {
         return repositoryFriendship.remove(id);
     }
 
-    /**
-     * Load the friends of the users in memory
-     *
-     * @param users the list of the users to load friends of
-     * @return the list of the users with friends loaded
-     */
-    public Iterable<User> loadUsersFriends(Iterable<User> users) {
-        Map<String, User> users1 = new HashMap<>();
-        users.forEach(user -> users1.put(user.getId(), user));
-        repositoryFriendship.findAll().forEach(frnds -> {
-            users1.get(frnds.getId().getLeft()).addFriend(users1.get(frnds.getId().getRight()));
-            users1.get(frnds.getId().getRight()).addFriend(users1.get(frnds.getId().getLeft()));
-        });
-        return users1.values();
-    }
+
 
     /**
      * @param id the id of the user to search for his friends for
@@ -131,8 +117,8 @@ public class FriendshipService {
     /**
      * @return all entities
      */
-    public Iterable<Friendship> friendshipRequestFindAll() {
-        return repositoryFriendshipRequest.findAll();
+    public Iterable<Friendship> friendshipRequestFindAll(int pageSize) {
+        return repositoryFriendshipRequest.findAll(pageSize);
     }
 
     /**
@@ -243,6 +229,10 @@ public class FriendshipService {
      */
     public void updateSeenRequestToTrue(String email){
         repositoryFriendshipRequest.setToSeenNewRequest(email);
+    }
+
+    public int size() {
+        return repositoryFriendship.size();
     }
 }
 

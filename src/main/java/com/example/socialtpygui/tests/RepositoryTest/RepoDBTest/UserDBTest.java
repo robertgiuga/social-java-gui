@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDBTest {
-    private static UserDb userRepo = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static UserDb userRepo = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
 
 
     private UserDBTest() {}
@@ -65,7 +65,7 @@ public class UserDBTest {
         }
         userRepo.save(new User("Cristian", "Gulea", "gulea@ymail.com","parola6"));
         List<User> result = new ArrayList<User>();
-        userRepo.findAll().forEach(result::add);
+        userRepo.findAll(0).forEach(result::add);
         assert (result.size() == 7);
         assert (userRepo.findOne("gulea@ymail.com") != null);
         userRepo.remove("gulea@ymail.com");

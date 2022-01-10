@@ -21,17 +21,17 @@ public class ServiceTests {
     private static UserValidator userValidator = new UserValidator();
     private static MessageValidator messageValidator = new MessageValidator(userValidator);
 
-    private static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
-    private static UserDb userDb = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
-    private static FriendshipDb friendshipDb = new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
-    private static MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
+    private static UserDb userDb = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
+    private static FriendshipDb friendshipDb = new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
+    private static MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
     private static UserService userService = new UserService(userDb, userValidator);
     private static NetworkService networkService = new NetworkService(userDb, friendshipDb);
     private static MessageService messageService = new MessageService(messageDb);
     private static FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);
-    private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
     private static EventService eventService = new EventService(eventDb);
-    private static PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
     private static PostService postService = new PostService(postDb);
     private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator,eventService, postService);
 
@@ -204,10 +204,9 @@ public class ServiceTests {
     }
 
     private static void testUsers() {
-        Iterable<User> users = service.users();
+        Iterable<User> users = service.users(0);
         long size = StreamSupport.stream(users.spliterator(), false).count();
         assert (size == 6);
-        assert (users.iterator().next().getId().equals("jon1@yahoo.com"));
     }
 
     private static void testAddFriend() {
@@ -866,7 +865,7 @@ public class ServiceTests {
     }
 
     private static void testFindAllEvents(){
-        Iterable<EventDTO> list1 = service.findAllEvents();
+        Iterable<EventDTO> list1 = service.findAllEvents(0);
         List<EventDTO> list = new ArrayList<>();
         list1.forEach(list::add);
         assert list.size() == 2;
@@ -940,7 +939,7 @@ public class ServiceTests {
     private static void testFindAllPosts()
     {
         List<Integer> listId = new ArrayList<>();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
         assert listId.contains(1);
         assert listId.contains(2);
@@ -950,17 +949,17 @@ public class ServiceTests {
     private static void testSaveRemovePost()
     {
         List<Integer> listId = new ArrayList<>();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
         Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"));
         Post postt = service.savePost(newPost);
         listId.clear();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert service.sizePost() == 4;
         assert service.findOnePost(postt.getId()) != null;
         service.removePost(postt.getId());
         listId.clear();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert service.sizePost() == 3;
         try{
             service.removePost(432);

@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 
 public class MessageDBTest {
 
-    private static MessageDb messageDBTest = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static MessageDb messageDBTest = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
 
     private MessageDBTest(){}
 
@@ -38,8 +38,8 @@ public class MessageDBTest {
     {
         assert (messageDBTest.findOne(1).getFrom().equals("jon1@yahoo.com"));
         assert (messageDBTest.findOne(1).getMessage().equals("Ce faci?"));
-        assert (messageDBTest.findOne(1).getTo().get(0).equals("gg@gmail.com"));
-        assert (messageDBTest.findOne(1).getTo().get(1).equals("andr@gamail.com"));
+        assert (messageDBTest.findOne(1).getTo().contains("gg@gmail.com"));
+        assert (messageDBTest.findOne(1).getTo().contains("andr@gamail.com"));
         assert (messageDBTest.findOne(1).getId() == 1);
         assert (messageDBTest.findOne(-21) == null);
     }
