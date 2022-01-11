@@ -979,10 +979,10 @@ public class SuperService implements Observable {
      * @return all posts from the friends of user with email "email and his/her posts"
      * @throws ValidationException if the user with email "email" does not exist
      */
-    public List<Post> getAllPostFromFriends(String email){
+    public List<Post> getAllPostFromFriends(String email,int pageId){
         userValidator.validateEmail(email);
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
-        return postService.getAllPostFromFriends(email);
+        return postService.getAllPostFromFriends(email,pageId);
     }
 
     /**

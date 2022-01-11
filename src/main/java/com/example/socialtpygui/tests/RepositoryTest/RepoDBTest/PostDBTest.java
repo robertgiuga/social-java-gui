@@ -77,7 +77,7 @@ public class PostDBTest {
 
     private static void testGetAllPostFromFriends(){
         List<Integer> list = new ArrayList<>();
-        postDb.getAllPostFromFriends("snj@gmail.com").forEach(post -> {list.add(post.getId());});
+        postDb.getAllPostFromFriends("snj@gmail.com",0).forEach(post -> {list.add(post.getId());});
         assert list.size() == 2;
         assert list.contains(1);
         assert list.contains(2);

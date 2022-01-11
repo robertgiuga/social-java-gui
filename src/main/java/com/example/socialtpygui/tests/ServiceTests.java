@@ -1020,16 +1020,16 @@ public class ServiceTests {
 
     private static void testGetAllPostFromFriends(){
         List<Integer> list = new ArrayList<>();
-        service.getAllPostFromFriends("snj@gmail.com").forEach(post -> {list.add(post.getId());});
+        service.getAllPostFromFriends("snj@gmail.com",0).forEach(post -> {list.add(post.getId());});
         assert list.size() == 2;
         assert list.contains(1);
         assert list.contains(2);
         try{
-            service.getAllPostFromFriends("ds");
+            service.getAllPostFromFriends("ds",0);
             assert false;
         }catch (ValidationException ignored){assert true;}
         try{
-            service.getAllPostFromFriends("ggh@gmail.com");
+            service.getAllPostFromFriends("ggh@gmail.com",0);
             assert false;
         }catch (NonExistingException ignored){assert true;}
     }

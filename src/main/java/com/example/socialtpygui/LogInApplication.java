@@ -61,7 +61,7 @@ public class LogInApplication extends Application {
         MessageValidator messageValidator= new MessageValidator(userValidator);
         EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 1);
         EventService eventService = new EventService(eventDb);
-        PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 3);
+        PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 4);
         PostService postService = new PostService(postDb);
         SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator, eventService, postService);
         return service;

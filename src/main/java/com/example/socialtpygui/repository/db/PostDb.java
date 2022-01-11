@@ -164,16 +164,18 @@ public class PostDb implements Repository<Integer, Post> {
      * @param email String
      * @return all posts from the friends of user with email "email and his/her posts"
      */
-    public List<Post> getAllPostFromFriends(String email){
+    public List<Post> getAllPostFromFriends(String email,int pageID){
         List<Post> list = new ArrayList<>();
         String sql = "select distinct post.id, post.user_from, post.text, post.date from post inner join friendship on " +
                 "(((friendship.email1 = ?) and (friendship.email2 = post.user_from)) or ((friendship.email1 = " +
-                "post.user_from) and (friendship.email2 = ?)) or (post.user_from = ?)) order by date desc";
+                "post.user_from) and (friendship.email2 = ?)) or (post.user_from = ?)) order by date desc offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, email);
             preparedStatement.setString(3, email);
+            preparedStatement.setInt(4,pageSize*pageID);
+            preparedStatement.setInt(5,pageSize);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
