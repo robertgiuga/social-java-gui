@@ -13,7 +13,7 @@
             <Insets left="25.0" />
          </padding>
          <font>
-            <Font name="System Bold Italic" size="10.0" />
+            <Font size="10.0" />
          </font>
       </Label>
       <Text fx:id="messageLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="218.39996218681335" VBox.vgrow="ALWAYS">
@@ -23,7 +23,7 @@
       </Text>
       <Label fx:id="fromLbl" prefHeight="0.0" prefWidth="154.0" text="Label" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="10.0" />
+            <Font size="10.0" />
          </font>
          <padding>
             <Insets left="25.0" />

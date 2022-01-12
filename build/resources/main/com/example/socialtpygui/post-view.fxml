@@ -28,9 +28,9 @@
          </content>
       </ScrollPane>
       <TextField fx:id="postTextField" layoutX="8.0" layoutY="7.0" prefHeight="36.0" prefWidth="575.0" promptText="What's on your mind?" />
-      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="606.0" layoutY="10.0" onMouseClicked="#handlerForPost" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="596.0" layoutY="9.0" onMouseClicked="#handlerForPost" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@icons/instagram-post.png" />
+            <Image url="@icons/noun-new-1393210.png" />
          </image>
       </ImageView>
    </children>

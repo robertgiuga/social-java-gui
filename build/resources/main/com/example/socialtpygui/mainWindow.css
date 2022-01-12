@@ -1,3 +1,6 @@
+.label{
+    font-style: normal;
+}
 #leftPane{
     -fx-background-color: #C9E9D8;
     -fx-background-radius: 25;
@@ -78,7 +81,15 @@
     -fx-background-insets: 0px;
     -fx-padding: 0px;
 }
-
+#friendsBtn{
+    -fx-background-color: #B5D3C5;
+}
+#logoutBackBtn{
+    -fx-background-color: #B5D3C5;
+}
+#statisticBackBtn{
+    -fx-background-color: #B5D3C5;
+}
 #scrollPaneSearchView{
     -fx-background: #242E3D;
     -fx-background-color: #242E3D;

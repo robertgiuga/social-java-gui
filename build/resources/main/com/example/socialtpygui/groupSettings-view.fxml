@@ -14,7 +14,7 @@
    <children>
       <Label fx:id="groupNameLabel" layoutX="280.0" layoutY="31.0" prefHeight="36.0" prefWidth="109.0" text="Nume Grup" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="20.0" />
+            <Font size="20.0" />
          </font>
       </Label>
       <ScrollPane fx:id="scrollPaneMembers" hbarPolicy="NEVER" layoutX="14.0" layoutY="127.0" onScroll="#scrollMemberHandler" prefHeight="73.0" prefWidth="576.0">
@@ -28,7 +28,7 @@
       </ScrollPane>
       <Label layoutX="11.0" layoutY="87.0" prefHeight="25.0" prefWidth="101.0" text="Participants:" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="16.0" />
+            <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="searchBarGroupSetting" layoutX="14.0" layoutY="259.0" onKeyPressed="#handlerLoadPossibleMember" prefHeight="36.0" prefWidth="201.0" promptText="Search for a friend">
@@ -57,12 +57,12 @@
       </ImageView>
       <Label layoutX="71.0" layoutY="331.0" text="Leave Group" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="16.0" />
+            <Font size="16.0" />
          </font>
       </Label>
       <Label layoutX="11.0" layoutY="222.0" text="Add Members:" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="16.0" />
+            <Font size="16.0" />
          </font>
       </Label>
    </children>

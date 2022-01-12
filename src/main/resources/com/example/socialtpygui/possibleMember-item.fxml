@@ -10,7 +10,7 @@
    <children>
       <Label fx:id="labelPossibleMember" layoutX="7.0" layoutY="5.0" prefHeight="35.0" prefWidth="185.0" text="Label" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="14.0" />
+            <Font size="14.0" />
          </font></Label>
       <ImageView fx:id="btnPossibleMember" fitHeight="30.0" fitWidth="30.0" layoutX="262.0" layoutY="5.0" onMouseClicked="#handlerAddMemberBtn" pickOnBounds="true" preserveRatio="true">
          <image>
