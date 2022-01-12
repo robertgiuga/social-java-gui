@@ -6,6 +6,8 @@ import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class SearchController{
 
+    public ScrollPane scrollPaneSearchView;
     List<UserDTO> users;
     FXMLLoader fxmlLoader;
     UserDTO loggedUser;
@@ -21,39 +24,48 @@ public class SearchController{
     @FXML
     GridPane gridPane;
 
+    private int row =0;
+    private int pageId=0;
+    private String name;
+
     /**
      * Load in gridpane all the item, dinamic
      * @param completeNameSearch
      */
     public void load(String completeNameSearch)
     {
-        int row = 0;
-        this.users = service.getUsersByName(completeNameSearch);
-        try
-        {
-            for (UserDTO user : users) {
-                FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("search-item.fxml"));
-                Pane item = fxmlLoader.load();
-                SearchItemController searchItemController = fxmlLoader.getController();
-                searchItemController.setData(user);
-                searchItemController.setLoggedUser(this.loggedUser);
-                searchItemController.setService(this.service);
-                if ((service.friendshipDate(this.loggedUser.getId(), user.getId()) != null) || (user.getId().equals(this.loggedUser.getId()))){
-                    searchItemController.hideAddBtn();
-                    searchItemController.hideCancelBtn();
-                }
+        this.name=completeNameSearch;
+        nextPage();
 
-                if (service.friendshipRequestDate(this.loggedUser.getId(), user.getId()) != null)
-                {searchItemController.hideAddBtn();}
-                else
-                {searchItemController.hideCancelBtn();}
-                gridPane.addRow(row++, item);
+    }
 
+    private void nextPage(){
+        service.getUsersByName(name,pageId++).forEach(userDTO -> {
+            try {
+                createItem(userDTO);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        });
+    }
+
+    private void createItem(UserDTO user) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("search-item.fxml"));
+        Pane item = fxmlLoader.load();
+        SearchItemController searchItemController = fxmlLoader.getController();
+        searchItemController.setData(user);
+        searchItemController.setLoggedUser(this.loggedUser);
+        searchItemController.setService(this.service);
+        if ((service.friendshipDate(this.loggedUser.getId(), user.getId()) != null) || (user.getId().equals(this.loggedUser.getId()))){
+            searchItemController.hideAddBtn();
+            searchItemController.hideCancelBtn();
         }
 
+        if (service.friendshipRequestDate(this.loggedUser.getId(), user.getId()) != null)
+        {searchItemController.hideAddBtn();}
+        else
+        {searchItemController.hideCancelBtn();}
+        gridPane.addRow(row++, item);
     }
 
     /**
@@ -73,4 +85,9 @@ public class SearchController{
     }
 
 
+    public void handlerScroll(ScrollEvent scrollEvent) {
+        if(scrollPaneSearchView.getVvalue()>0.45&&scrollPaneSearchView.getVvalue()<0.55){
+            nextPage();
+        }
+    }
 }

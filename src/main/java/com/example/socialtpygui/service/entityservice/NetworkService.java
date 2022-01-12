@@ -50,7 +50,7 @@ public class NetworkService {
      */
     public Iterable<User> socialCommunity() {
         return runNetworkGraph().getRight()
-                .stream().peek(user -> friendshipRepository.getFriends(user.getId()).forEach(s -> user.addFriend(userRepository.findOne(s.getLeft()))))
+                .stream().peek(user -> friendshipRepository.getFriends(user.getId(),0).forEach(s -> user.addFriend(userRepository.findOne(s.getLeft()))))
                 .collect(toList());
     }
 }

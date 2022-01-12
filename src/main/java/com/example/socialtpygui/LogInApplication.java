@@ -51,7 +51,7 @@ public class LogInApplication extends Application {
     private SuperService createSuperService(){
         UserValidator userValidator= new UserValidator();
         UserDb userDb= new UserDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 10);
-        FriendshipDb friendshipDb= new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 10);
+        FriendshipDb friendshipDb= new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 11);
         MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 10);
         FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetwork", "postgres", "postgres", 10);
         UserService userService = new UserService(userDb, userValidator);

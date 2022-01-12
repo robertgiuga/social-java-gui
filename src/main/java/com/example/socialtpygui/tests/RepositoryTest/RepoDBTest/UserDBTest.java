@@ -93,14 +93,14 @@ public class UserDBTest {
     private static void testgetUsersByName()
     {
         List<String> list1 = new ArrayList<>();
-        userRepo.getUsersByName("a", "").forEach(elem-> list1.add(elem.getId()));
+        userRepo.getUsersByName("a", "",0).forEach(elem-> list1.add(elem.getId()));
         assert (list1.size() == 4);
         assert (list1.contains("gc@gmail.com"));
         assert (list1.contains("gg@gmail.com"));
         assert (list1.contains("andr@gamail.com"));
         assert (list1.contains("aand@hotmail.com"));
         list1.clear();
-        userRepo.getUsersByName("adasda", "dasda").forEach(elem->list1.add(elem.getId()));
+        userRepo.getUsersByName("adasda", "dasda",0).forEach(elem->list1.add(elem.getId()));
         assert (list1.size() == 0);
     }
 

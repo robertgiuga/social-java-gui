@@ -127,6 +127,9 @@ public class PostViewController {
 
     }
 
+    /**
+     * loads the next page with data in the ui
+     */
     private void nextPage(){
         List<Post> nextPost= service.getAllPostFromFriends(this.loggedUser.getId(),pageId++);
         System.out.println("*****");
@@ -145,7 +148,6 @@ public class PostViewController {
     }
     public void scrollHandler(ScrollEvent scrollEvent) {
         System.out.println(scrollPanePostView.getVvalue());
-        //todo add new posts
         if(scrollPanePostView.getVvalue()>0.48&&scrollPanePostView.getVvalue()<0.52){
             nextPage();
         }

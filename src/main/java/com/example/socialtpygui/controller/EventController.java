@@ -58,6 +58,10 @@ public class EventController {
         borderPaneMainEventWindow.addEventFilter(LoadView.LOAD_EVENTS, this::handlerForEvent);
     }
 
+    /**
+     * loads the new eventt in the UI
+     * @throws IOException
+     */
     private void nextPage() throws IOException {
         List<EventDTO> eventsDTO =service.findAllEvents(pageId);
         if ( eventsDTO.size()>0) {
@@ -66,6 +70,10 @@ public class EventController {
         }
     }
 
+    /**
+     * loads the previous page in the UI
+     * @throws IOException
+     */
     private void previousPage() throws IOException {
         if(pageId>0) {
             List<EventDTO> eventsDTO = service.findAllEvents(--pageId);

@@ -18,6 +18,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsController {
@@ -30,12 +31,17 @@ public class StatisticsController {
     private SuperService service;
     private UserDTO loggedUser;
     ToggleGroup toggleGroup;
+    int pageId=0;
 
     public void load(SuperService service, UserDTO loggedUser){
         this.service=service;
         this.loggedUser=loggedUser;
         toggleGroup= new ToggleGroup();
-        service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {
+        nextPage();
+
+    }
+    private void nextPage(){
+        service.getFriends(loggedUser.getId(),pageId++).forEach(friendShipDTO -> {
             try {
                 Pane item= createItem(friendShipDTO.getUser2());
                 gridPane.addRow(gridPane.getRowCount(), item);
@@ -43,7 +49,6 @@ public class StatisticsController {
                 e.printStackTrace();
             }
         });
-
     }
 
     private Pane createItem(UserDTO user) throws IOException {
@@ -61,8 +66,13 @@ public class StatisticsController {
         LocalDate stopDate= dateStop.getValue();
 
         if(startDate!=null&&stopDate!=null) {
-            List<FriendShipDTO> friendShipDTOList = service.getUserFriendshipsInDate(loggedUser.getId(), startDate, stopDate);
-
+            List<FriendShipDTO> friendShipDTOList= new ArrayList<>();
+            int startPageId=0;
+            List<FriendShipDTO> friendList = service.getUserFriendshipsInDate(loggedUser.getId(), startDate, stopDate,startPageId++);
+            while (friendList.size()!=0){
+                friendShipDTOList.addAll(friendList);
+                friendList = service.getUserFriendshipsInDate(loggedUser.getId(), startDate, stopDate,startPageId++);
+            }
             PDDocument doc = new PDDocument();
             PDPage page = new PDPage();
             doc.addPage(page);

@@ -184,14 +184,14 @@ public class SuperService implements Observable {
      * @param id .
      * @return an iterable of FriendshipDTO always having first user the one that requested
      */
-    public Iterable<FriendShipDTO> getFriends(String id) {
+    public Iterable<FriendShipDTO> getFriends(String id,int pageId) {
         userValidator.validateEmail(id);
         User user1 = userService.findOne(id);
         if(user1==null){
             throw new NonExistingException("User not found!");
         }
         UserDTO finalUserDTO = new UserDTO(user1);
-        return friendshipService.getFriends(id).stream().map(s -> {UserDTO user = new UserDTO(userService.findOne(s.getLeft())); return new FriendShipDTO(finalUserDTO, user,s.getRight());}).collect(Collectors.toList());
+        return friendshipService.getFriends(id,pageId).stream().map(s -> {UserDTO user = new UserDTO(userService.findOne(s.getLeft())); return new FriendShipDTO(finalUserDTO, user,s.getRight());}).collect(Collectors.toList());
     }
 
 
@@ -200,7 +200,7 @@ public class SuperService implements Observable {
      * @param date .
      * @return the friends of a user in a specific month of a year
      */
-    public Iterable<FriendShipDTO> getFriendsSince(String id, YearMonth date)
+    public Iterable<FriendShipDTO> getFriendsSince(String id, YearMonth date,int pageId)
     {
         userValidator.validateEmail(id);
         User user1 = userService.findOne(id);
@@ -212,7 +212,7 @@ public class SuperService implements Observable {
         Predicate<LocalDate> predicateM = m->m.getMonth() == date.getMonth();
         Predicate<LocalDate> predicateYM = predicateM.and(predicateY);
 
-        return friendshipService.getFriends(id).stream().filter(p->predicateYM.test(p.getRight()))
+        return friendshipService.getFriends(id,pageId).stream().filter(p->predicateYM.test(p.getRight()))
                 .map(u->{UserDTO user = new UserDTO(userService.findOne(u.getLeft())); return new FriendShipDTO(finalUserDto, user, u.getRight());})
                 .collect(Collectors.toList());
     }
@@ -263,7 +263,7 @@ public class SuperService implements Observable {
     }
 
     /**
-     * validate if the message could be real, if the sender and receiver exists and are not admins
+     * validate if the message could be real, if the sender and receiver exists
      * validates if the friendship exist between the user to send and the ones to receive
      * @param messageDTO the message to be tested
      */
@@ -277,7 +277,7 @@ public class SuperService implements Observable {
             if (userService.findOne(s) == null)
                 er.append("User ").append(s).append(" does not exist!\n");
             boolean sem = false;
-            for (Tuple<String, LocalDate> t : friendshipService.getFriends(messageDTO.getFrom()))
+            for (Tuple<String, LocalDate> t : friendshipService.getFriends(messageDTO.getFrom(),0))
                 if (t.getLeft().equals(s)) {
                     sem = true;
                     break;
@@ -422,10 +422,10 @@ public class SuperService implements Observable {
      * @return Return a list with UserDto, where first_name and last_name contain completName.
      * @throws ValidationException if completName is empty
      */
-    public List<UserDTO> getUsersByName(String completName)
+    public List<UserDTO> getUsersByName(String completName, int pageId)
     {
         if (completName.length() == 0) throw new ValidationException("Name in searchBar is null!");
-        return userService.getUsersByName(completName);
+        return userService.getUsersByName(completName,pageId);
     }
 
     /**
@@ -479,7 +479,7 @@ public class SuperService implements Observable {
      * @param name
      * @return
      */
-    public List<UserDTO> getFriendsByName(String id, String name){
+    public List<UserDTO> getFriendsByName(String id, String name, int pageId){
         if(name.length()==0){
             throw new NonExistingException("Cannot contain null values");
         }
@@ -487,7 +487,7 @@ public class SuperService implements Observable {
                 userDTO -> userDTO.getLastName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)) ||
                         userDTO.getFirstName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT));
 
-        return  friendshipService.getFriends(id).stream()
+        return  friendshipService.getFriends(id,pageId).stream()
                 .map(s -> new UserDTO(userService.findOne(s.getLeft()))).collect(Collectors.toList())
                 .stream().filter(contains).collect(Collectors.toList());
     }
@@ -676,7 +676,7 @@ public class SuperService implements Observable {
      * @param dateStop the end date for searching
      * @return a list of FriendshipDTO
      */
-    public List<FriendShipDTO> getUserFriendshipsInDate(String id, LocalDate dateStart ,LocalDate dateStop ){
+    public List<FriendShipDTO> getUserFriendshipsInDate(String id, LocalDate dateStart ,LocalDate dateStop, int pageId ){
         userValidator.validateEmail(id);
         if(dateStart==null||dateStop==null)
             throw new ValidationException("Date invalid!");
@@ -687,7 +687,7 @@ public class SuperService implements Observable {
 
         List<FriendShipDTO> friendships=new ArrayList<>();
         UserDTO currentUser= new UserDTO(userService.findOne(id));
-        List<Tuple<String, LocalDate>> friends= friendshipService.getFriends(id);
+        List<Tuple<String, LocalDate>> friends= friendshipService.getFriends(id,pageId);
         friends.forEach(stringLocalDateTuple -> {
             LocalDate frindshipDate=stringLocalDateTuple.getRight();
             if (frindshipDate.compareTo(dateStart)>=0&&frindshipDate.compareTo(dateStop)<=0){

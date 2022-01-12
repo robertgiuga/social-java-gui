@@ -106,14 +106,14 @@ public class UserService {
      * @param completName
      * @throws SQLException
      */
-    public List<UserDTO> getUsersByName(String completName) {
+    public List<UserDTO> getUsersByName(String completName, int pageId) {
         if (completName.contains(" ")) {
             String[] splitName = completName.split(" ");
             String namePart1 = splitName[0];
             String namePart2 = splitName[1];
-            return repositoryUser.getUsersByName(namePart1, namePart2);
+            return repositoryUser.getUsersByName(namePart1, namePart2,pageId);
         } else {
-            return repositoryUser.getUsersByName(completName, "");
+            return repositoryUser.getUsersByName(completName, "",pageId);
         }
     }
 

@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -17,11 +19,14 @@ import java.io.IOException;
 
 public class SearchFriendConvController {
 
+    public ScrollPane scrollPaneSearchFriendConvView;
     @FXML
     private GridPane gridPane;
 
     private SuperService service;
     private UserDTO loggedUser;
+    private int pageId;
+    private String name;
 
     /**
      * create a new view of a Friend
@@ -47,20 +52,30 @@ public class SearchFriendConvController {
     public void load(SuperService service, UserDTO loggedUser,String name){
         this.service=service;
         this.loggedUser=loggedUser;
+        this.name=name;
+        nextPage();
+        //todo
+    }
 
-        service.getFriendsByName(loggedUser.getId(),name).forEach(userDTO ->  {
-                try {
-                    Pane item = createItem(userDTO);
-                    item.getChildren().forEach(node -> {
-                        if (node instanceof Label) node.setId(String.valueOf(userDTO.getId()));
-                    });
-                    gridPane.addRow(gridPane.getRowCount(), item);
+    private void nextPage(){
+        service.getFriendsByName(loggedUser.getId(),name,pageId++).forEach(userDTO ->  {
+            try {
+                Pane item = createItem(userDTO);
+                item.getChildren().forEach(node -> {
+                    if (node instanceof Label) node.setId(String.valueOf(userDTO.getId()));
+                });
+                gridPane.addRow(gridPane.getRowCount(), item);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
 
+    public void handlerScroll(ScrollEvent scrollEvent) {
+        if(scrollPaneSearchFriendConvView.getVvalue()>0.45&&scrollPaneSearchFriendConvView.getVvalue()<0.55){
+            nextPage();
+        }
+    }
 }

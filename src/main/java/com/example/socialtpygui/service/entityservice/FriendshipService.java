@@ -72,8 +72,8 @@ public class FriendshipService {
      * @param id the id of the user to search for his friends for
      * @return the list of the id of his friends
      */
-    public List<Tuple<String, LocalDate>> getFriends(String id) {
-        return repositoryFriendship.getFriends(id);
+    public List<Tuple<String, LocalDate>> getFriends(String id, int pageId) {
+        return repositoryFriendship.getFriends(id,pageId);
     }
 
     /**

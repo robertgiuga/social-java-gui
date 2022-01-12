@@ -148,14 +148,16 @@ public class FriendshipDb implements Repository<TupleOne<String>, Friendship> {
      * @param email the email of the user to search for his friends for
      * @return  the list of the email of hid friends
      */
-    public List<Tuple<String, LocalDate>> getFriends(String email){
+    public List<Tuple<String, LocalDate>> getFriends(String email,int pageId){
         List<Tuple<String, LocalDate>> friends=new ArrayList<>();
-        String sql = "select * from friendship where email1=? or email2=?";
+        String sql = "select * from friendship where email1=? or email2=? offset ? limit ?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password)){
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1,email);
             ps.setString(2,email);
+            ps.setInt(3,pageSize*pageId);
+            ps.setInt(4,pageSize);
             ResultSet resultSet = ps.executeQuery();
 
 
