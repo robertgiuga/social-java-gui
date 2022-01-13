@@ -41,12 +41,20 @@ public class CreateGroupController {
         this.loggedUser=loggedUser;
         nextPage();
     }
+
+    /**
+     * loads new items in list of conversation
+     */
     private void nextPage(){
         service.getFriends(loggedUser.getId(),pageId++).forEach(friendShipDTO -> {
             addPosibleParticipant(friendShipDTO.getUser2());
         });
     }
 
+    /**
+     * create an posibleParticipant view and adds it in friends pane
+     * @param friend
+     */
     private void addPosibleParticipant(UserDTO friend){
         FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("posibleParticipant-viewItem.fxml"));
         try {
@@ -83,7 +91,10 @@ public class CreateGroupController {
             friendsPane.fireEvent(new ItemSelected(ItemSelected.GROUP_LOAD_MSJ,String.valueOf(newgroup.getId())));
         }
     }
-
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
     public void scrollHandler(ScrollEvent scrollEvent) {
         if(scrollPaneCreateGroupWindow.getVvalue()>0.45&&scrollPaneCreateGroupWindow.getVvalue()<0.54)
             nextPage();

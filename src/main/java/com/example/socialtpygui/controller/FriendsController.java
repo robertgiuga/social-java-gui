@@ -59,7 +59,9 @@ public class FriendsController implements Observer<ViewItemEvent> {
         nextPage();
     }
 
-
+    /**
+     * loads new friends in the UI (paginated)
+     */
     private void nextPage(){
         friends=new ArrayList<>();
         service.getFriends(loggedUser.getId(),pageId++).forEach(friendShipDTO -> {
@@ -78,7 +80,10 @@ public class FriendsController implements Observer<ViewItemEvent> {
         gridPane.getChildren().remove(friends.indexOf(viewItemEvent.getUserDTO()));
         friends.remove(viewItemEvent.getUserDTO());
     }
-
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
     public void scrollHandler(ScrollEvent scrollEvent) {
         if(scrollPaneFriendsView.getVvalue()>0.45&&scrollPaneFriendsView.getVvalue()<0.54)
             nextPage();

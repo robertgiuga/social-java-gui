@@ -39,6 +39,9 @@ public class SearchController{
 
     }
 
+    /**
+     * loads new data by the pageId
+     */
     private void nextPage(){
         service.getUsersByName(name,pageId++).forEach(userDTO -> {
             try {
@@ -84,7 +87,10 @@ public class SearchController{
         this.loggedUser = loggedUser;
     }
 
-
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
     public void handlerScroll(ScrollEvent scrollEvent) {
         if(scrollPaneSearchView.getVvalue()>0.45&&scrollPaneSearchView.getVvalue()<0.55){
             nextPage();

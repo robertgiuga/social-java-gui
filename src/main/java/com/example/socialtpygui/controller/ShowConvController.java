@@ -95,6 +95,10 @@ public class ShowConvController implements Observer<EventCustom> {
         }
     }
 
+    /**
+     * loads new data in UI(messages) by groupId
+     * @return true if messages are loaded false otherwise
+     */
     private boolean nextPagePrivateConv(){
         List<ReplyMessage> messages=service.getMessagesBetween2Users(loggedUser.getId(), email2User,pageId++);
         if(messages.size()>0) {
@@ -240,6 +244,10 @@ public class ShowConvController implements Observer<EventCustom> {
         nextGroupPage();
     }
 
+    /**
+     * loads new data data in UI(messages) by groupId
+     * @return true if messages are loaded false otherwise
+     */
     private boolean nextGroupPage(){
         List<ReplyMessage> messages=service.getGroupMessages(groupId,pageId++);
         if(messages.size()>0) {
@@ -365,6 +373,10 @@ public class ShowConvController implements Observer<EventCustom> {
         scrollPaneShowConv.setVvalue(1.0f);
     }
 
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
     public void handlerScroll(ScrollEvent scrollEvent) {
         System.out.println(scrollPaneShowConv.getVvalue());
         if(scrollPaneShowConv.getVvalue()>0.45&&scrollPaneShowConv.getVvalue()<0.55){

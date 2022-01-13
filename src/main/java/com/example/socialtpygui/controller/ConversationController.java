@@ -87,6 +87,9 @@ public class ConversationController {
         });
     }
 
+    /**
+     * loads new items in list of conversation
+     */
     private void nextPage(){
         this.service.getAllConversation(loggedUser.getId(),pageId++).forEach(email->{
             try {
@@ -100,7 +103,10 @@ public class ConversationController {
                 e.printStackTrace();
             }});
     }
-
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
     public void handlerScroll(ScrollEvent scrollEvent) {
         if(scrollPaneConversationView.getVvalue()>0.45&&scrollPaneConversationView.getVvalue()<0.55){
             nextPage();

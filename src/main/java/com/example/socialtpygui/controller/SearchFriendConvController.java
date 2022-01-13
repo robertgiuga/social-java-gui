@@ -57,6 +57,9 @@ public class SearchFriendConvController {
         //todo
     }
 
+    /**
+     * load new data in UI by pageId
+     */
     private void nextPage(){
         service.getFriendsByName(loggedUser.getId(),name,pageId++).forEach(userDTO ->  {
             try {
@@ -72,7 +75,10 @@ public class SearchFriendConvController {
         });
     }
 
-
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
     public void handlerScroll(ScrollEvent scrollEvent) {
         if(scrollPaneSearchFriendConvView.getVvalue()>0.45&&scrollPaneSearchFriendConvView.getVvalue()<0.55){
             nextPage();
