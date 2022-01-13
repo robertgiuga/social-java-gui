@@ -16,6 +16,7 @@ import com.example.socialtpygui.utils.observer.Observer;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.function.Predicate;
@@ -233,13 +234,13 @@ public class SuperService implements Observable {
      * @param id .
      * @return All emails with whom a user has interacted(receive message/send message).
      */
-    public List<String> getAllConversation(String id)
+    public List<String> getAllConversation(String id,int pageId)
     {
 
         userValidator.validateEmail(id);
         if(userService.findOne(id)==null)
             throw new NonExistingException("User "+id+" does not exist!");
-        return messageService.getAllConversation(id);
+        return messageService.getAllConversation(id,pageId);
     }
 
     /**
@@ -248,7 +249,7 @@ public class SuperService implements Observable {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessagesBetween2Users(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetween2Users(String id1, String id2, int pageId)
     {
         userValidator.validateEmail(id1);
         userValidator.validateEmail(id2);
@@ -259,7 +260,7 @@ public class SuperService implements Observable {
         if(userService.findOne(id2)==null)
             throw new NonExistingException("User "+id2+" does not exist!");
 
-        return messageService.getMessagesBetweenTwoUsers(id1, id2);
+        return messageService.getMessagesBetweenTwoUsers(id1, id2,pageId);
     }
 
     /**
@@ -277,11 +278,8 @@ public class SuperService implements Observable {
             if (userService.findOne(s) == null)
                 er.append("User ").append(s).append(" does not exist!\n");
             boolean sem = false;
-            for (Tuple<String, LocalDate> t : friendshipService.getFriends(messageDTO.getFrom(),0))
-                if (t.getLeft().equals(s)) {
-                    sem = true;
-                    break;
-                }
+            if( friendshipService.friendshipDate(s,messageDTO.getFrom())!=null)
+                sem=true;
 
             if (!sem) er.append("User with email ").append(messageDTO.getFrom()).append(" and user with email ").append(s).append(" are not friends!");
         }
@@ -622,10 +620,10 @@ public class SuperService implements Observable {
      * if ReplayMessage has currentMessage null that means it is a Message entity
      * @throws NonExistingException if the group with groupId does not exist
      */
-    public List<ReplyMessage> getGroupMessages(int groupId)
+    public List<ReplyMessage> getGroupMessages(int groupId, int pageId)
     {
         if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
-        return messageService.getGroupMessages(groupId);
+        return messageService.getGroupMessages(groupId,pageId);
     }
 
     /**
@@ -713,10 +711,10 @@ public class SuperService implements Observable {
             throw new ValidationException("Data start must be less than stop date!");
         if(userService.findOne(id)==null)
             throw new NonExistingException("User "+id+" does not exist!");
-
+        //todo see where used
         List<Tuple<User,Integer>> userMessage= new ArrayList<>();
-        messageService.getAllConversation(id).forEach(s ->{
-            long a= messageService.getMessagesBetweenTwoUsers(id,s).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
+        messageService.getAllConversation(id,0).forEach(s ->{
+            long a= messageService.getMessagesBetweenTwoUsers(id,s,0).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
                     .count();
             if(a>0)
                 userMessage.add(new Tuple<User,Integer>(userService.findOne(s), (int) a));
@@ -744,7 +742,7 @@ public class SuperService implements Observable {
         if(userService.findOne(id2)==null)
             throw new NonExistingException("User "+id2+" does not exist!");
 
-        return messageService.getMessagesBetweenTwoUsers(id1, id2).stream().filter(replyMessage -> replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0).collect(Collectors.toList());
+        return messageService.getMessagesBetweenTwoUsers(id1, id2,0).stream().filter(replyMessage -> replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0).collect(Collectors.toList());
     }
     
     /**

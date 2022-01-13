@@ -74,7 +74,7 @@ public class MainWindowController implements Observer<EventCustom> {
     private UDPClient udpThread;
     private int currentEventIndex = 0;
 
-    public void load(SuperService service, UserDTO loggedUser, UDPClient udpThread, PageDTO pageDTO){
+    public void load(SuperService service, UserDTO loggedUser, UDPClient udpThread, PageDTO pageDTO) throws IOException {
         leftPane.setVisible(false);
         this.service=service;
         this.loggedUser=loggedUser;
@@ -82,6 +82,7 @@ public class MainWindowController implements Observer<EventCustom> {
         this.pageDTO = pageDTO;
         loadNotification();
         service.addObserver(this);
+        handlerFeedBtn();
 
     }
 
@@ -188,6 +189,7 @@ public class MainWindowController implements Observer<EventCustom> {
         else {
             leftPane.setVisible(true);
             borderPane.setDisable(true);
+            exitBtnMW.setDisable(false);
         }
 
     }
@@ -196,6 +198,7 @@ public class MainWindowController implements Observer<EventCustom> {
     }
 
     public void handelerStatisticsBtn(MouseEvent event) throws IOException {
+        slidebarDisbale();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("statistics-view.fxml"));
 
         AnchorPane pane = fxmlLoader.load();
@@ -221,8 +224,8 @@ public class MainWindowController implements Observer<EventCustom> {
             borderPane.setCenter(view);
     }
 
-
-    public void handlerFeedBtn(MouseEvent mouseEvent) throws IOException {
+    @FXML
+    public void handlerFeedBtn() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("post-view.fxml"));
         AnchorPane panel = fxmlLoader.load();
         PostViewController controller = fxmlLoader.getController();

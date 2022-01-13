@@ -22,7 +22,7 @@ public class LogInApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Tests.RunALL();
+        Tests.RunALL();
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
@@ -52,7 +52,7 @@ public class LogInApplication extends Application {
         UserValidator userValidator= new UserValidator();
         UserDb userDb= new UserDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 10);
         FriendshipDb friendshipDb= new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 11);
-        MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 10);
+        MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 7);
         FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetwork", "postgres", "postgres", 10);
         UserService userService = new UserService(userDb, userValidator);
         FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);

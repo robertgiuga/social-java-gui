@@ -14,9 +14,9 @@
 
 <AnchorPane fx:id="anchorPaneShowConvView" prefHeight="458.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
    <children>
-      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" hbarPolicy="NEVER" layoutX="13.0" layoutY="11.0" prefHeight="394.0" prefWidth="627.0" style="-fx-background-color: #242E3D;" vvalue="1.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="11.0">
+      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" hbarPolicy="NEVER" layoutX="13.0" layoutY="11.0" onScroll="#handlerScroll" prefHeight="394.0" prefWidth="627.0" style="-fx-background-color: #242E3D;" vvalue="1.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="11.0">
          <content>
-            <GridPane fx:id="gridShowMessages" prefHeight="374.0" prefWidth="607.0">
+            <GridPane fx:id="gridShowMessages" nodeOrientation="LEFT_TO_RIGHT" onScroll="#handlerScroll" prefHeight="374.0" prefWidth="607.0" rotate="-180.0">
                <columnConstraints>
                   <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints fx:id="leftColomnGridPaneShowConv" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

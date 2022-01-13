@@ -9,12 +9,14 @@ import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -56,6 +58,7 @@ public class ShowConvController implements Observer<EventCustom> {
     private Integer groupId = null;
     private int lastGroupMsjId;
     private int lastConvMsjId;
+    private int pageId=0;
 
     /**
      * send a message witch is create by the logged user in the GUI
@@ -72,13 +75,52 @@ public class ShowConvController implements Observer<EventCustom> {
         else{
             item= sendGroupMessage();
         }
-
-        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+        insertRows(1);
+        gridShowMessages.add(item, 0, 0);
         messageToReply.setText("");
         messageText.clear();
         gridShowMessages.autosize();
         scrollPaneShowConv.autosize();
         scrollPaneShowConv.setVvalue(1.0f);
+    }
+
+    /**
+     * insert rows in GridShowMessage
+     * @param count
+     */
+    private void insertRows(int count) {
+        for (Node child : gridShowMessages.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            GridPane.setRowIndex(child, rowIndex == null ? count : count + rowIndex);
+        }
+    }
+
+    private boolean nextPagePrivateConv(){
+        List<ReplyMessage> messages=service.getMessagesBetween2Users(loggedUser.getId(), email2User,pageId++);
+        if(messages.size()>0) {
+            messages.forEach(replyMessage -> {
+                try {
+                    Pane item = createItem(replyMessage);
+                    lastConvMsjId = replyMessage.getId();
+                    item.getChildren().forEach(node -> {
+                        if (node instanceof Label)
+                            node.setId(String.valueOf(replyMessage.getId()));
+                    });
+                    if (replyMessage.getFrom().equals(loggedUser.getId())) {
+
+                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                    } else {
+                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                    }
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            });
+            gridShowMessages.autosize();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -177,25 +219,7 @@ public class ShowConvController implements Observer<EventCustom> {
         this.email2User = email;
         this.groupId = null;
         scrollPaneShowConv.setVvalue(1.0f);
-        service.getMessagesBetween2Users(loggedUser.getId(), email).forEach(replyMessage->{
-            try{
-                Pane item = createItem(replyMessage);
-                lastConvMsjId= replyMessage.getId();
-                item.getChildren().forEach(node->{
-                    if (node instanceof Label)
-                        node.setId(String.valueOf(replyMessage.getId()));
-                    });
-                    if(replyMessage.getFrom().equals(loggedUser.getId())){
-                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
-                    }
-                    else{
-                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
-                    }
-            }catch (IOException e){
-                System.out.println(e.getMessage());
-            }
-
-        });
+        nextPagePrivateConv();
         gridShowMessages.autosize();
     }
 
@@ -213,28 +237,34 @@ public class ShowConvController implements Observer<EventCustom> {
         this.loggedUser = loggedUser;
         this.service = service;
         this.groupId = groupId;
-        service.getGroupMessages(groupId).forEach(replyMessage -> {
-            try{
-                Pane item = createGroupItem(replyMessage);
-                lastGroupMsjId =replyMessage.getId();
-                item.getChildren().forEach(node->{
-                    if (node instanceof Label)
-                        node.setId(String.valueOf(replyMessage.getId()));
-                });
-                if(replyMessage.getFrom().equals(loggedUser.getId())){
-                    gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
-                }
-                else{
-                    gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
-                }
-            }catch (IOException e){
-                System.out.println(e.getMessage());
-            }
-        });
-        gridShowMessages.autosize();
+        nextGroupPage();
     }
 
-
+    private boolean nextGroupPage(){
+        List<ReplyMessage> messages=service.getGroupMessages(groupId,pageId++);
+        if(messages.size()>0) {
+            messages.forEach(replyMessage -> {
+                try {
+                    Pane item = createGroupItem(replyMessage);
+                    lastGroupMsjId = replyMessage.getId();
+                    item.getChildren().forEach(node -> {
+                        if (node instanceof Label)
+                            node.setId(String.valueOf(replyMessage.getId()));
+                    });
+                    if (replyMessage.getFrom().equals(loggedUser.getId())) {
+                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                    } else {
+                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                    }
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+            gridShowMessages.autosize();
+            return true;
+        }
+        return false;
+    }
 
     /**
      * handle press ok 'ENTER' key sending a Message with text from textField
@@ -289,6 +319,7 @@ public class ShowConvController implements Observer<EventCustom> {
     @Override
     public void update(EventCustom eventCustom) {
         scrollPaneShowConv.setVvalue(1.0f);
+        insertRows(1);
         System.out.println("update");
         if(eventCustom.getType().equals(ChangeEventType.NEW_MSJ)) {
             service.getConvMessagesGreaterThan(loggedUser.getId(), email2User,lastConvMsjId ).forEach(replyMessage -> {
@@ -299,9 +330,9 @@ public class ShowConvController implements Observer<EventCustom> {
                             node.setId(String.valueOf(replyMessage.getId()));
                     });
                     if (replyMessage.getFrom().equals(loggedUser.getId())) {
-                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                        gridShowMessages.add(item, 0, 0);
                     } else {
-                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                        gridShowMessages.add(item, 1, 0);
                     }
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
@@ -319,10 +350,10 @@ public class ShowConvController implements Observer<EventCustom> {
                             node.setId(String.valueOf(replyMessage.getId()));
                     });
                     if(replyMessage.getFrom().equals(loggedUser.getId())){
-                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
+                        gridShowMessages.add(item, 0, 0);
                     }
                     else{
-                        gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                        gridShowMessages.add(item, 1, 0);
                     }
                 }catch (IOException e){
                     System.out.println(e.getMessage());
@@ -332,5 +363,31 @@ public class ShowConvController implements Observer<EventCustom> {
         gridShowMessages.autosize();
         scrollPaneShowConv.autosize();
         scrollPaneShowConv.setVvalue(1.0f);
+    }
+
+    public void handlerScroll(ScrollEvent scrollEvent) {
+        System.out.println(scrollPaneShowConv.getVvalue());
+        if(scrollPaneShowConv.getVvalue()>0.45&&scrollPaneShowConv.getVvalue()<0.55){
+
+
+            double val= scrollPaneShowConv.getVvalue();
+
+            if(groupId==null) {
+                if (nextPagePrivateConv()) {
+                    //todo set scrollbar
+                    int elm = gridShowMessages.getChildren().size();
+                    System.out.println(elm);
+                    val += 1.0 / elm * 7.0;
+                    scrollPaneShowConv.setVvalue(val);
+                }
+            }
+            else if(nextGroupPage()){
+                //todo group msj
+                int elm = gridShowMessages.getChildren().size();
+                System.out.println(elm);
+                val += 1.0 / elm * 7.0;
+                scrollPaneShowConv.setVvalue(val);
+            }
+        }
     }
 }

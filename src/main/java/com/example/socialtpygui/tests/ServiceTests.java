@@ -359,10 +359,10 @@ public class ServiceTests {
 
 
     private static void testGetAllConversation() {
-        List<String> list = service.getAllConversation("gg@gmail.com");
+        List<String> list = service.getAllConversation("gg@gmail.com",0);
         assert (list.size() == 3);
         try {
-            list = service.getAllConversation("dsa");
+            list = service.getAllConversation("dsa",0);
             assert false;
         } catch (ValidationException e) {
             assert true;
@@ -370,7 +370,7 @@ public class ServiceTests {
     }
 
     private static void testGetMessages() {
-        List<ReplyMessage> replyMessageList = service.getMessagesBetween2Users("aand@hotmail.com", "snj@gmail.com");
+        List<ReplyMessage> replyMessageList = service.getMessagesBetween2Users("aand@hotmail.com", "snj@gmail.com",0);
         List<Integer> idList = new ArrayList<>();
         for (ReplyMessage replyMessage : replyMessageList) idList.add(replyMessage.getId());
         assert (replyMessageList.size() == 3);
@@ -645,7 +645,7 @@ public class ServiceTests {
 
     private static void testReplyAll() {
         MessageDTO messageDTO = service.replyAll(new MessageDTO("gg@gmail.com", null, "Salut!", LocalDate.now()), 1);
-        assert (service.getGroupMessages(1).size() == 2);
+        assert (service.getGroupMessages(1,0).size() == 2);
         int id = messageDTO.getId();
         String sql = "select count (*) from message_group";
         String sql1 = "delete from message_group where id_message = ?";
@@ -776,7 +776,7 @@ public class ServiceTests {
     }
 
     private static void testGetGroupMessages() {
-        List<ReplyMessage> list = messageService.getGroupMessages(1);
+        List<ReplyMessage> list = messageService.getGroupMessages(1,0);
         assert (list.size() == 1);
     }
 
