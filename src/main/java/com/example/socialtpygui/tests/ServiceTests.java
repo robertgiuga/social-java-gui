@@ -951,7 +951,7 @@ public class ServiceTests {
         List<Integer> listId = new ArrayList<>();
         service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
-        Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"));
+        Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"), 0);
         Post postt = service.savePost(newPost);
         listId.clear();
         service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});

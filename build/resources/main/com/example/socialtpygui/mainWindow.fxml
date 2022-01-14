@@ -74,9 +74,9 @@
             </BorderPane>
             <AnchorPane fx:id="leftPane" prefHeight="599.0" prefWidth="201.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button fx:id="logoutBackBtn" layoutY="522.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="202.0" />
-                  <Button fx:id="statisticBackBtn" layoutY="233.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="202.0" />
-                  <Button fx:id="friendsBtn" layoutY="145.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="202.0" />
+                  <Button fx:id="logoutBackBtn" layoutY="522.0" mnemonicParsing="false" onMouseClicked="#handlerLogOutBtn" prefHeight="68.0" prefWidth="202.0" />
+                  <Button fx:id="statisticBackBtn" layoutY="233.0" mnemonicParsing="false" onMouseClicked="#handelerStatisticsBtn" prefHeight="68.0" prefWidth="202.0" />
+                  <Button fx:id="friendsBtn" layoutY="145.0" mnemonicParsing="false" onMouseClicked="#handlerFriendsButton" prefHeight="68.0" prefWidth="202.0" />
                   <ImageView fx:id="friendsViewBtn" fitHeight="40.0" fitWidth="60.0" layoutX="44.0" layoutY="159.0" onMouseClicked="#handlerFriendsButton" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
                         <Image url="@icons/noun-friends-1047139.png" />
