@@ -21,13 +21,13 @@ public class PostDb implements Repository<Integer, Post> {
 
     @Override
     public Post findOne(Integer id) {
-        String sql = "select * from post where id = ?";
+        String sql = "select *, (select count(*) from like_post where like_post.id_post= post.id) as likes from post where id = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
+            Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()), resultSet.getInt("likes"));
             post.setId(resultSet.getInt("id"));
             return post;
         } catch (SQLException e) {
@@ -37,13 +37,13 @@ public class PostDb implements Repository<Integer, Post> {
 
     @Override
     public List<Post> findAll(int pageSize) {
-        String sql = "select * from post";
+        String sql = "select *, (select count(*) from like_post where like_post.id_post= post.id) as likes from post";
         List<Post> set = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
+                Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()), resultSet.getInt("likes"));
                 post.setId(resultSet.getInt("id"));
                 set.add(post);
             }
@@ -145,15 +145,15 @@ public class PostDb implements Repository<Integer, Post> {
      * @return true, if the user with email "email" like the post with id "idPost", false otherwise
      */
     public boolean isPostLike(int idPost, String email){
-        String sql = "select count(*) from like_post where email = ? and id_post = ?";
+        String sql = "select * from like_post where email = ? and id_post = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
             preparedStatement.setInt(2, idPost);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-            if (count == 1) { return true; }
+            if(resultSet.next()){
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -166,8 +166,9 @@ public class PostDb implements Repository<Integer, Post> {
      */
     public List<Post> getAllPostFromFriends(String email,int pageID){
         List<Post> list = new ArrayList<>();
-        String sql = "select * from post where post.user_from in (select case email1 when ? then email2 else email1 end from friendship f where f.email1= ? or f.email2= ?)\n" +
-                "or post.user_from= ? order by post.date desc offset ? limit ?";
+        String sql = "select *, (select count(*) from like_post where like_post.id_post= post.id) as likes from post where post.user_from in (select case email1 when ? then email2 else email1 end \n" +
+                "\tfrom friendship f where f.email1= ? or f.email2= ?)\n" +
+                "        or post.user_from= ? order by post.date desc, post.id desc offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
@@ -178,7 +179,7 @@ public class PostDb implements Repository<Integer, Post> {
             preparedStatement.setInt(6,pageSize);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()));
+                Post post = new Post(resultSet.getString("text"), resultSet.getString("user_from"), LocalDate.parse(resultSet.getDate("date").toString()), resultSet.getInt("likes"));
                 post.setId(resultSet.getInt("id"));
                 list.add(post);
             }
@@ -188,22 +189,4 @@ public class PostDb implements Repository<Integer, Post> {
         return list;
     }
 
-    /**
-     * @param idPost Integer
-     * @return number of like from a post
-     */
-    public int numberOfLikes(int idPost) {
-        String sql = "select count(*) from like_post where id_post = ?";
-        int count = 0;
-        try(Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, idPost);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            count = resultSet.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return count;
-    }
 }

@@ -48,7 +48,7 @@ public class PostDBTest {
         List<Integer> listId = new ArrayList<>();
         postDb.findAll(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
-        Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"));
+        Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"), 0);
         Post postt = postDb.save(newPost);
         listId.clear();
         postDb.findAll(0).forEach(post -> {listId.add(post.getId());});

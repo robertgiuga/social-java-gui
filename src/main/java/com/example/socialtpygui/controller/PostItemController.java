@@ -98,15 +98,9 @@ public class PostItemController {
      */
     public void setPost(Post post){
         this.post = post;
+        this.numberOfLikesLabel.setText(String.valueOf(post.getNrLikes()));
     }
 
-    /**
-     * Set number of likes
-     * @param numberOfLikesLabel String
-     */
-    public void setNumberOfLikesLabel(String numberOfLikesLabel) {
-        this.numberOfLikesLabel.setText(numberOfLikesLabel);
-    }
 
     /**
      * Decrement number of likes

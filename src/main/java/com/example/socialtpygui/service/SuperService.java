@@ -481,13 +481,9 @@ public class SuperService implements Observable {
         if(name.length()==0){
             throw new NonExistingException("Cannot contain null values");
         }
-        Predicate<UserDTO> contains=
-                userDTO -> userDTO.getLastName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)) ||
-                        userDTO.getFirstName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT));
+        Predicate<UserDTO> prieteni = userDTO -> friendshipService.friendshipDate(userDTO.getId(),id)!=null;
 
-        return  friendshipService.getFriends(id,pageId).stream()
-                .map(s -> new UserDTO(userService.findOne(s.getLeft()))).collect(Collectors.toList())
-                .stream().filter(contains).collect(Collectors.toList());
+        return new ArrayList<>(userService.getUsersByName(name, pageId).stream().filter(prieteni).toList());
     }
 
     /**
@@ -982,12 +978,6 @@ public class SuperService implements Observable {
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
         return postService.getAllPostFromFriends(email,pageId);
     }
-
-    /**
-     * @param idPost Integer
-     * @return number of like from a post
-     */
-    public int numberOfLikes(int idPost) {return postService.numberOfLikes(idPost);}
 
     /**
      * @param email String
