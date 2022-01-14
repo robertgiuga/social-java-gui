@@ -15,6 +15,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.time.LocalDate;
+
 
 public class EventItemController {
     @FXML
@@ -82,6 +84,10 @@ public class EventItemController {
         if (eventDTO.getCreator().equals(loggedUser.getId()))
         {
             removeEventBtn.setVisible(true);
+        }
+        if (eventDTO.getDate().isBefore(LocalDate.now())){
+            checkBoxParticipateEvent.setDisable(true);
+            notificationCheckBox.setDisable(true);
         }
     }
 
