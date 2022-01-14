@@ -35,7 +35,7 @@ public class JavaMailUtil {
             message.setFrom(new InternetAddress(myAccountEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("Welcome to aiZei");
-            message.setText("Use the verification code below to log in.\n" + verificationCode);
+            message.setText("Use the verification code below to create your account.\n" + verificationCode);
             return message;
         } catch (MessagingException e) {
             e.printStackTrace();
