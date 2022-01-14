@@ -5,6 +5,7 @@ import com.example.socialtpygui.service.validators.ValidationException;
 import com.example.socialtpygui.repository.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryRepository<ID,E extends Entity<ID>> implements Repository<ID,E> {
@@ -24,8 +25,8 @@ public class InMemoryRepository<ID,E extends Entity<ID>> implements Repository<I
     }
 
     @Override
-    public Iterable<E> findAll() {
-        return entities.values();
+    public List<E> findAll(int pageSize) {
+        return entities.values().stream().toList();
     }
 
     @Override

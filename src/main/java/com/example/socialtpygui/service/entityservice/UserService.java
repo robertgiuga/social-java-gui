@@ -7,7 +7,12 @@ import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.NonExistingException;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
+import com.example.socialtpygui.utils.HashStringSHA_256;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -45,7 +50,7 @@ public class UserService {
     /**
      * @return all entities
      */
-    public Iterable<User> findAll(){return repositoryUser.findAll();}
+    public Iterable<User> findAll(int pageSize){return repositoryUser.findAll(pageSize);}
 
     /**
      * @param id -the id of the entity to be returned
@@ -86,8 +91,13 @@ public class UserService {
         User user= repositoryUser.findOne(id);
         if (user==null)
             throw new ValidationException("User does not exist!");
-        if (!user.getPassword().equals(password))
-            throw new ValidationException("Password is incorrect!");
+        try {
+            String hashStr = HashStringSHA_256.hashString(password);
+            if (!user.getPassword().equals(hashStr))
+                throw new ValidationException("Password is incorrect!");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         return user;
     }
 
@@ -96,14 +106,14 @@ public class UserService {
      * @param completName
      * @throws SQLException
      */
-    public List<UserDTO> getUsersByName(String completName) {
+    public List<UserDTO> getUsersByName(String completName, int pageId) {
         if (completName.contains(" ")) {
             String[] splitName = completName.split(" ");
             String namePart1 = splitName[0];
             String namePart2 = splitName[1];
-            return repositoryUser.getUsersByName(namePart1, namePart2);
+            return repositoryUser.getUsersByName(namePart1, namePart2,pageId);
         } else {
-            return repositoryUser.getUsersByName(completName, "");
+            return repositoryUser.getUsersByName(completName, "",pageId);
         }
     }
 

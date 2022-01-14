@@ -4,11 +4,12 @@ package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.repository.db.UserDb;
 import com.example.socialtpygui.service.validators.ValidationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDBTest {
-    private static UserDb userRepo = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static UserDb userRepo = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
 
 
     private UserDBTest() {}
@@ -64,7 +65,7 @@ public class UserDBTest {
         }
         userRepo.save(new User("Cristian", "Gulea", "gulea@ymail.com","parola6"));
         List<User> result = new ArrayList<User>();
-        userRepo.findAll().forEach(result::add);
+        userRepo.findAll(0).forEach(result::add);
         assert (result.size() == 7);
         assert (userRepo.findOne("gulea@ymail.com") != null);
         userRepo.remove("gulea@ymail.com");
@@ -92,14 +93,14 @@ public class UserDBTest {
     private static void testgetUsersByName()
     {
         List<String> list1 = new ArrayList<>();
-        userRepo.getUsersByName("a", "").forEach(elem-> list1.add(elem.getId()));
+        userRepo.getUsersByName("a", "",0).forEach(elem-> list1.add(elem.getId()));
         assert (list1.size() == 4);
         assert (list1.contains("gc@gmail.com"));
         assert (list1.contains("gg@gmail.com"));
         assert (list1.contains("andr@gamail.com"));
         assert (list1.contains("aand@hotmail.com"));
         list1.clear();
-        userRepo.getUsersByName("adasda", "dasda").forEach(elem->list1.add(elem.getId()));
+        userRepo.getUsersByName("adasda", "dasda",0).forEach(elem->list1.add(elem.getId()));
         assert (list1.size() == 0);
     }
 

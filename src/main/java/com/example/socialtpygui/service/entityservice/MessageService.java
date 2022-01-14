@@ -3,14 +3,10 @@ package com.example.socialtpygui.service.entityservice;
 import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.domain.MessageDTO;
 import com.example.socialtpygui.domain.ReplyMessage;
-import com.example.socialtpygui.domain.ReplyMessageDTO;
 import com.example.socialtpygui.repository.db.MessageDb;
-import com.example.socialtpygui.service.validators.NonExistingException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 public class MessageService {
@@ -21,17 +17,20 @@ public class MessageService {
         this.messageRepository = messageDb;
     }
 
+
     /**
      * @param id .
      * @return All emails with whom a user has interacted(receive message/send message).
      */
-    public List<String> getAllConversation(String id)
+    public List<String> getAllConversation(String id,int pageId)
     {
-        List<String> listAllEmails = new ArrayList<>(messageRepository.getAllEmailsFromSendMessage(id));
+        /*List<String> listAllEmails = new ArrayList<>(messageRepository.getAllEmailsFromSendMessage(id));
+
         messageRepository.getAllEmailsFromReceiveEmails(id).forEach(emailReceive->{
             if (!listAllEmails.contains(emailReceive)) listAllEmails.add(emailReceive);
-        });
-        return listAllEmails;
+        });*/
+
+        return messageRepository.getAllConversation(id, pageId);
     }
 
 
@@ -41,9 +40,9 @@ public class MessageService {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessages(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetweenTwoUsers(String id1, String id2, int pageId)
     {
-        return messageRepository.findAllMessageBetweenTwoUsers(id1, id2);
+        return messageRepository.findAllMessageBetweenTwoUsers(id1, id2,pageId);
     }
 
     /**
@@ -155,7 +154,7 @@ public class MessageService {
      * @return a list of replyMessage, it returns all the messages from a group
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getGroupMessages(int groupId) {return messageRepository.getGroupMessages(groupId);}
+    public List<ReplyMessage> getGroupMessages(int groupId,int pageId) {return messageRepository.getGroupMessages(groupId,pageId);}
 
     /**
      * send a reply message to a message from a group with id equals with groupId
@@ -181,4 +180,40 @@ public class MessageService {
      * @return number of users in group with id "groupId"
      */
     public int numberOfUserFromAGroup(int groupId) {return messageRepository.numberOfUserFromAGroup(groupId);}
+
+    /**
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
+     */
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID) {
+        return messageRepository.getGroupMessagesGreaterThen(groupId,lastMsjID);
+    }
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId) {
+        return messageRepository.getConvMessagesGreaterThan(email1,email2,lastMsjId);
+    }
+
+    /**
+     * @param email String
+     * @return number of new messages(unseen message)
+     */
+    public int getNumberNewMessage(String email){
+        return messageRepository.getNumberNewMessage(email);
+    }
+
+    /**
+     * Seen new message
+     * @param email String
+     */
+    public void updateSeenMessageToTrue(String email){
+        messageRepository.setToSeenNewMessage(email);
+    }
 }

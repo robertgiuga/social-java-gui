@@ -6,23 +6,26 @@ import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import org.w3c.dom.events.MouseEvent;
 
 public class SearchItemController {
 
     @FXML
-    private Label nameLbl;
+    private Label nameLbl, cancelRequestLabel, sendRequestLabel;
 
     @FXML
-    private Button addBtn;
+    private ImageView addBtn;
 
     @FXML
-    private  Button cancelBtn;
+    private  ImageView cancelBtn;
 
     private UserDTO userDTO;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * Set the name label.
@@ -51,6 +54,16 @@ public class SearchItemController {
     }
 
     /**
+     * Hide cancel label.
+     */
+    public void hideCancelLabel() {cancelRequestLabel.setVisible(false);}
+
+    /**
+     * Hide send label.
+     */
+    public void hideSendLabel() {sendRequestLabel.setVisible(false);}
+
+    /**
      * Set service
      * @param service
      */
@@ -62,27 +75,31 @@ public class SearchItemController {
      * Set the user which is logged
      * @param loggedUser
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 
     /**
      * Send a request when the button is pushed and hide addBtn button.
-     * @param actionEvent
+     * @param mouseEvent
      */
-    public void handlerAddBtn(ActionEvent actionEvent) {
-            service.sendRequest(this.loggedUser.getId(), this.userDTO.getId());
-            addBtn.setVisible(false);
-            cancelBtn.setVisible(true);
+    public void handlerAddBtn(javafx.scene.input.MouseEvent mouseEvent) {
+        service.sendRequest(this.loggedUser.getId(), this.userDTO.getId());
+        addBtn.setVisible(false);
+        cancelBtn.setVisible(true);
+        cancelRequestLabel.setVisible(true);
+        sendRequestLabel.setVisible(false);
     }
 
     /**
      * Cancel a request when the button is pushed and hide cancelBtn button.
-     * @param actionEvent
+     * @param mouseEvent
      */
-    public void handlerCloseBtn(ActionEvent actionEvent) {
-            service.friendshipRequestRemove(new TupleOne<>(this.loggedUser.getId(), this.userDTO.getId()));
-            addBtn.setVisible(true);
-            cancelBtn.setVisible(false);
+    public void handlerCancelBtn(javafx.scene.input.MouseEvent mouseEvent) {
+        service.friendshipRequestRemove(new TupleOne<>(this.loggedUser.getId(), this.userDTO.getId()));
+        addBtn.setVisible(true);
+        cancelBtn.setVisible(false);
+        cancelRequestLabel.setVisible(false);
+        sendRequestLabel.setVisible(true);
     }
 }

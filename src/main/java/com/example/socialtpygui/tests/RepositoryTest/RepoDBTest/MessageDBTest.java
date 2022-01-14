@@ -2,21 +2,17 @@ package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
 import com.example.socialtpygui.domain.*;
-import com.example.socialtpygui.domain.MessageDTO;
-import com.example.socialtpygui.domain.ReplyMessage;
 import com.example.socialtpygui.repository.db.MessageDb;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class MessageDBTest {
 
-    private static MessageDb messageDBTest = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static MessageDb messageDBTest = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
 
     private MessageDBTest(){}
 
@@ -25,7 +21,6 @@ public class MessageDBTest {
         testFindOne();
         testFindAllMessageBetweenTwoUsers();
         testRemoveAndSaveSize();
-        testGetAllEmailsFromExistingConversation();
         testGetUserGroups();
         testGetGroup();
         testAddRemoveUserToGroup();
@@ -33,21 +28,24 @@ public class MessageDBTest {
         testGetGroupMessages();
         testUserInGroup();
         testNumberOfUserFromAGroup();
+        testGetConvMessagesGreaterThan();
+        testGetGroupMessagesGreaterThen();
+        testGetNumberNewMessage();
     }
 
     private static void testFindOne()
     {
         assert (messageDBTest.findOne(1).getFrom().equals("jon1@yahoo.com"));
         assert (messageDBTest.findOne(1).getMessage().equals("Ce faci?"));
-        assert (messageDBTest.findOne(1).getTo().get(0).equals("gg@gmail.com"));
-        assert (messageDBTest.findOne(1).getTo().get(1).equals("andr@gamail.com"));
+        assert (messageDBTest.findOne(1).getTo().contains("gg@gmail.com"));
+        assert (messageDBTest.findOne(1).getTo().contains("andr@gamail.com"));
         assert (messageDBTest.findOne(1).getId() == 1);
         assert (messageDBTest.findOne(-21) == null);
     }
 
     private static void testFindAllMessageBetweenTwoUsers()
     {
-        Iterable<ReplyMessage> list = messageDBTest.findAllMessageBetweenTwoUsers("aand@hotmail.com","snj@gmail.com");
+        Iterable<ReplyMessage> list = messageDBTest.findAllMessageBetweenTwoUsers("aand@hotmail.com","snj@gmail.com",0);
         long size = StreamSupport.stream(list.spliterator(), false).count();
         assert(size == 3);
         assert(messageDBTest.findOne(4).getMessage().equals("Ce faceti baietii?"));
@@ -68,15 +66,13 @@ public class MessageDBTest {
         assert (messageDBTest.findOne(messageDTO.getId()) == null);
     }
 
-    private static void testGetAllEmailsFromExistingConversation()
+    private static void testGetAllConversation()
     {
-        List<String> list = messageDBTest.getAllEmailsFromSendMessage("gg@gmail.com");
+        List<String> list = messageDBTest.getAllConversation("gg@gmail.com",0);
         assert (list.size() == 2);
-        list = messageDBTest.getAllEmailsFromSendMessage("ds");
+        list = messageDBTest.getAllConversation("ds",0);
         assert (list.size() == 0);
-        list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gmail.com");
-        assert (list.size() == 2);
-        list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gdsmail.com");
+        list = messageDBTest.getAllConversation("gg@gdsmail.com",0);
         assert (list.size() == 0);
     }
 
@@ -138,7 +134,7 @@ public class MessageDBTest {
 
     private static void testGetGroupMessages()
     {
-        List<ReplyMessage> list = messageDBTest.getGroupMessages(1);
+        List<ReplyMessage> list = messageDBTest.getGroupMessages(1,0);
         assert (list.size() == 1);
     }
 
@@ -155,4 +151,22 @@ public class MessageDBTest {
         assert (messageDBTest.numberOfUserFromAGroup(2) == 3);
     }
 
+    private static void testGetConvMessagesGreaterThan(){
+        List<ReplyMessage> msj= messageDBTest.getConvMessagesGreaterThan("snj@gmail.com","aand@hotmail.com",6);
+        assert msj.get(0).getFrom().equals("aand@hotmail.com");
+        assert msj.get(0).getId()>6;
+    }
+
+    private static void testGetGroupMessagesGreaterThen(){
+        List<ReplyMessage> msj= messageDBTest.getGroupMessagesGreaterThen(1,1);
+        assert msj.get(0).getFrom().equals("gg@gmail.com");
+        assert msj.get(0).getId()>1;
+    }
+
+    private static  void testGetNumberNewMessage()
+    {
+        assert messageDBTest.getNumberNewMessage("snj@gmail.com") == 2;
+        assert messageDBTest.getNumberNewMessage("aand@hotmail.com") == 1;
+        assert messageDBTest.getNumberNewMessage("jon1@yahoo.com") == 0;
+    }
 }

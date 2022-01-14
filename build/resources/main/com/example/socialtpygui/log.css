@@ -57,3 +57,65 @@
     -fx-border-radius: 18 18 18 18;
     -fx-background-color: #C9E9D8;
 }
+
+#textFieldSignUpFN{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#textFieldSignUpLN{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#textFieldSignUpEmail{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#passwordFieldSignUp{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#passwordFieldSignUpConfirm{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#btnSignUpNext{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#textFieldVerificationCodeSignUp{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#btnSignUpConfirmEmail{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#passwordTxt{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#usernameTxt{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}

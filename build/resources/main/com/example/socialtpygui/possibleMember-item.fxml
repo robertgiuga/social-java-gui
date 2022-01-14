@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="40.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.PossibleMemberItemController">
+<AnchorPane prefHeight="40.0" prefWidth="306.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.PossibleMemberItemController">
    <children>
-      <Label fx:id="labelPossibleMember" layoutX="7.0" layoutY="5.0" prefHeight="35.0" prefWidth="160.0" text="Label" />
-      <Button fx:id="btnPossibleMember" layoutX="174.0" layoutY="10.0" mnemonicParsing="false" onAction="#handlerAddMemberBtn" prefHeight="25.0" prefWidth="39.0" text="Add" />
+      <Label fx:id="labelPossibleMember" layoutX="7.0" layoutY="5.0" prefHeight="35.0" prefWidth="185.0" text="Label" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <ImageView fx:id="btnPossibleMember" fitHeight="30.0" fitWidth="30.0" layoutX="262.0" layoutY="5.0" onMouseClicked="#handlerAddMemberBtn" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/plus-sign.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

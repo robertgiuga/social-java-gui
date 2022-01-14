@@ -1,3 +1,6 @@
+.label{
+    font-style: normal;
+}
 #leftPane{
     -fx-background-color: #C9E9D8;
     -fx-background-radius: 25;
@@ -20,8 +23,8 @@
 #bottomPane{
     -fx-background-radius: 0 0 25 0;
     -fx-border-radius: 0 0 25 0;
-    -fx-border-width: 1 0 0 0;
-    -fx-border-color: #C9E9D8;
+    -fx-border-width: 0.5 0 0 0;
+    -fx-border-color: #2b394f;
 }
 
 .button{
@@ -78,63 +81,15 @@
     -fx-background-insets: 0px;
     -fx-padding: 0px;
 }
-
-#messageBtn{
-    -fx-border-color: #C9E9D8;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #242E3D;
-}
-
-#requestsBtn{
-    -fx-border-color: #C9E9D8;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #242E3D;
-}
-
-#eventsBtn{
-    -fx-border-color: #C9E9D8;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #242E3D;
-}
-
-#feedBtn{
-    -fx-border-color: #C9E9D8;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #242E3D;
-}
-
 #friendsBtn{
-    -fx-border-color: #242E3D;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #C9E9D8;
+    -fx-background-color: #B5D3C5;
 }
-
-#logoutBtn{
-    -fx-border-color: #242E3D;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #C9E9D8;
+#logoutBackBtn{
+    -fx-background-color: #B5D3C5;
 }
-
-#settingBtn{
-    -fx-border-color: #242E3D;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #C9E9D8;
+#statisticBackBtn{
+    -fx-background-color: #B5D3C5;
 }
-
-#statisticsBtn{
-    -fx-border-color: #242E3D;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-color: #C9E9D8;
-}
-
 #scrollPaneSearchView{
     -fx-background: #242E3D;
     -fx-background-color: #242E3D;
@@ -199,8 +154,6 @@
     -fx-background-color: #242E3D;
 }
 
-
-
 #messageText{
     -fx-background-radius: 18 18 18 18;
     -fx-border-radius: 18 18 18 18;
@@ -220,4 +173,161 @@
     -fx-background: #242E3D;
     -fx-background-color: #242E3D;
 }
+
+#anchorPaneFriendItem{
+    fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#paneShowConvItem{
+    -fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#leftColomnGridPaneShowConv{
+    -fx-alignment: left;
+}
+
+#scrollPaneMembers{
+    -fx-border-color: #425570;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#scrollPanePossibleMembers{
+    -fx-border-color: #425570;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#searchBarGroupSetting{
+    -fx-border-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#anchorPaneRequestItem{
+    -fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#nameGroupLbl{
+    -fx-border-color: #242E3D;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#friendsPane{
+    -fx-background-color: #242E3D;
+}
+
+#anchorPaneEventItem{
+    -fx-background: #242E3D;
+}
+
+#anchorPaneCreateEvent{
+    -fx-background: #242E3D;
+}
+
+#exploreEventBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#createEventBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#addEventButton{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#removeEventBtn{
+    -fx-border-color: #C9E9D8;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #242E3D;
+}
+
+#scrollPanePostView{
+    -fx-background-color: #242E3D;
+}
+
+#gridPanePostView{
+    -fx-background-color: #242E3D;
+}
+
+#anchorPanePostView{
+    -fx-background-color: #242E3D;
+}
+
+#anchorPanePostItem{
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+    -fx-background-color: #1C2430;
+    -fx-border-color: #242E3D;
+}
+
+#postTextField{
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#nameEventTextField{
+    -fx-border-color: #242E3D;
+}
+
+#dateEventTextField{
+    -fx-border-color: #242E3D;
+}
+
+#locationEventTextField{
+    -fx-border-color: #242E3D;
+}
+
+#descriptionEventTextField{
+    -fx-border-color: #242E3D;
+}
+
+#countNewRequests{
+    -fx-border-color: red;
+}
+
+#countNewEvents{
+    -fx-border-color: red;
+}
+
+#countNewMessage{
+    -fx-border-color: red;
+}
+
+#anchorPaneConv{
+    -fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+#anchorPaneSearchItemView{
+    -fx-border-color: #242E3D;
+    -fx-background-color: #1C2430;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
+}
+
+
 

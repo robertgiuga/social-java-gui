@@ -1,24 +1,26 @@
 package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 import java.util.Arrays;
 
 public class FriendItemController {
 
     @FXML
-    private Button deleteBtn;
+    private ImageView deleteBtn;
     @FXML
     private Label nameLbl;
     @FXML
     private Label dateLbl;
 
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * handler for delete button
@@ -64,7 +66,7 @@ public class FriendItemController {
      * sets the user currently logged
      * @param loggedUser .
      */
-    public void setLoggedUser(User loggedUser) {
+    public void setLoggedUser(UserDTO loggedUser) {
         this.loggedUser = loggedUser;
     }
 }

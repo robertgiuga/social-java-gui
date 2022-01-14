@@ -2,6 +2,7 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.User;
+import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domainEvent.ItemSelected;
 import com.example.socialtpygui.domainEvent.LoadConvList;
 import com.example.socialtpygui.service.SuperService;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -25,11 +27,11 @@ public class MessageController {
     @FXML
     private BorderPane convPane;
     @FXML
-    private Button createGroupBtn;
+    private ImageView createGroupBtn;
 
 
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
 
     /**
      * handle the press of a key
@@ -45,6 +47,7 @@ public class MessageController {
             try{searchFriendConvController.load(service,loggedUser,searchFriendBar.getText());} catch (NonExistingException ignored){}
 
             convPane.setCenter(item);
+            searchFriendBar.clear();
         }
     }
 
@@ -83,7 +86,7 @@ public class MessageController {
      * @param service the SuperService
      * @param loggedUser  the user currently logged in
      */
-    public void load(SuperService service, User loggedUser) throws IOException {
+    public void load(SuperService service, UserDTO loggedUser) throws IOException {
         convPane.getParent().addEventFilter(ItemSelected.ANY,this::handlerForSelectedFriend);
         convPane.getParent().addEventFilter(LoadConvList.ANY,this::handlerLoadConvList);
         this.service=service;

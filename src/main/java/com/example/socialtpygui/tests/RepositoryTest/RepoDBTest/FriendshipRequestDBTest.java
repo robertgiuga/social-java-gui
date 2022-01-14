@@ -1,7 +1,6 @@
 package com.example.socialtpygui.tests.RepositoryTest.RepoDBTest;
 
 
-import com.example.socialtpygui.domain.FriendShipDTO;
 import com.example.socialtpygui.domain.Friendship;
 import com.example.socialtpygui.domain.TupleOne;
 import com.example.socialtpygui.repository.db.FriendshipRequestDb;
@@ -12,7 +11,7 @@ import java.util.stream.StreamSupport;
 
 public class FriendshipRequestDBTest {
 
-    private  static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private  static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
 
     private FriendshipRequestDBTest() {}
 
@@ -22,6 +21,7 @@ public class FriendshipRequestDBTest {
         testSaveRemoveSize();
         testfriendshipRequestDate();
         testGetFriendRequest();
+        testGetNumberNewRequests();
     }
 
     private static void testFindOne(){
@@ -32,7 +32,7 @@ public class FriendshipRequestDBTest {
     }
 
     private static void testFindAll(){
-        Iterable<Friendship> friendshipRequests = friendshipRequestDb.findAll();
+        Iterable<Friendship> friendshipRequests = friendshipRequestDb.findAll(0);
         long size = StreamSupport.stream(friendshipRequests.spliterator(), false).count();
         assert (size == 3);
     }
@@ -67,10 +67,16 @@ public class FriendshipRequestDBTest {
     private static void testGetFriendRequest(){
         Iterable<Friendship> friendships = friendshipRequestDb.getFriendRequest("andr@gamail.com");
         long size = StreamSupport.stream(friendships.spliterator(), false).count();
-        assert (size == 2);
+        assert (size == 0);
 
         friendships = friendshipRequestDb.getFriendRequest("an@gamail.com");
         size = StreamSupport.stream(friendships.spliterator(), false).count();
         assert (size == 0);
+    }
+
+    private static void testGetNumberNewRequests()
+    {
+        assert friendshipRequestDb.getNumberNewRequests("jon1@yahoo.com") == 1;
+        assert friendshipRequestDb.getNumberNewRequests("snj@gmail.com") == 1;
     }
 }

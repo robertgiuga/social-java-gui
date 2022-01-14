@@ -11,9 +11,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,16 +26,54 @@ public class CreateGroupController {
 
     public TextField nameGroupLbl;
     public GridPane friendsPane;
+    public ScrollPane scrollPaneCreateGroupWindow;
     private SuperService service;
-    private User loggedUser;
+    private UserDTO loggedUser;
+    private int pageId=0;
 
+    /**
+     * adds in the gridPane the friends of the user, creating a possibleParticipant view
+     * @param service
+     * @param loggedUser
+     */
+    public void load(SuperService service, UserDTO loggedUser){
+        this.service=service;
+        this.loggedUser=loggedUser;
+        nextPage();
+    }
+
+    /**
+     * loads new items in list of conversation
+     */
+    private void nextPage(){
+        service.getFriends(loggedUser.getId(),pageId++).forEach(friendShipDTO -> {
+            addPosibleParticipant(friendShipDTO.getUser2());
+        });
+    }
+
+    /**
+     * create an posibleParticipant view and adds it in friends pane
+     * @param friend
+     */
+    private void addPosibleParticipant(UserDTO friend){
+        FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("posibleParticipant-viewItem.fxml"));
+        try {
+            Pane item= loader.load();
+            PossibleParticipantControler controller =loader.getController();
+            controller.setName(friend.getFirstName()+" "+ friend.getLastName());
+            controller.setId(friend.getId());
+            friendsPane.addRow(friendsPane.getRowCount(),item);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * create a group with the data from the view
      * puttings as the participants the loggedUser and the one selected
-     * @param event
+     * @param mouseEvent
      */
-    public void handelerCreateGroupBtn(ActionEvent event) {
+    public void handelerCreateGroupBtn(javafx.scene.input.MouseEvent mouseEvent) {
         if(nameGroupLbl.getText().length()>0){
             List<String> participants = new ArrayList<>();
             participants.add(loggedUser.getId());
@@ -50,27 +91,12 @@ public class CreateGroupController {
             friendsPane.fireEvent(new ItemSelected(ItemSelected.GROUP_LOAD_MSJ,String.valueOf(newgroup.getId())));
         }
     }
-
     /**
-     * adds in the gridPane the friends of the user, creating a possibleParticipant view
-     * @param service
-     * @param loggedUser
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
      */
-    public void load(SuperService service, User loggedUser){
-        this.service=service;
-        this.loggedUser=loggedUser;
-        service.getFriends(loggedUser.getId()).forEach(friendShipDTO -> {
-            UserDTO friend= friendShipDTO.getUser2();
-            FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("posibleParticipant-viewItem.fxml"));
-            try {
-                Pane item= loader.load();
-                PossibleParticipantControler controller =loader.getController();
-                controller.setName(friend.getFirstName()+" "+ friend.getLastName());
-                controller.setId(friend.getId());
-                friendsPane.addRow(friendsPane.getRowCount(),item);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    public void scrollHandler(ScrollEvent scrollEvent) {
+        if(scrollPaneCreateGroupWindow.getVvalue()>0.45&&scrollPaneCreateGroupWindow.getVvalue()<0.54)
+            nextPage();
     }
 }

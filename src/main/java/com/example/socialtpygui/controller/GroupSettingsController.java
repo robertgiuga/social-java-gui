@@ -13,9 +13,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -25,8 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupSettingsController {
+    public ScrollPane scrollPanePossibleMembers;
     @FXML
-    private Button backBtn, leaveBtn;
+    private ImageView backBtn, leaveBtn;
     @FXML
     private GridPane gridMembers;
     @FXML
@@ -38,11 +43,14 @@ public class GroupSettingsController {
     @FXML
     private AnchorPane settingsPane;
 
-    User loggerUser;
+    UserDTO loggerUser;
     private int groupId;
     private SuperService service;
     List<UserDTO> participants;
     List<UserDTO> possibleParticipants;
+    private int pageId;
+    private String completeNameSearch;
+    private int row=0;
 
     /**
      * handle the back button witch is fireing a ItemSelected Event for reloading the conv
@@ -75,14 +83,17 @@ public class GroupSettingsController {
      * loads the participants of the group and add users in participants list.
      * @param groupId
      */
-    public void load(SuperService service, int groupId, User loggedUser) {
+    public void load(SuperService service, int groupId, UserDTO loggedUser) {
         catchEvent();
         groupNameLabel.setText(service.getGroup(groupId).getNameGroup());
         this.groupId = groupId;
         this.service = service;
         this.loggerUser = loggedUser;
         this.participants = new ArrayList<>();
+        nextPageMember();
+    }
 
+    private void nextPageMember(){
         GroupDTO currentGroup = service.getGroup(groupId);
         currentGroup.getMembersEmail().forEach(s -> {
             if (! s.equals(this.loggerUser.getId())) {
@@ -100,9 +111,9 @@ public class GroupSettingsController {
 
     /**
      * Leave from a group and fire LoadConvList event for load all conversation
-     * @param actionEvent ActionEvent
+     * @param mouseEvent ActionEvent
      */
-    public void handlerLeaveGroup(ActionEvent actionEvent) {
+    public void handlerLeaveGroup(MouseEvent mouseEvent) {
         service.removeUserFromGroup(this.loggerUser.getId(), groupId);
         leaveBtn.fireEvent(new LoadConvList(LoadConvList.LOAD_CONV));
     }
@@ -112,11 +123,16 @@ public class GroupSettingsController {
      * @param completeNameSearch String
      */
     public void loadUsersWithNameMatchSearchBarTxt(String completeNameSearch) {
-        int row = 0;
         possibleParticipants = new ArrayList<>();
-            gridPaneGroupSettingSB.getChildren().clear();
+        gridPaneGroupSettingSB.getChildren().clear();
+        pageId=0;
+        this.completeNameSearch=completeNameSearch;
+        nextPagePosibleMember();
+    }
+
+    private void nextPagePosibleMember(){
         try {
-            for (UserDTO user : service.getFriendsByName(this.loggerUser.getId(), completeNameSearch)) {
+            for (UserDTO user : service.getFriendsByName(this.loggerUser.getId(), completeNameSearch,pageId++)) {
                 if (!service.userInGroup(user.getId(), groupId)) {
                     FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("possibleMember-item.fxml"));
                     Pane item = fxmlLoader.load();
@@ -175,4 +191,11 @@ public class GroupSettingsController {
         settingsPane.addEventFilter(ItemSelected.ADD_MEMBER, this::handlerForSelectedMembers);
     }
 
+    public void scrollMemberHandler(ScrollEvent scrollEvent) {
+    }
+
+    public void scrollPosibleHandler(ScrollEvent scrollEvent) {
+        if(scrollPanePossibleMembers.getVvalue()>0.45&&scrollPanePossibleMembers.getVvalue()<0.54)
+            nextPagePosibleMember();
+    }
 }

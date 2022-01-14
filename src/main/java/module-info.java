@@ -6,6 +6,8 @@ module com.example.socialtpygui {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires org.apache.pdfbox;
+    requires java.mail;
 
     opens com.example.socialtpygui to javafx.fxml;
     exports com.example.socialtpygui;

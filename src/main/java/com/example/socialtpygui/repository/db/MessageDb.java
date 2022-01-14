@@ -8,16 +8,18 @@ import com.example.socialtpygui.repository.Repository;
 import com.example.socialtpygui.service.validators.ValidationException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+
 public class MessageDb implements Repository<Integer, MessageDTO> {
     String url, username, password;
+    private int pageSize;
 
-    public MessageDb(String url, String username, String password) {
+    public MessageDb(String url, String username, String password, int pageSize) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
 
@@ -53,7 +55,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
 
 
     @Override
-    public Iterable<MessageDTO> findAll()
+    public List<MessageDTO> findAll(int pageSize)
     {
         return null;
     }
@@ -134,27 +136,40 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      * a Message or a ReplayMessage otherwise, the second integer being the message witch it replayed to
      * @throws ValidationException if the given email1 is null or email2 is null.
      */
-    public List<ReplyMessage> findAllMessageBetweenTwoUsers(String emailUser1, String emailUser2)
+    public List<ReplyMessage> findAllMessageBetweenTwoUsers(String emailUser1, String emailUser2, int pageId)
     {
         if (emailUser1 == null || emailUser2 == null) throw new ValidationException("Entity must not be null");
         List<ReplyMessage> resultList = new ArrayList<>();
-        String sqlAllMessagesFromBothUsers = "select * from message where ms_from = ? or ms_from = ? order by id";
-        String sqlVerify = "select * from message_recipient where message = ? and (email = ? or email = ?)";
+        String sqlAllMessagesFromBothUsers = "select * from message as m inner join message_recipient as mr \n" +
+                "                on mr.message= m.id and ((mr.email = ? and m.ms_from = ?) \n" +
+                "                or( mr.email =? and m.ms_from =?)) order by m.date desc, m.id desc offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
-            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers);
-            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlVerify))
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
         {
             preparedStatement1.setString(1, emailUser1);
             preparedStatement1.setString(2, emailUser2);
+            preparedStatement1.setString(3, emailUser2);
+            preparedStatement1.setString(4, emailUser1);
+            preparedStatement1.setInt(5,pageId*pageSize);
+            preparedStatement1.setInt(6,pageSize);
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next())
             {
-                preparedStatement2.setInt(1, resultSet.getInt("id"));
-                preparedStatement2.setString(2, emailUser1);
-                preparedStatement2.setString(3, emailUser2);
-                ResultSet resultSet1 = preparedStatement2.executeQuery();
-                if (resultSet1.next())
-                    resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+                MessageDTO messageDTO1= new MessageDTO(
+                        resultSet.getString("ms_from"),
+                        List.of(resultSet.getString("email")),resultSet.getString("text")
+                        ,LocalDate.parse(resultSet.getString("date")));
+                messageDTO1.setId(resultSet.getInt("id"));
+
+                MessageDTO messageDTO2;
+                if(resultSet.getString("reply_to")==null){
+                    messageDTO2=null;
+                }
+                else {
+                    messageDTO2=findOne(resultSet.getInt("reply_to"));
+                }
+
+                resultList.add(new ReplyMessage(messageDTO1, messageDTO2));
             }
         }
         catch (SQLException throwables) {
@@ -219,7 +234,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         return size;
     }
 
-    public List<String> getAllEmailsFromSendMessage(String email)
+    /*public List<String> getAllEmailsFromSendMessage(String email)
     {
         List<String> list = new ArrayList<>();
         String sqlAllIdMessage = "select id from message where ms_from = ?";
@@ -244,9 +259,9 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             throwables.printStackTrace();
         }
         return list;
-    }
+    }*/
 
-    public List<String> getAllEmailsFromReceiveEmails(String email)
+   /* public List<String> getAllEmailsFromReceiveEmails(String email)
     {
         List<String> list = new ArrayList<>();
         String sql = "select m.ms_from from message as m inner join message_recipient as mp on m.id = mp.message where mp.email = ?";
@@ -266,7 +281,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return list;
     }
-
+*/
     /**
      * @param email String
      * @return a list with GroupDTO, only the groups where the user with email "email" is in
@@ -479,17 +494,25 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      * @return a list of replyMessage, it returns all the messages from a group
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getGroupMessages(int groupId)
+    public List<ReplyMessage> getGroupMessages(int groupId, int pageId)
     {
         List<ReplyMessage> returnList = new ArrayList<>();
-        String sql = "select distinct message.id, message.reply_to from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.id";
+        String sql = "select distinct * , message.date as date2, message.id as id2 from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.date desc, message.id desc offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, groupId);
+            preparedStatement.setInt(2,pageId*pageSize);
+            preparedStatement.setInt(3,pageSize);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
-                returnList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+                ReplyMessage msj = new ReplyMessage(resultSet.getString("ms_from"),List.of(String.valueOf(groupId)),resultSet.getString("text"),LocalDate.parse(resultSet.getString("date")),null);
+                msj.setId(resultSet.getInt("id"));
+                MessageDTO replay=null;
+                if(resultSet.getString("reply_to")!=null)
+                    replay=findOne(resultSet.getInt("reply_to"));
+                msj.setOriginal(replay);
+                returnList.add(msj);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -568,6 +591,135 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             e.printStackTrace();
         }
         return numberOfUsers;
+    }
+
+    /**
+     * gets the messages in a group with id bigger than lastMsjID
+     * @param groupId the group id
+     * @param lastMsjID the message id to get bigger id messages than
+     * @return a list of ReplayMessage
+     */
+    public List<ReplyMessage> getGroupMessagesGreaterThen(Integer groupId, int lastMsjID){
+        List<ReplyMessage> resultList = new ArrayList<>();
+        String sqlAllMessagesFromBothUsers = "select * from message where id in (select id_message from message_group where id_group = ? and id_message > ? )";
+
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
+        {
+            preparedStatement1.setInt(1,groupId);
+            preparedStatement1.setInt(2,lastMsjID);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            while (resultSet.next())
+            {
+                resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return resultList;
+    }
+
+    /**
+     * gets the last messages sent by email2 to email1 which have the id bigger than lastMsjId
+     * @param email1 the first user
+     * @param email2 the second user
+     * @param lastMsjId the id which message id has to be bigger than
+     * @return a list of ReplayMessages
+     */
+    public List<ReplyMessage> getConvMessagesGreaterThan(String email1, String email2, int lastMsjId){
+        List<ReplyMessage> resultList = new ArrayList<>();
+        String sqlAllMessagesFromBothUsers = "select * from message where ms_from = ? and id > ? order by id ";
+        String sqlVerify = "select * from message_recipient where message = ? and email =?";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlVerify))
+        {
+            preparedStatement1.setString(1, email2);
+            preparedStatement1.setInt(2,lastMsjId);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            while (resultSet.next())
+            {
+                preparedStatement2.setInt(1, resultSet.getInt("id"));
+                preparedStatement2.setString(2, email1);
+                ResultSet resultSet1 = preparedStatement2.executeQuery();
+                if (resultSet1.next())
+                    resultList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return resultList;
+    }
+
+    /**
+     * @param email String
+     * @return number of new requests(message where in message_recipient table seen column is false)
+     */
+    public int getNumberNewMessage(String email){
+        String sql = "select count(*) from message_recipient where email = ? and seen  = false";
+        int numberOfNewMessages = 0;
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql))
+        {
+            preparedStatement1.setString(1, email);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            resultSet.next();
+            numberOfNewMessages = resultSet.getInt(1);
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return numberOfNewMessages;
+    }
+
+    /**
+     * Seen new message
+     * @param email String
+     */
+    public void setToSeenNewMessage(String email){
+        String sql = "update message_recipient set seen = true where email = ? and seen = false";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    //todo tests
+    /**
+     * gets a list of emails with all the users which user which email id has benn chatting
+     * @param id the email
+     * @param pageId
+     * @return a list of string (email)
+     */
+    public List<String> getAllConversation(String id, int pageId) {
+        List<String> list = new ArrayList<>();
+        String sql = "select distinct case when ms_from != ? then ms_from else email end " +
+                "from message m inner join message_recipient mr on mr.message=m.id " +
+                "where ms_from= ? or email= ? offset ? limit ? ";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, id);
+            preparedStatement.setString(3, id);
+            preparedStatement.setInt(4,pageId*pageSize);
+            preparedStatement.setInt(5,pageSize);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                String emailSQL = resultSet.getString("email");
+                if(!list.contains(emailSQL))
+                    list.add(emailSQL);
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
     }
 }
 

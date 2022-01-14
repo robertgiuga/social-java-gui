@@ -6,20 +6,22 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox fx:id="paneShowConvItem" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#HandlerDragMessage" prefHeight="60.0" prefWidth="233.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvItemController">
+<VBox fx:id="paneShowConvItem" alignment="CENTER_LEFT" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" onDragDetected="#HandlerDragMessage" prefHeight="60.0" prefWidth="233.0" rotate="-180.0" style="-fx-border-color: #242E3D;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvItemController">
    <children>
-      <Label fx:id="messageToReply" prefHeight="10.0" prefWidth="154.0" text="Label">
+      <Label fx:id="messageToReply" prefHeight="10.0" prefWidth="154.0" text="Label" textFill="WHITE">
          <padding>
             <Insets left="25.0" />
          </padding>
+         <font>
+            <Font size="10.0" />
+         </font>
       </Label>
-      <Text fx:id="messageLabel" fill="#c9e9d8" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="232.39996218681335" VBox.vgrow="ALWAYS">
+      <Text fx:id="messageLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="218.39996218681335" VBox.vgrow="ALWAYS">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Label fx:id="fromLbl" prefHeight="0.0" prefWidth="154.0" text="Label">
+      <Label fx:id="fromLbl" prefHeight="0.0" prefWidth="154.0" text="Label" textFill="WHITE">
          <font>
             <Font size="10.0" />
          </font>
@@ -28,4 +30,7 @@
          </padding>
       </Label>
    </children>
+   <padding>
+      <Insets left="10.0" />
+   </padding>
 </VBox>
