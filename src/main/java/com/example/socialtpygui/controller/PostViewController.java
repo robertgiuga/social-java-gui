@@ -7,6 +7,7 @@ import com.example.socialtpygui.domainEvent.LikeEvent;
 import com.example.socialtpygui.service.SuperService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -106,10 +107,22 @@ public class PostViewController {
      * @param mouseEvent MouseEvent
      */
     public void handlerForPost(MouseEvent mouseEvent) {
+        insertRows(1);
         Post post = service.savePost(new Post(postTextField.getText(), loggedUser.getId(), LocalDate.now(), 0));
 
-        try {gridPanePostView.addRow(gridPanePostView.getRowCount(), createItem(post));} catch (IOException e) {e.printStackTrace();}
+        try {gridPanePostView.addRow(0, createItem(post));} catch (IOException e) {e.printStackTrace();}
 
+    }
+
+    /**
+     * insert rows in GridShowMessage
+     * @param count
+     */
+    private void insertRows(int count) {
+        for (Node child : gridPanePostView.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            GridPane.setRowIndex(child, rowIndex == null ? count : count + rowIndex);
+        }
     }
 
     /**
