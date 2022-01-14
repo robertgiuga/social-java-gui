@@ -9,14 +9,13 @@ import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.service.validators.ValidationException;
 import com.example.socialtpygui.utils.events.ChangeEventType;
 import com.example.socialtpygui.utils.events.Event;
-import com.example.socialtpygui.utils.events.ViewItemEvent;
+import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observable;
 import com.example.socialtpygui.utils.observer.Observer;
 
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.function.Predicate;
@@ -161,7 +160,9 @@ public class SuperService implements Observable {
 
         //------------
         User toremove=userService.findOne(ids.get(0));
-        notifyObservers(new ViewItemEvent(ChangeEventType.DELETE,new UserDTO(toremove)));
+        EventCustom event = new EventCustom(ChangeEventType.DELETE);
+        event.setUserDTO(new UserDTO(toremove));
+        notifyObservers(event);
 
     }
 
@@ -372,7 +373,9 @@ public class SuperService implements Observable {
     public void acceptRequest(String id1, String id2){
         validateRequest(id1, id2);
         friendshipService.acceptRequest(id1, id2);
-        notifyObservers(new ViewItemEvent(ChangeEventType.REMOVE,new UserDTO(userService.findOne(id2))));
+        EventCustom event = new EventCustom(ChangeEventType.REMOVE);
+        event.setUserDTO(new UserDTO(userService.findOne(id2)));
+        notifyObservers(event);
     }
 
     /**
@@ -385,7 +388,9 @@ public class SuperService implements Observable {
     public void declineRequest(String id1, String id2){
         validateRequest(id1, id2);
         friendshipService.declineRequest(id1, id2);
-        notifyObservers(new ViewItemEvent(ChangeEventType.REMOVE,new UserDTO(userService.findOne(id2))));
+        EventCustom event = new EventCustom(ChangeEventType.REMOVE);
+        event.setUserDTO(new UserDTO(userService.findOne(id2)));
+        notifyObservers(event);
     }
 
     /**
