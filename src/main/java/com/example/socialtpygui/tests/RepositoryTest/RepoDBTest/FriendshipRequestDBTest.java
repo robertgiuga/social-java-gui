@@ -11,7 +11,7 @@ import java.util.stream.StreamSupport;
 
 public class FriendshipRequestDBTest {
 
-    private  static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private  static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
 
     private FriendshipRequestDBTest() {}
 
@@ -32,7 +32,7 @@ public class FriendshipRequestDBTest {
     }
 
     private static void testFindAll(){
-        Iterable<Friendship> friendshipRequests = friendshipRequestDb.findAll();
+        Iterable<Friendship> friendshipRequests = friendshipRequestDb.findAll(0);
         long size = StreamSupport.stream(friendshipRequests.spliterator(), false).count();
         assert (size == 3);
     }

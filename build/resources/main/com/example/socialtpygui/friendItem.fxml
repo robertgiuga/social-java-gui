@@ -10,11 +10,11 @@
    <children>
       <Label fx:id="nameLbl" layoutX="14.0" layoutY="15.0" prefHeight="25.0" prefWidth="275.0" text="nameLbl" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="15.0" />
+            <Font size="15.0" />
          </font></Label>
       <Label fx:id="dateLbl" layoutX="281.0" layoutY="20.0" prefHeight="15.0" prefWidth="133.0" text="text" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="10.0" />
+            <Font size="10.0" />
          </font>
       </Label>
       <ImageView fx:id="deleteBtn" fitHeight="30.0" fitWidth="30.0" layoutX="581.0" layoutY="13.0" onMouseClicked="#handlerDeleteButton" pickOnBounds="true" preserveRatio="true">

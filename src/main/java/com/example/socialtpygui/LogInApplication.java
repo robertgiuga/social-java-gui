@@ -8,7 +8,6 @@ import com.example.socialtpygui.service.validators.MessageValidator;
 import com.example.socialtpygui.service.validators.UserValidator;
 import com.example.socialtpygui.tests.Tests;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -51,18 +50,18 @@ public class LogInApplication extends Application {
 
     private SuperService createSuperService(){
         UserValidator userValidator= new UserValidator();
-        UserDb userDb= new UserDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
-        FriendshipDb friendshipDb= new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
-        MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
-        FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetwork", "postgres", "postgres");
+        UserDb userDb= new UserDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 10);
+        FriendshipDb friendshipDb= new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 11);
+        MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 7);
+        FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetwork", "postgres", "postgres", 10);
         UserService userService = new UserService(userDb, userValidator);
         FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);
         NetworkService networkService = new NetworkService(userDb, friendshipDb);
         MessageService messageService = new MessageService(messageDb);
         MessageValidator messageValidator= new MessageValidator(userValidator);
-        EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
+        EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 1);
         EventService eventService = new EventService(eventDb);
-        PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
+        PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres", 4);
         PostService postService = new PostService(postDb);
         SuperService service= new SuperService(messageService, networkService, friendshipService, userService,userValidator,messageValidator, eventService, postService);
         return service;

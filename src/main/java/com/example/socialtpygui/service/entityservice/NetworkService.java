@@ -27,11 +27,11 @@ public class NetworkService {
      */
     public Tuple<Integer,List<User>> runNetworkGraph(){
         //the friendship list
-        Iterable<Friendship> it= friendshipRepository.findAll();
+        Iterable<Friendship> it= friendshipRepository.findAll(friendshipRepository.size());
         // make the graph with te user lists
         //need a list of users
         List<User> userList= new ArrayList<>();
-        userRepository.findAll().forEach(userList::add);
+        userRepository.findAll(friendshipRepository.size()).forEach(userList::add);
         Graph<User> g= new Graph(userList);
         //add the edges
         it.forEach(frn->g.addEdge(userRepository.findOne(frn.getId().getLeft()),userRepository.findOne(frn.getId().getRight())));
@@ -50,7 +50,7 @@ public class NetworkService {
      */
     public Iterable<User> socialCommunity() {
         return runNetworkGraph().getRight()
-                .stream().peek(user -> friendshipRepository.getFriends(user.getId()).forEach(s -> user.addFriend(userRepository.findOne(s.getLeft()))))
+                .stream().peek(user -> friendshipRepository.getFriends(user.getId(),0).forEach(s -> user.addFriend(userRepository.findOne(s.getLeft()))))
                 .collect(toList());
     }
 }

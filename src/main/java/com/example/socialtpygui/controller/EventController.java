@@ -2,7 +2,6 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.EventDTO;
-import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domainEvent.EventCursor;
 import com.example.socialtpygui.domainEvent.LoadView;
@@ -10,8 +9,6 @@ import com.example.socialtpygui.service.SuperService;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.ImageCursor;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -29,26 +26,17 @@ public class EventController {
     private ImageView exploreEventBtn, createEventBtn;
 
     private SuperService service;
-    private int currentEventIndex = 0;
+    private int pageId = 0;
     private UserDTO loggedUser;
 
     /**
      * Load first Event.
      * @throws IOException .
      */
-    public void loadExploreEventView() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventItem.fxml"));
-        AnchorPane panel = fxmlLoader.load();
-        EventItemController eventItemController = fxmlLoader.getController();
-        eventItemController.setService(service);
-        eventItemController.setLoggedUser(loggedUser);
-        List<EventDTO> list = new ArrayList<>();
-        service.findAllEvents().forEach(list::add);
-        if (service.sizeEvent() != 0) {eventItemController.load(list.get(0));}
-        else {
-            loadCreateEvent();}
-        Pane view = new Pane(panel);
-        borderPaneMainEventWindow.setCenter(view);
+    public void resetEventToFirst() throws IOException {
+        pageId=0;
+        nextPage();
+
     }
 
     /**
@@ -57,27 +45,42 @@ public class EventController {
      * @throws IOException .
      */
     public void handlerExploreEventBtn(MouseEvent mouseEvent) throws IOException {
-        if (service.sizeEvent() != 0) {
-            loadCursorEventFilter();
-            loadExploreEventView();
-        }
+        resetEventToFirst();
     }
 
-    /**
-     * Set service
-     * @param service SuperService
-     */
-    public void setService(SuperService service) {
-        this.service = service;
-    }
 
     /**
      * Filter for Event(fireEvent).
      */
-    public void loadCursorEventFilter()
+    public void addEventFilter()
     {
         borderPaneMainEventWindow.addEventFilter(EventCursor.ANY, this::handlerForEvent);
         borderPaneMainEventWindow.addEventFilter(LoadView.LOAD_EVENTS, this::handlerForEvent);
+    }
+
+    /**
+     * loads the new eventt in the UI
+     * @throws IOException
+     */
+    private void nextPage() throws IOException {
+        List<EventDTO> eventsDTO =service.findAllEvents(pageId);
+        if ( eventsDTO.size()>0) {
+            loadEventItem(eventsDTO.get(0));
+            pageId++;
+        }
+    }
+
+    /**
+     * loads the previous page in the UI
+     * @throws IOException
+     */
+    private void previousPage() throws IOException {
+        if(pageId>0) {
+            List<EventDTO> eventsDTO = service.findAllEvents(--pageId);
+            if ( eventsDTO.size()>0)
+                loadEventItem(eventsDTO.get(0));
+
+        }
     }
 
     /**
@@ -86,59 +89,16 @@ public class EventController {
      * @param t Event
      */
     private void handlerForEvent(Event t){
-        if (t.getEventType().equals(EventCursor.NEXT_EVENT))
-        {
-            if ((service.sizeEvent()!= 0) && (this.currentEventIndex >= 0) && (this.currentEventIndex < service.sizeEvent()-1))
-            {
-                this.currentEventIndex++;
-                try {
-                    loadEventItem();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else if (service.sizeEvent() == 0){
-                try {
-                    loadCreateEvent();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        try {
+           if (t.getEventType().equals(EventCursor.NEXT_EVENT))
+               nextPage();
+           else if (t.getEventType().equals(EventCursor.PREVIOUS_EVENT))
+               previousPage();
+           else if (t.getEventType().equals(LoadView.LOAD_EVENTS))
+               resetEventToFirst();
 
-        } else if (t.getEventType().equals(EventCursor.PREVIOUS_EVENT)){
-            if ((service.sizeEvent()!= 0) && (this.currentEventIndex > 0) && (this.currentEventIndex <= service.sizeEvent()-1))
-            {
-                this.currentEventIndex--;
-                try {
-                    loadEventItem();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else if (service.sizeEvent() == 0){
-                try {
-                    loadCreateEvent();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else if (t.getEventType().equals(LoadView.LOAD_EVENTS)){
-            if (service.sizeEvent() == 0){
-                try {
-                    loadCreateEvent();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                try {
-                    loadExploreEventView();
-                    this.currentEventIndex = 0;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -146,15 +106,14 @@ public class EventController {
      * Load a eventItem.
      * @throws IOException .
      */
-    public void loadEventItem() throws IOException {
+    public void loadEventItem(EventDTO eventDTO) throws IOException {
             FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("eventItem.fxml"));
             AnchorPane panel = fxmlLoader.load();
             EventItemController eventItemController = fxmlLoader.getController();
             eventItemController.setService(this.service);
             eventItemController.setLoggedUser(loggedUser);
-            List<EventDTO> list = new ArrayList<>();
-            service.findAllEvents().forEach(list::add);
-            eventItemController.load(list.get(this.currentEventIndex));
+
+            eventItemController.load(eventDTO);
             Pane view = new Pane(panel);
             borderPaneMainEventWindow.setCenter(view);
     }
@@ -168,13 +127,7 @@ public class EventController {
        loadCreateEvent();
     }
 
-    /**
-     * Set logged user.
-     * @param loggedUser User
-     */
-    public void setLoggedUser(UserDTO loggedUser) {
-        this.loggedUser = loggedUser;
-    }
+
 
     public void loadCreateEvent() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("createEventWindow.fxml"));
@@ -187,5 +140,14 @@ public class EventController {
     }
 
 
-
+    public void load(SuperService service, UserDTO loggedUser) {
+        this.service=service;
+        this.loggedUser=loggedUser;
+        addEventFilter();
+        try {
+            resetEventToFirst();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

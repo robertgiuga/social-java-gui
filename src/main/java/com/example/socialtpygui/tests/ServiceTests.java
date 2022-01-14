@@ -21,17 +21,17 @@ public class ServiceTests {
     private static UserValidator userValidator = new UserValidator();
     private static MessageValidator messageValidator = new MessageValidator(userValidator);
 
-    private static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
-    private static UserDb userDb = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
-    private static FriendshipDb friendshipDb = new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
-    private static MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static FriendshipRequestDb friendshipRequestDb = new FriendshipRequestDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
+    private static UserDb userDb = new UserDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
+    private static FriendshipDb friendshipDb = new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
+    private static MessageDb messageDb = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
     private static UserService userService = new UserService(userDb, userValidator);
     private static NetworkService networkService = new NetworkService(userDb, friendshipDb);
     private static MessageService messageService = new MessageService(messageDb);
     private static FriendshipService friendshipService = new FriendshipService(friendshipRequestDb, friendshipDb);
-    private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static EventDb eventDb = new EventDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
     private static EventService eventService = new EventService(eventDb);
-    private static PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
     private static PostService postService = new PostService(postDb);
     private static SuperService service = new SuperService(messageService, networkService, friendshipService, userService, userValidator, messageValidator,eventService, postService);
 
@@ -204,10 +204,9 @@ public class ServiceTests {
     }
 
     private static void testUsers() {
-        Iterable<User> users = service.users();
+        Iterable<User> users = service.users(0);
         long size = StreamSupport.stream(users.spliterator(), false).count();
         assert (size == 6);
-        assert (users.iterator().next().getId().equals("jon1@yahoo.com"));
     }
 
     private static void testAddFriend() {
@@ -316,19 +315,19 @@ public class ServiceTests {
     }
 
     private static void testGetFriends() {
-        Iterable<FriendShipDTO> friends = service.getFriends("andr@gamail.com");
+        Iterable<FriendShipDTO> friends = service.getFriends("andr@gamail.com",0);
         long size = StreamSupport.stream(friends.spliterator(), false).count();
         assert (size == 2);
 
         try {
-            Iterable<FriendShipDTO> friends1 = service.getFriends("andr@gamail.c");
+            Iterable<FriendShipDTO> friends1 = service.getFriends("andr@gamail.c",0);
             assert false;
         } catch (ValidationException exception) {
             assert true;
         }
 
         try {
-            Iterable<FriendShipDTO> friends2 = service.getFriends("user@gmail.com");
+            Iterable<FriendShipDTO> friends2 = service.getFriends("user@gmail.com",0);
             assert false;
         } catch (NonExistingException e) {
             assert true;
@@ -338,19 +337,19 @@ public class ServiceTests {
     private static void testGetFriendsSince() {
         try {
             YearMonth date = YearMonth.parse("2020-10", DateTimeFormatter.ofPattern("yyyy-MM"));
-            Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@sad.", date);
+            Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@sad.", date,0);
             assert false;
         } catch (ValidationException exception) {
             assert true;
         }
 
         YearMonth date = YearMonth.parse("2021-10", DateTimeFormatter.ofPattern("yyyy-MM"));
-        Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@gamail.com", date);
+        Iterable<FriendShipDTO> friends = service.getFriendsSince("andr@gamail.com", date,0);
         long size = StreamSupport.stream(friends.spliterator(), false).count();
         assert (size == 2);
 
         try {
-            service.getFriendsSince("andrei@gamail.com", date);
+            service.getFriendsSince("andrei@gamail.com", date,0);
             assert false;
         } catch (NonExistingException e) {
             assert true;
@@ -360,10 +359,10 @@ public class ServiceTests {
 
 
     private static void testGetAllConversation() {
-        List<String> list = service.getAllConversation("gg@gmail.com");
+        List<String> list = service.getAllConversation("gg@gmail.com",0);
         assert (list.size() == 3);
         try {
-            list = service.getAllConversation("dsa");
+            list = service.getAllConversation("dsa",0);
             assert false;
         } catch (ValidationException e) {
             assert true;
@@ -371,7 +370,7 @@ public class ServiceTests {
     }
 
     private static void testGetMessages() {
-        List<ReplyMessage> replyMessageList = service.getMessagesBetween2Users("aand@hotmail.com", "snj@gmail.com");
+        List<ReplyMessage> replyMessageList = service.getMessagesBetween2Users("aand@hotmail.com", "snj@gmail.com",0);
         List<Integer> idList = new ArrayList<>();
         for (ReplyMessage replyMessage : replyMessageList) idList.add(replyMessage.getId());
         assert (replyMessageList.size() == 3);
@@ -646,7 +645,7 @@ public class ServiceTests {
 
     private static void testReplyAll() {
         MessageDTO messageDTO = service.replyAll(new MessageDTO("gg@gmail.com", null, "Salut!", LocalDate.now()), 1);
-        assert (service.getGroupMessages(1).size() == 2);
+        assert (service.getGroupMessages(1,0).size() == 2);
         int id = messageDTO.getId();
         String sql = "select count (*) from message_group";
         String sql1 = "delete from message_group where id_message = ?";
@@ -670,14 +669,14 @@ public class ServiceTests {
 
     private static void testgetUsersByName() {
         List<String> list1 = new ArrayList<>();
-        service.getUsersByName("a").forEach(elem -> list1.add(elem.getId()));
+        service.getUsersByName("a",0).forEach(elem -> list1.add(elem.getId()));
         assert (list1.size() == 4);
         assert (list1.contains("gc@gmail.com"));
         assert (list1.contains("gg@gmail.com"));
         assert (list1.contains("andr@gamail.com"));
         assert (list1.contains("aand@hotmail.com"));
         list1.clear();
-        service.getUsersByName("adasda dasda").forEach(elem -> list1.add(elem.getId()));
+        service.getUsersByName("adasda dasda",0).forEach(elem -> list1.add(elem.getId()));
         assert (list1.size() == 0);
     }
 
@@ -777,7 +776,7 @@ public class ServiceTests {
     }
 
     private static void testGetGroupMessages() {
-        List<ReplyMessage> list = messageService.getGroupMessages(1);
+        List<ReplyMessage> list = messageService.getGroupMessages(1,0);
         assert (list.size() == 1);
     }
 
@@ -866,7 +865,7 @@ public class ServiceTests {
     }
 
     private static void testFindAllEvents(){
-        Iterable<EventDTO> list1 = service.findAllEvents();
+        Iterable<EventDTO> list1 = service.findAllEvents(0);
         List<EventDTO> list = new ArrayList<>();
         list1.forEach(list::add);
         assert list.size() == 2;
@@ -940,7 +939,7 @@ public class ServiceTests {
     private static void testFindAllPosts()
     {
         List<Integer> listId = new ArrayList<>();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
         assert listId.contains(1);
         assert listId.contains(2);
@@ -950,17 +949,17 @@ public class ServiceTests {
     private static void testSaveRemovePost()
     {
         List<Integer> listId = new ArrayList<>();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
         Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"));
         Post postt = service.savePost(newPost);
         listId.clear();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert service.sizePost() == 4;
         assert service.findOnePost(postt.getId()) != null;
         service.removePost(postt.getId());
         listId.clear();
-        service.findAllPosts().forEach(post -> {listId.add(post.getId());});
+        service.findAllPosts(0).forEach(post -> {listId.add(post.getId());});
         assert service.sizePost() == 3;
         try{
             service.removePost(432);
@@ -1021,16 +1020,16 @@ public class ServiceTests {
 
     private static void testGetAllPostFromFriends(){
         List<Integer> list = new ArrayList<>();
-        service.getAllPostFromFriends("snj@gmail.com").forEach(post -> {list.add(post.getId());});
+        service.getAllPostFromFriends("snj@gmail.com",0).forEach(post -> {list.add(post.getId());});
         assert list.size() == 2;
         assert list.contains(1);
         assert list.contains(2);
         try{
-            service.getAllPostFromFriends("ds");
+            service.getAllPostFromFriends("ds",0);
             assert false;
         }catch (ValidationException ignored){assert true;}
         try{
-            service.getAllPostFromFriends("ggh@gmail.com");
+            service.getAllPostFromFriends("ggh@gmail.com",0);
             assert false;
         }catch (NonExistingException ignored){assert true;}
     }

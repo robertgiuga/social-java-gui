@@ -12,16 +12,17 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneShowConvView" prefHeight="470.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
+<AnchorPane fx:id="anchorPaneShowConvView" prefHeight="458.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ShowConvController">
    <children>
-      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" hbarPolicy="NEVER" layoutX="13.0" layoutY="36.0" prefHeight="369.0" prefWidth="627.0" style="-fx-background-color: #242E3D;" vvalue="1.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="36.0">
+      <ScrollPane fx:id="scrollPaneShowConv" focusTraversable="false" hbarPolicy="NEVER" layoutX="13.0" layoutY="11.0" onScroll="#handlerScroll" prefHeight="394.0" prefWidth="627.0" style="-fx-background-color: #242E3D;" vvalue="1.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="11.0">
          <content>
-            <GridPane fx:id="gridShowMessages" prefHeight="362.0" prefWidth="607.0">
+            <GridPane fx:id="gridShowMessages" nodeOrientation="LEFT_TO_RIGHT" onScroll="#handlerScroll" prefHeight="374.0" prefWidth="607.0" rotate="-180.0">
                <columnConstraints>
                   <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints fx:id="leftColomnGridPaneShowConv" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
+                  <RowConstraints />
                   <RowConstraints />
                </rowConstraints>
                <padding>
@@ -33,18 +34,18 @@
             </GridPane>
          </content>
       </ScrollPane>
-      <TextField fx:id="messageText" focusTraversable="false" layoutX="12.0" layoutY="299.0" onKeyPressed="#handlerKeyPressed" prefHeight="32.0" prefWidth="551.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="12.0" />
+      <TextField fx:id="messageText" focusTraversable="false" layoutX="13.0" layoutY="424.0" onKeyPressed="#handlerKeyPressed" prefHeight="32.0" prefWidth="551.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" />
       <Label fx:id="messageToReply" alignment="TOP_LEFT" layoutX="20.0" layoutY="403.0" prefHeight="9.0" prefWidth="158.0" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Label>
-      <ImageView fx:id="buttonSend" fitHeight="30.0" fitWidth="30.0" layoutX="590.0" layoutY="425.0" onMouseClicked="#pressedSendButton" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="buttonSend" fitHeight="30.0" fitWidth="30.0" layoutX="590.0" layoutY="413.0" onMouseClicked="#pressedSendButton" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/send.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="settingsBtn" fitHeight="30.0" fitWidth="30.0" layoutX="600.0" layoutY="1.0" onMouseClicked="#handlerSettignsButton" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="settingsBtn" fitHeight="30.0" fitWidth="30.0" layoutX="605.0" layoutY="-1.0" onMouseClicked="#handlerSettignsButton" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/info.png" />
          </image>

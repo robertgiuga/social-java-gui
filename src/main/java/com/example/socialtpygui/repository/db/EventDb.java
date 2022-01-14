@@ -1,7 +1,6 @@
 package com.example.socialtpygui.repository.db;
 
 import com.example.socialtpygui.domain.EventDTO;
-import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.domain.UserEventDTO;
 import com.example.socialtpygui.repository.Repository;
@@ -12,12 +11,14 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class EventDb implements Repository<Integer, EventDTO> {
-    String url,username,password;
+    private String url,username,password;
+    private int pageSize;
 
-    public EventDb(String url, String username, String password) {
+    public EventDb(String url, String username, String password, int pageSize) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
 
@@ -62,14 +63,16 @@ public class EventDb implements Repository<Integer, EventDTO> {
     }
 
     @Override
-    public Iterable<EventDTO> findAll() {
-        Set<EventDTO> events = new HashSet<>();
+    public List<EventDTO> findAll(int pageId) {
+        List<EventDTO> events = new ArrayList<>();
         List<UserDTO> list = new ArrayList<>();
-        String sqlSelectAllEvents = "select * from event";
+        String sqlSelectAllEvents = "select * from event offset ? limit ?";
         String sqlSelectParticipants = "select users.first_name, users.last_name, user_event.email from user_event inner join users on users.email = user_event.email where id_event = ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectAllEvents);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlSelectParticipants)) {
+            preparedStatement.setInt(1,pageId*pageSize);
+            preparedStatement.setInt(2,pageSize);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next())
             {

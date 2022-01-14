@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import com.example.socialtpygui.domain.User;
@@ -38,7 +39,7 @@ public class PostViewController {
 
     private UserDTO loggedUser;
     private SuperService service;
-    private List<Post> list = new ArrayList<>();
+    private int pageId=0;
 
     /**
      * Set the logged user
@@ -81,9 +82,8 @@ public class PostViewController {
     public void load()
     {
         loadLikeEventFilter();
-        service.getAllPostFromFriends(this.loggedUser.getId()).forEach(post->{
+        service.getAllPostFromFriends(this.loggedUser.getId(),pageId++).forEach(post->{
             Pane item = null;
-            list.add(post);
             try {
                 item = createItem(post);
                 gridPanePostView.addRow(gridPanePostView.getRowCount(), item);
@@ -122,8 +122,34 @@ public class PostViewController {
      */
     public void handlerForPost(MouseEvent mouseEvent) {
         Post post = service.savePost(new Post(postTextField.getText(), loggedUser.getId(), LocalDate.now()));
-        list.add(post);
+
         try {gridPanePostView.addRow(gridPanePostView.getRowCount(), createItem(post));} catch (IOException e) {e.printStackTrace();}
 
+    }
+
+    /**
+     * loads the next page with data in the ui
+     */
+    private void nextPage(){
+        List<Post> nextPost= service.getAllPostFromFriends(this.loggedUser.getId(),pageId++);
+        System.out.println("*****");
+        if(nextPost.size()>0){
+            nextPost.forEach(post->{
+                Pane item = null;
+                try {
+                    item = createItem(post);
+                    gridPanePostView.addRow(gridPanePostView.getRowCount(), item);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+    public void scrollHandler(ScrollEvent scrollEvent) {
+        System.out.println(scrollPanePostView.getVvalue());
+        if(scrollPanePostView.getVvalue()>0.48&&scrollPanePostView.getVvalue()<0.52){
+            nextPage();
+        }
     }
 }

@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 
 public class MessageDBTest {
 
-    private static MessageDb messageDBTest = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static MessageDb messageDBTest = new MessageDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
 
     private MessageDBTest(){}
 
@@ -21,7 +21,6 @@ public class MessageDBTest {
         testFindOne();
         testFindAllMessageBetweenTwoUsers();
         testRemoveAndSaveSize();
-        testGetAllEmailsFromExistingConversation();
         testGetUserGroups();
         testGetGroup();
         testAddRemoveUserToGroup();
@@ -38,15 +37,15 @@ public class MessageDBTest {
     {
         assert (messageDBTest.findOne(1).getFrom().equals("jon1@yahoo.com"));
         assert (messageDBTest.findOne(1).getMessage().equals("Ce faci?"));
-        assert (messageDBTest.findOne(1).getTo().get(0).equals("gg@gmail.com"));
-        assert (messageDBTest.findOne(1).getTo().get(1).equals("andr@gamail.com"));
+        assert (messageDBTest.findOne(1).getTo().contains("gg@gmail.com"));
+        assert (messageDBTest.findOne(1).getTo().contains("andr@gamail.com"));
         assert (messageDBTest.findOne(1).getId() == 1);
         assert (messageDBTest.findOne(-21) == null);
     }
 
     private static void testFindAllMessageBetweenTwoUsers()
     {
-        Iterable<ReplyMessage> list = messageDBTest.findAllMessageBetweenTwoUsers("aand@hotmail.com","snj@gmail.com");
+        Iterable<ReplyMessage> list = messageDBTest.findAllMessageBetweenTwoUsers("aand@hotmail.com","snj@gmail.com",0);
         long size = StreamSupport.stream(list.spliterator(), false).count();
         assert(size == 3);
         assert(messageDBTest.findOne(4).getMessage().equals("Ce faceti baietii?"));
@@ -67,15 +66,13 @@ public class MessageDBTest {
         assert (messageDBTest.findOne(messageDTO.getId()) == null);
     }
 
-    private static void testGetAllEmailsFromExistingConversation()
+    private static void testGetAllConversation()
     {
-        List<String> list = messageDBTest.getAllEmailsFromSendMessage("gg@gmail.com");
+        List<String> list = messageDBTest.getAllConversation("gg@gmail.com",0);
         assert (list.size() == 2);
-        list = messageDBTest.getAllEmailsFromSendMessage("ds");
+        list = messageDBTest.getAllConversation("ds",0);
         assert (list.size() == 0);
-        list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gmail.com");
-        assert (list.size() == 2);
-        list = messageDBTest.getAllEmailsFromReceiveEmails("gg@gdsmail.com");
+        list = messageDBTest.getAllConversation("gg@gdsmail.com",0);
         assert (list.size() == 0);
     }
 
@@ -137,7 +134,7 @@ public class MessageDBTest {
 
     private static void testGetGroupMessages()
     {
-        List<ReplyMessage> list = messageDBTest.getGroupMessages(1);
+        List<ReplyMessage> list = messageDBTest.getGroupMessages(1,0);
         assert (list.size() == 1);
     }
 

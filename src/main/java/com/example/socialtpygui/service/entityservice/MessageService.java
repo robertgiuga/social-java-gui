@@ -22,13 +22,15 @@ public class MessageService {
      * @param id .
      * @return All emails with whom a user has interacted(receive message/send message).
      */
-    public List<String> getAllConversation(String id)
+    public List<String> getAllConversation(String id,int pageId)
     {
-        List<String> listAllEmails = new ArrayList<>(messageRepository.getAllEmailsFromSendMessage(id));
+        /*List<String> listAllEmails = new ArrayList<>(messageRepository.getAllEmailsFromSendMessage(id));
+
         messageRepository.getAllEmailsFromReceiveEmails(id).forEach(emailReceive->{
             if (!listAllEmails.contains(emailReceive)) listAllEmails.add(emailReceive);
-        });
-        return listAllEmails;
+        });*/
+
+        return messageRepository.getAllConversation(id, pageId);
     }
 
 
@@ -38,9 +40,9 @@ public class MessageService {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessagesBetweenTwoUsers(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetweenTwoUsers(String id1, String id2, int pageId)
     {
-        return messageRepository.findAllMessageBetweenTwoUsers(id1, id2);
+        return messageRepository.findAllMessageBetweenTwoUsers(id1, id2,pageId);
     }
 
     /**
@@ -152,7 +154,7 @@ public class MessageService {
      * @return a list of replyMessage, it returns all the messages from a group
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getGroupMessages(int groupId) {return messageRepository.getGroupMessages(groupId);}
+    public List<ReplyMessage> getGroupMessages(int groupId,int pageId) {return messageRepository.getGroupMessages(groupId,pageId);}
 
     /**
      * send a reply message to a message from a group with id equals with groupId

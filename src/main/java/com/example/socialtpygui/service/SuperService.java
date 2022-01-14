@@ -16,6 +16,7 @@ import com.example.socialtpygui.utils.observer.Observer;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.function.Predicate;
@@ -49,15 +50,6 @@ public class SuperService implements Observable {
         this.postService = postService;
     }
 
-    /**
-     * Load the friends of the users in memory
-     * @param users the list of the users to load friends of
-     * @return the list of the users with friends loaded
-     */
-    private Iterable<User> loadUsersFriends(Iterable<User> users){
-        return friendshipService.loadUsersFriends(users);
-    }
-
 
     /**
      * Add a new user
@@ -77,7 +69,7 @@ public class SuperService implements Observable {
     public void removeUser(String id){
         User toremove = userService.removeUser(id);
         List<TupleOne<String>> removelist= new ArrayList<>();
-        friendshipService.friendshipFindAll().forEach(tup->{
+        friendshipService.friendshipFindAll(friendshipService.size()).forEach(tup->{
             User  removefrom=null;
             if(tup.getId().getRight().equals(id))
                 removefrom=userService.findOne(tup.getId().getLeft());
@@ -95,8 +87,8 @@ public class SuperService implements Observable {
     /**
      * @return all the users
      */
-    public Iterable<User> users(){
-        return friendshipService.loadUsersFriends(userService.findAll());
+    public Iterable<User> users(int pageSize){
+        return userService.findAll(pageSize);
 
     }
 
@@ -193,14 +185,14 @@ public class SuperService implements Observable {
      * @param id .
      * @return an iterable of FriendshipDTO always having first user the one that requested
      */
-    public Iterable<FriendShipDTO> getFriends(String id) {
+    public Iterable<FriendShipDTO> getFriends(String id,int pageId) {
         userValidator.validateEmail(id);
         User user1 = userService.findOne(id);
         if(user1==null){
             throw new NonExistingException("User not found!");
         }
         UserDTO finalUserDTO = new UserDTO(user1);
-        return friendshipService.getFriends(id).stream().map(s -> {UserDTO user = new UserDTO(userService.findOne(s.getLeft())); return new FriendShipDTO(finalUserDTO, user,s.getRight());}).collect(Collectors.toList());
+        return friendshipService.getFriends(id,pageId).stream().map(s -> {UserDTO user = new UserDTO(userService.findOne(s.getLeft())); return new FriendShipDTO(finalUserDTO, user,s.getRight());}).collect(Collectors.toList());
     }
 
 
@@ -209,7 +201,7 @@ public class SuperService implements Observable {
      * @param date .
      * @return the friends of a user in a specific month of a year
      */
-    public Iterable<FriendShipDTO> getFriendsSince(String id, YearMonth date)
+    public Iterable<FriendShipDTO> getFriendsSince(String id, YearMonth date,int pageId)
     {
         userValidator.validateEmail(id);
         User user1 = userService.findOne(id);
@@ -221,7 +213,7 @@ public class SuperService implements Observable {
         Predicate<LocalDate> predicateM = m->m.getMonth() == date.getMonth();
         Predicate<LocalDate> predicateYM = predicateM.and(predicateY);
 
-        return friendshipService.getFriends(id).stream().filter(p->predicateYM.test(p.getRight()))
+        return friendshipService.getFriends(id,pageId).stream().filter(p->predicateYM.test(p.getRight()))
                 .map(u->{UserDTO user = new UserDTO(userService.findOne(u.getLeft())); return new FriendShipDTO(finalUserDto, user, u.getRight());})
                 .collect(Collectors.toList());
     }
@@ -242,13 +234,13 @@ public class SuperService implements Observable {
      * @param id .
      * @return All emails with whom a user has interacted(receive message/send message).
      */
-    public List<String> getAllConversation(String id)
+    public List<String> getAllConversation(String id,int pageId)
     {
 
         userValidator.validateEmail(id);
         if(userService.findOne(id)==null)
             throw new NonExistingException("User "+id+" does not exist!");
-        return messageService.getAllConversation(id);
+        return messageService.getAllConversation(id,pageId);
     }
 
     /**
@@ -257,7 +249,7 @@ public class SuperService implements Observable {
      * @return a list of replayMessage, it returns all the messages between 2 users
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getMessagesBetween2Users(String id1, String id2)
+    public List<ReplyMessage> getMessagesBetween2Users(String id1, String id2, int pageId)
     {
         userValidator.validateEmail(id1);
         userValidator.validateEmail(id2);
@@ -268,11 +260,11 @@ public class SuperService implements Observable {
         if(userService.findOne(id2)==null)
             throw new NonExistingException("User "+id2+" does not exist!");
 
-        return messageService.getMessagesBetweenTwoUsers(id1, id2);
+        return messageService.getMessagesBetweenTwoUsers(id1, id2,pageId);
     }
 
     /**
-     * validate if the message could be real, if the sender and receiver exists and are not admins
+     * validate if the message could be real, if the sender and receiver exists
      * validates if the friendship exist between the user to send and the ones to receive
      * @param messageDTO the message to be tested
      */
@@ -286,11 +278,8 @@ public class SuperService implements Observable {
             if (userService.findOne(s) == null)
                 er.append("User ").append(s).append(" does not exist!\n");
             boolean sem = false;
-            for (Tuple<String, LocalDate> t : friendshipService.getFriends(messageDTO.getFrom()))
-                if (t.getLeft().equals(s)) {
-                    sem = true;
-                    break;
-                }
+            if( friendshipService.friendshipDate(s,messageDTO.getFrom())!=null)
+                sem=true;
 
             if (!sem) er.append("User with email ").append(messageDTO.getFrom()).append(" and user with email ").append(s).append(" are not friends!");
         }
@@ -431,10 +420,10 @@ public class SuperService implements Observable {
      * @return Return a list with UserDto, where first_name and last_name contain completName.
      * @throws ValidationException if completName is empty
      */
-    public List<UserDTO> getUsersByName(String completName)
+    public List<UserDTO> getUsersByName(String completName, int pageId)
     {
         if (completName.length() == 0) throw new ValidationException("Name in searchBar is null!");
-        return userService.getUsersByName(completName);
+        return userService.getUsersByName(completName,pageId);
     }
 
     /**
@@ -488,7 +477,7 @@ public class SuperService implements Observable {
      * @param name
      * @return
      */
-    public List<UserDTO> getFriendsByName(String id, String name){
+    public List<UserDTO> getFriendsByName(String id, String name, int pageId){
         if(name.length()==0){
             throw new NonExistingException("Cannot contain null values");
         }
@@ -496,7 +485,7 @@ public class SuperService implements Observable {
                 userDTO -> userDTO.getLastName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)) ||
                         userDTO.getFirstName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT));
 
-        return  friendshipService.getFriends(id).stream()
+        return  friendshipService.getFriends(id,pageId).stream()
                 .map(s -> new UserDTO(userService.findOne(s.getLeft()))).collect(Collectors.toList())
                 .stream().filter(contains).collect(Collectors.toList());
     }
@@ -631,10 +620,10 @@ public class SuperService implements Observable {
      * if ReplayMessage has currentMessage null that means it is a Message entity
      * @throws NonExistingException if the group with groupId does not exist
      */
-    public List<ReplyMessage> getGroupMessages(int groupId)
+    public List<ReplyMessage> getGroupMessages(int groupId, int pageId)
     {
         if (messageService.getGroup(groupId) == null) {throw new NonExistingException("Group with id " + groupId + " does not exist!");}
-        return messageService.getGroupMessages(groupId);
+        return messageService.getGroupMessages(groupId,pageId);
     }
 
     /**
@@ -685,7 +674,7 @@ public class SuperService implements Observable {
      * @param dateStop the end date for searching
      * @return a list of FriendshipDTO
      */
-    public List<FriendShipDTO> getUserFriendshipsInDate(String id, LocalDate dateStart ,LocalDate dateStop ){
+    public List<FriendShipDTO> getUserFriendshipsInDate(String id, LocalDate dateStart ,LocalDate dateStop, int pageId ){
         userValidator.validateEmail(id);
         if(dateStart==null||dateStop==null)
             throw new ValidationException("Date invalid!");
@@ -696,7 +685,7 @@ public class SuperService implements Observable {
 
         List<FriendShipDTO> friendships=new ArrayList<>();
         UserDTO currentUser= new UserDTO(userService.findOne(id));
-        List<Tuple<String, LocalDate>> friends= friendshipService.getFriends(id);
+        List<Tuple<String, LocalDate>> friends= friendshipService.getFriends(id,pageId);
         friends.forEach(stringLocalDateTuple -> {
             LocalDate frindshipDate=stringLocalDateTuple.getRight();
             if (frindshipDate.compareTo(dateStart)>=0&&frindshipDate.compareTo(dateStop)<=0){
@@ -722,10 +711,10 @@ public class SuperService implements Observable {
             throw new ValidationException("Data start must be less than stop date!");
         if(userService.findOne(id)==null)
             throw new NonExistingException("User "+id+" does not exist!");
-
+        //todo see where used
         List<Tuple<User,Integer>> userMessage= new ArrayList<>();
-        messageService.getAllConversation(id).forEach(s ->{
-            long a= messageService.getMessagesBetweenTwoUsers(id,s).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
+        messageService.getAllConversation(id,0).forEach(s ->{
+            long a= messageService.getMessagesBetweenTwoUsers(id,s,0).stream().filter(replyMessage ->replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0 )
                     .count();
             if(a>0)
                 userMessage.add(new Tuple<User,Integer>(userService.findOne(s), (int) a));
@@ -753,7 +742,7 @@ public class SuperService implements Observable {
         if(userService.findOne(id2)==null)
             throw new NonExistingException("User "+id2+" does not exist!");
 
-        return messageService.getMessagesBetweenTwoUsers(id1, id2).stream().filter(replyMessage -> replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0).collect(Collectors.toList());
+        return messageService.getMessagesBetweenTwoUsers(id1, id2,0).stream().filter(replyMessage -> replyMessage.getData().compareTo(dateStart)>=0&&replyMessage.getData().compareTo(dateStop)<=0).collect(Collectors.toList());
     }
     
     /**
@@ -852,7 +841,7 @@ public class SuperService implements Observable {
     /**
      * @return all events.
      */
-    public Iterable<EventDTO> findAllEvents() {return eventService.findAll();}
+    public List<EventDTO> findAllEvents(int pageId) {return eventService.findAll(pageId);}
 
     /**
      * @param eventId Integer
@@ -914,8 +903,8 @@ public class SuperService implements Observable {
     /**
      * @return all posts.
      */
-    public Iterable<Post> findAllPosts() {
-        return postService.findAll();
+    public Iterable<Post> findAllPosts(int pageSize) {
+        return postService.findAll(pageSize);
     }
 
     /**
@@ -988,10 +977,10 @@ public class SuperService implements Observable {
      * @return all posts from the friends of user with email "email and his/her posts"
      * @throws ValidationException if the user with email "email" does not exist
      */
-    public List<Post> getAllPostFromFriends(String email){
+    public List<Post> getAllPostFromFriends(String email,int pageId){
         userValidator.validateEmail(email);
         if (userService.findOne(email) == null){throw new NonExistingException("User does not exist!");}
-        return postService.getAllPostFromFriends(email);
+        return postService.getAllPostFromFriends(email,pageId);
     }
 
     /**

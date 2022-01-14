@@ -13,11 +13,13 @@ import java.util.List;
 
 public class MessageDb implements Repository<Integer, MessageDTO> {
     String url, username, password;
+    private int pageSize;
 
-    public MessageDb(String url, String username, String password) {
+    public MessageDb(String url, String username, String password, int pageSize) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
 
@@ -53,7 +55,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
 
 
     @Override
-    public Iterable<MessageDTO> findAll()
+    public List<MessageDTO> findAll(int pageSize)
     {
         return null;
     }
@@ -134,13 +136,13 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      * a Message or a ReplayMessage otherwise, the second integer being the message witch it replayed to
      * @throws ValidationException if the given email1 is null or email2 is null.
      */
-    public List<ReplyMessage> findAllMessageBetweenTwoUsers(String emailUser1, String emailUser2)
+    public List<ReplyMessage> findAllMessageBetweenTwoUsers(String emailUser1, String emailUser2, int pageId)
     {
         if (emailUser1 == null || emailUser2 == null) throw new ValidationException("Entity must not be null");
         List<ReplyMessage> resultList = new ArrayList<>();
-        String sqlAllMessagesFromBothUsers = "select * from message as m inner join message_recipient as mr\n" +
-                "on mr.message= m.id and ((mr.email = ? and m.ms_from = ?) \n" +
-                "or( mr.email=? and m.ms_from = ?)) order by m.id";
+        String sqlAllMessagesFromBothUsers = "select * from message as m inner join message_recipient as mr \n" +
+                "                on mr.message= m.id and ((mr.email = ? and m.ms_from = ?) \n" +
+                "                or( mr.email =? and m.ms_from =?)) order by m.date desc, m.id desc offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement preparedStatement1 = connection.prepareStatement(sqlAllMessagesFromBothUsers))
         {
@@ -148,6 +150,8 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             preparedStatement1.setString(2, emailUser2);
             preparedStatement1.setString(3, emailUser2);
             preparedStatement1.setString(4, emailUser1);
+            preparedStatement1.setInt(5,pageId*pageSize);
+            preparedStatement1.setInt(6,pageSize);
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next())
             {
@@ -230,7 +234,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         return size;
     }
 
-    public List<String> getAllEmailsFromSendMessage(String email)
+    /*public List<String> getAllEmailsFromSendMessage(String email)
     {
         List<String> list = new ArrayList<>();
         String sqlAllIdMessage = "select id from message where ms_from = ?";
@@ -255,9 +259,9 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
             throwables.printStackTrace();
         }
         return list;
-    }
+    }*/
 
-    public List<String> getAllEmailsFromReceiveEmails(String email)
+   /* public List<String> getAllEmailsFromReceiveEmails(String email)
     {
         List<String> list = new ArrayList<>();
         String sql = "select m.ms_from from message as m inner join message_recipient as mp on m.id = mp.message where mp.email = ?";
@@ -277,7 +281,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         }
         return list;
     }
-
+*/
     /**
      * @param email String
      * @return a list with GroupDTO, only the groups where the user with email "email" is in
@@ -490,17 +494,25 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      * @return a list of replyMessage, it returns all the messages from a group
      * if ReplayMessage has currentMessage null that means it is a Message entity
      */
-    public List<ReplyMessage> getGroupMessages(int groupId)
+    public List<ReplyMessage> getGroupMessages(int groupId, int pageId)
     {
         List<ReplyMessage> returnList = new ArrayList<>();
-        String sql = "select distinct message.id, message.reply_to from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.id";
+        String sql = "select distinct * from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.id offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, groupId);
+            preparedStatement.setInt(2,pageId*pageSize);
+            preparedStatement.setInt(3,pageSize);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
-                returnList.add(new ReplyMessage(findOne(resultSet.getInt("id")), findOne(resultSet.getInt("reply_to"))));
+                ReplyMessage msj = new ReplyMessage(resultSet.getString("ms_from"),List.of(String.valueOf(groupId)),resultSet.getString("text"),LocalDate.parse(resultSet.getString("date")),null);
+                msj.setId(resultSet.getInt("id"));
+                MessageDTO replay=null;
+                if(resultSet.getString("reply_to")!=null)
+                    replay=findOne(resultSet.getInt("reply_to"));
+                msj.setOriginal(replay);
+                returnList.add(msj);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -675,6 +687,39 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    //todo tests
+    /**
+     * gets a list of emails with all the users which user which email id has benn chatting
+     * @param id the email
+     * @param pageId
+     * @return a list of string (email)
+     */
+    public List<String> getAllConversation(String id, int pageId) {
+        List<String> list = new ArrayList<>();
+        String sql = "select distinct case when ms_from != ? then ms_from else email end , m.date " +
+                "from message m inner join message_recipient mr on mr.message=m.id " +
+                "where ms_from= ? or email= ? order by m.date desc offset ? limit ? ";
+        try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, id);
+            preparedStatement.setString(3, id);
+            preparedStatement.setInt(4,pageId*pageSize);
+            preparedStatement.setInt(5,pageSize);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                String emailSQL = resultSet.getString("email");
+                if(!list.contains(emailSQL))
+                    list.add(emailSQL);
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
     }
 }
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostDBTest {
-    private static final PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static final PostDb postDb = new PostDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 10);
     private PostDBTest(){}
 
     /**
@@ -36,7 +36,7 @@ public class PostDBTest {
     private static void testFindAll()
     {
         List<Integer> listId = new ArrayList<>();
-        postDb.findAll().forEach(post -> {listId.add(post.getId());});
+        postDb.findAll(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
         assert listId.contains(1);
         assert listId.contains(2);
@@ -46,17 +46,17 @@ public class PostDBTest {
     private static void testSaveRemove()
     {
         List<Integer> listId = new ArrayList<>();
-        postDb.findAll().forEach(post -> {listId.add(post.getId());});
+        postDb.findAll(0).forEach(post -> {listId.add(post.getId());});
         assert listId.size() == 3;
         Post newPost = new Post("descriere" ,"gg@gmail.com", LocalDate.parse("2021-09-09"));
         Post postt = postDb.save(newPost);
         listId.clear();
-        postDb.findAll().forEach(post -> {listId.add(post.getId());});
+        postDb.findAll(0).forEach(post -> {listId.add(post.getId());});
         assert postDb.size() == 4;
         assert postDb.findOne(postt.getId()) != null;
         postDb.remove(postt.getId());
         listId.clear();
-        postDb.findAll().forEach(post -> {listId.add(post.getId());});
+        postDb.findAll(0).forEach(post -> {listId.add(post.getId());});
         assert postDb.size() == 3;
     }
 
@@ -77,7 +77,7 @@ public class PostDBTest {
 
     private static void testGetAllPostFromFriends(){
         List<Integer> list = new ArrayList<>();
-        postDb.getAllPostFromFriends("snj@gmail.com").forEach(post -> {list.add(post.getId());});
+        postDb.getAllPostFromFriends("snj@gmail.com",0).forEach(post -> {list.add(post.getId());});
         assert list.size() == 2;
         assert list.contains(1);
         assert list.contains(2);

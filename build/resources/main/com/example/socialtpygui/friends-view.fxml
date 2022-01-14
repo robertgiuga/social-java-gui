@@ -8,9 +8,9 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="319.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.FriendsController">
    <children>
-      <ScrollPane fx:id="scrollPaneFriendsView" prefHeight="501.0" prefWidth="650.0">
+      <ScrollPane fx:id="scrollPaneFriendsView" hbarPolicy="NEVER" onScroll="#scrollHandler" prefHeight="501.0" prefWidth="650.0">
          <content>
-            <GridPane fx:id="gridPane" hgap="5.0" prefHeight="487.0" prefWidth="639.0" vgap="5.0">
+            <GridPane fx:id="gridPane" hgap="5.0" onScroll="#scrollHandler" prefHeight="510.0" prefWidth="639.0" vgap="5.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>

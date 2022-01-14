@@ -25,8 +25,8 @@ public class PostService {
     /**
      * @return all posts.
      */
-    public Iterable<Post> findAll() {
-        return postDb.findAll();
+    public Iterable<Post> findAll(int pageSize) {
+        return postDb.findAll(pageSize);
     }
 
     /**
@@ -101,8 +101,8 @@ public class PostService {
      * @param email String
      * @return all posts from the friends of user with email "email and his/her posts"
      */
-    public List<Post> getAllPostFromFriends(String email){
-        return postDb.getAllPostFromFriends(email);
+    public List<Post> getAllPostFromFriends(String email,int pageId){
+        return postDb.getAllPostFromFriends(email,pageId);
     }
 
     /**

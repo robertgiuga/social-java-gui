@@ -9,17 +9,17 @@ import com.example.socialtpygui.service.validators.ValidationException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FriendshipRequestDb implements Repository<TupleOne<String>, Friendship> {
     String url, username, password;
+    private int pageSize;
 
-    public FriendshipRequestDb(String url, String username, String password){
+    public FriendshipRequestDb(String url, String username, String password, int pageSize){
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class FriendshipRequestDb implements Repository<TupleOne<String>, Friends
     }
 
     @Override
-    public Iterable<Friendship> findAll() {
-        Set<Friendship> friendships= new HashSet<>();
+    public List<Friendship> findAll(int pageId) {
+        List<Friendship> friendships= new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("SELECT * from friendship_request");
              ResultSet resultSet = statement.executeQuery()) {

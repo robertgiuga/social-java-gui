@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 public class FriendshipDBTest {
 
-    private static final FriendshipDb friendshipRepo = new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres");
+    private static final FriendshipDb friendshipRepo = new FriendshipDb("jdbc:postgresql://localhost:5432/SocialNetworkTest", "postgres", "postgres", 20);
 
     private FriendshipDBTest() {}
 

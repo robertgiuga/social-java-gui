@@ -9,7 +9,7 @@
    <children>
       <Label fx:id="nameLbl" layoutX="25.0" layoutY="11.0" text="Name" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="14.0" />
+            <Font size="14.0" />
          </font></Label>
       <RadioButton fx:id="radioBtn" layoutX="364.0" layoutY="12.0" mnemonicParsing="false" />
    </children>

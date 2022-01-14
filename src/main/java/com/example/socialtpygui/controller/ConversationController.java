@@ -9,17 +9,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
 public class ConversationController {
+    public ScrollPane scrollPaneConversationView;
     @FXML
     GridPane gridPane;
 
     SuperService service;
     UserDTO loggedUser;
+    private int pageId=0;
 
     /**
      * Create a conversationItem
@@ -69,7 +73,25 @@ public class ConversationController {
      */
     public void load()
     {
-        this.service.getAllConversation(loggedUser.getId()).forEach(email->{
+        nextPage();
+        this.service.getUserGroups(loggedUser.getId()).forEach(groupDTO -> {
+            try {
+
+                Pane item= createGroupIem(groupDTO);
+                item.getChildren().forEach(node-> {if (node instanceof Label) node.setId(String.valueOf(groupDTO.getId()));});
+                gridPane.addRow(gridPane.getRowCount(),item);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+    }
+
+    /**
+     * loads new items in list of conversation
+     */
+    private void nextPage(){
+        this.service.getAllConversation(loggedUser.getId(),pageId++).forEach(email->{
             try {
                 UserDTO userDTO = new UserDTO(this.service.findOneUser(email));
                 Pane pane = createItem(userDTO);
@@ -80,15 +102,14 @@ public class ConversationController {
             } catch (IOException e) {
                 e.printStackTrace();
             }});
-        this.service.getUserGroups(loggedUser.getId()).forEach(groupDTO -> {
-            try {
-                Pane item= createGroupIem(groupDTO);
-                item.getChildren().forEach(node-> {if (node instanceof Label) node.setId(String.valueOf(groupDTO.getId()));});
-                gridPane.addRow(gridPane.getRowCount(),item);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        });
+    }
+    /**
+     * loads new data in UI when scroll bar hit a value
+     * @param scrollEvent
+     */
+    public void handlerScroll(ScrollEvent scrollEvent) {
+        if(scrollPaneConversationView.getVvalue()>0.45&&scrollPaneConversationView.getVvalue()<0.55){
+            nextPage();
+        }
     }
 }

@@ -7,17 +7,17 @@ import com.example.socialtpygui.service.validators.ValidationException;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class UserDb implements Repository<String,User> {
     String url,username,password;
+    private int pageSize;
 
-    public UserDb(String url, String username, String password) {
+    public UserDb(String url, String username, String password, int pageSize) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.pageSize = pageSize;
     }
 
 
@@ -40,8 +40,8 @@ public class UserDb implements Repository<String,User> {
     }
 
     @Override
-    public Iterable<User> findAll() {
-        Set<User> users = new HashSet<>();
+    public List<User> findAll(int pageSize) {
+        List<User> users = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("SELECT * from users");
              ResultSet resultSet = statement.executeQuery()) {
@@ -125,15 +125,17 @@ public class UserDb implements Repository<String,User> {
      * @param string2
      * @throws SQLException
      */
-    public List<UserDTO> getUsersByName(String string1, String string2){
+    public List<UserDTO> getUsersByName(String string1, String string2, int pageId){
         List<UserDTO> listReturn = new ArrayList<>();
         String s1 = "%" + string1 + "%"; String s2 = "%" + string2 + "%";
-        String sql = "select * from users where (first_name ilike ? and last_name ilike ?) or (first_name ilike ? and last_name ilike ?)";
+        String sql = "select * from users where (first_name ilike ? and last_name ilike ?) or (first_name ilike ? and last_name ilike ?) offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql))
         {
             preparedStatement.setString(1, s1); preparedStatement.setString(2, s2);
             preparedStatement.setString(3, s2); preparedStatement.setString(4, s1);
+            preparedStatement.setInt(5,pageId*pageSize);
+            preparedStatement.setInt(6,pageSize);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
