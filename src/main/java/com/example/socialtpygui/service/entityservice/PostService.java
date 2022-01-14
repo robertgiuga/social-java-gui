@@ -105,16 +105,5 @@ public class PostService {
         return postDb.getAllPostFromFriends(email,pageId);
     }
 
-    /**
-     * @param idPost Integer
-     * @return number of like from a post
-     */
-    public int numberOfLikes(int idPost)
-    {
-        if (postDb.findOne(idPost) == null) {
-            throw new NonExistingException("Post with id " + idPost + " does not exist!");
-        }
-        return postDb.numberOfLikes(idPost);
-    }
 
 }

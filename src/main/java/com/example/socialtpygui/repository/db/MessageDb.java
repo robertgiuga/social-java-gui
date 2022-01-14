@@ -697,9 +697,9 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
      */
     public List<String> getAllConversation(String id, int pageId) {
         List<String> list = new ArrayList<>();
-        String sql = "select distinct case when ms_from != ? then ms_from else email end , m.date " +
+        String sql = "select distinct case when ms_from != ? then ms_from else email end " +
                 "from message m inner join message_recipient mr on mr.message=m.id " +
-                "where ms_from= ? or email= ? order by m.date desc offset ? limit ? ";
+                "where ms_from= ? or email= ? offset ? limit ? ";
         try(Connection connection = DriverManager.getConnection(this.url, this.username, this.password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql))
         {

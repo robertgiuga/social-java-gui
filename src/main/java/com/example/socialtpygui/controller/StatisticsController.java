@@ -3,10 +3,10 @@ package com.example.socialtpygui.controller;
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.*;
 import com.example.socialtpygui.service.SuperService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -168,7 +168,7 @@ public class StatisticsController {
         doc.close();
     }
 
-    public void handlerRaport2Btn(ActionEvent event) throws IOException {
+    public void handlerRaport2Btn(MouseEvent event) throws IOException {
         LocalDate startDate= dateStart.getValue();
         LocalDate stopDate= dateStop.getValue();
 
