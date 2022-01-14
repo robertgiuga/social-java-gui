@@ -57,8 +57,8 @@
             <Image url="@icons/plus-sign.png" />
          </image>
       </ImageView>
-      <Spinner fx:id="hourSpiner" editable="true" layoutX="201.0" layoutY="201.0" prefHeight="26.0" prefWidth="47.0" />
-      <Spinner fx:id="minSpiner" editable="true" layoutX="301.0" layoutY="202.0" prefHeight="26.0" prefWidth="47.0" />
+      <Spinner fx:id="hourSpiner" editable="true" layoutX="201.0" layoutY="201.0" prefHeight="26.0" prefWidth="59.0" />
+      <Spinner fx:id="minSpiner" editable="true" layoutX="301.0" layoutY="202.0" prefHeight="26.0" prefWidth="59.0" />
       <Label layoutX="178.0" layoutY="206.0" text="hh" textFill="WHITE" />
       <Label layoutX="270.0" layoutY="206.0" text="mm" textFill="WHITE" />
    </children>

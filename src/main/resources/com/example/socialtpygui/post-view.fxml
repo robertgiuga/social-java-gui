@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="anchorPanePostView" prefHeight="428.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.PostViewController">
+<AnchorPane fx:id="anchorPanePostView" prefHeight="428.0" prefWidth="650.0" style="-fx-background-color: #242E3D;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.PostViewController">
    <children>
-      <ScrollPane fx:id="scrollPanePostView" hbarPolicy="NEVER" layoutX="12.0" layoutY="48.0" onScroll="#scrollHandler" prefHeight="445.0" prefWidth="637.0" vbarPolicy="ALWAYS">
+      <ScrollPane fx:id="scrollPanePostView" hbarPolicy="NEVER" layoutX="12.0" layoutY="48.0" onScroll="#scrollHandler" prefHeight="445.0" prefWidth="637.0" style="-fx-background-color: #242E3D;" vbarPolicy="ALWAYS">
          <content>
-            <GridPane fx:id="gridPanePostView" onScroll="#scrollHandler" prefHeight="435.0" prefWidth="633.0">
+            <GridPane fx:id="gridPanePostView" onScroll="#scrollHandler" prefHeight="451.0" prefWidth="633.0" style="-fx-background-color: #242E3D;">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>

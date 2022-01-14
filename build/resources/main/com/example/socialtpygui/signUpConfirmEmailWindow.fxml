@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="396.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SignUpConfirmEmailWindowController">
     <children>
-        <Label layoutX="14.0" layoutY="21.0" text="Check your email" textFill="#c9e9d8">
+        <Label layoutX="14.0" layoutY="21.0" text="Check your email" textFill="WHITE">
             <font>
                 <Font name="System Bold Italic" size="20.0" />
             </font>
@@ -23,6 +23,6 @@
                 <Font size="15.0" />
             </font>
         </Button>
-        <Label layoutX="40.0" layoutY="118.0" text="Verification Code" textFill="#c9e9d8" />
+        <Label layoutX="40.0" layoutY="118.0" text="Verification Code" textFill="WHITE" />
     </children>
 </AnchorPane>
