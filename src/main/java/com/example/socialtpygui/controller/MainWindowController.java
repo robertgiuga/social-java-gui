@@ -159,7 +159,8 @@ public class MainWindowController implements Observer<EventCustom> {
 
     @FXML
     private void handlerLogOutBtn() throws IOException {
-
+        TCPClient closeThread = new TCPClient();
+        closeThread.closeConnection(loggedUser.getId());
         FXMLLoader fxmlLoader = new FXMLLoader(LogInApplication.class.getResource("logIn-view.fxml"));
 
         AnchorPane panel= fxmlLoader.load();
