@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="449.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.RequestController">
+<AnchorPane prefHeight="500.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.RequestController">
    <children>
-      <ScrollPane fx:id="scrollPaneRequestView" prefHeight="449.0" prefWidth="650.0">
+      <ScrollPane fx:id="scrollPaneRequestView" prefHeight="498.0" prefWidth="650.0">
          <content>
-            <GridPane fx:id="gridPane" prefHeight="439.0" prefWidth="641.0">
+            <GridPane fx:id="gridPane" prefHeight="493.0" prefWidth="642.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
