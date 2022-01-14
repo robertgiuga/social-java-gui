@@ -65,6 +65,15 @@ public class RequestController implements Observer<ViewItemEvent> {
         }catch (NonExistingException e){
             System.out.println(e.getMessage());
         }
+        if (gridPane.getRowCount() == 0){
+            try {
+                FXMLLoader loader = new FXMLLoader(LogInApplication.class.getResource("nothingFound-view.fxml"));
+                Pane item = loader.load();
+                gridPane.addRow(gridPane.getRowCount(), item);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
