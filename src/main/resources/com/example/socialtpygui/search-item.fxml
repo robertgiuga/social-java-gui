@@ -6,21 +6,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneSearchItemView" prefHeight="64.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchItemController">
+<AnchorPane fx:id="anchorPaneSearchItemView" prefHeight="64.0" prefWidth="607.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchItemController">
    <children>
-      <Label fx:id="nameLbl" layoutX="14.0" layoutY="24.0" prefHeight="17.0" prefWidth="207.0" text="Nume" textFill="WHITE">
+      <Label fx:id="nameLbl" layoutX="14.0" prefHeight="64.0" prefWidth="395.0" text="Nume" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font></Label>
-      <ImageView fx:id="addBtn" fitHeight="30.0" fitWidth="30.0" layoutX="576.0" layoutY="17.0" onMouseClicked="#handlerAddBtn" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="addBtn" fitHeight="30.0" fitWidth="30.0" layoutX="563.0" layoutY="17.0" onMouseClicked="#handlerAddBtn" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/plus-sign.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cancelBtn" fitHeight="30.0" fitWidth="30.0" layoutX="576.0" layoutY="17.0" onMouseClicked="#handlerCancelBtn" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="cancelBtn" fitHeight="30.0" fitWidth="30.0" layoutX="563.0" layoutY="17.0" onMouseClicked="#handlerCancelBtn" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons/cross.png" />
          </image>
       </ImageView>
+      <Label fx:id="sendRequestLabel" layoutX="487.0" layoutY="23.0" text="send request" />
+      <Label fx:id="cancelRequestLabel" layoutX="483.0" layoutY="23.0" text="cancel request" />
    </children>
 </AnchorPane>

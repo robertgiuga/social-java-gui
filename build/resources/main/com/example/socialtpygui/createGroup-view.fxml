@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.CreateGroupController">
+<AnchorPane prefHeight="450.0" prefWidth="650.0" style="-fx-background-color: #242E3D;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.CreateGroupController">
    <children>
       <TextField fx:id="nameGroupLbl" layoutX="226.0" layoutY="83.0" prefHeight="38.0" prefWidth="175.0" promptText="insert here" />
       <Label layoutX="48.0" layoutY="89.0" text="New Group name" textFill="WHITE">
@@ -23,7 +23,7 @@
          </font></Label>
       <ScrollPane fx:id="scrollPaneCreateGroupWindow" hbarPolicy="NEVER" layoutX="55.0" layoutY="212.0" onScroll="#scrollHandler" prefHeight="135.0" prefWidth="463.0" style="-fx-border-color: #1C2430; -fx-background-color: #242E3D; -fx-border-radius: 18 18 18 18; -fx-background-radius: 18 18 18 18;">
          <content>
-            <GridPane fx:id="friendsPane" onScroll="#scrollHandler" prefHeight="131.0" prefWidth="460.0" style="-fx-background-color: #242E3D; -fx-border-radius: 18 18 18 18; -fx-background-radius: 18 18 18 18;">
+            <GridPane fx:id="friendsPane" onScroll="#scrollHandler" prefHeight="131.0" prefWidth="460.0" style="-fx-background-color: #242E3D;">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>

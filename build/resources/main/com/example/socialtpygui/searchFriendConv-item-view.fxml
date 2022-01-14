@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" onMouseClicked="#handlerMouseClicked" prefHeight="60.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchFriendConvItemController">
+<AnchorPane fx:id="anchorPane" onMouseClicked="#handlerMouseClicked" prefHeight="60.0" prefWidth="650.0" style="-fx-background-color: #1C2430; -fx-border-color: #242E3D; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchFriendConvItemController">
    <children>
-      <Label fx:id="nameLbl" layoutX="14.0" layoutY="15.0" prefHeight="29.0" prefWidth="407.0" text="Label" textFill="WHITE">
+      <Label fx:id="nameLbl" layoutX="14.0" layoutY="-1.0" prefHeight="60.0" prefWidth="407.0" text="Label" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font></Label>

@@ -15,7 +15,7 @@ import org.w3c.dom.events.MouseEvent;
 public class SearchItemController {
 
     @FXML
-    private Label nameLbl;
+    private Label nameLbl, cancelRequestLabel, sendRequestLabel;
 
     @FXML
     private ImageView addBtn;
@@ -54,6 +54,16 @@ public class SearchItemController {
     }
 
     /**
+     * Hide cancel label.
+     */
+    public void hideCancelLabel() {cancelRequestLabel.setVisible(false);}
+
+    /**
+     * Hide send label.
+     */
+    public void hideSendLabel() {sendRequestLabel.setVisible(false);}
+
+    /**
      * Set service
      * @param service
      */
@@ -77,6 +87,8 @@ public class SearchItemController {
         service.sendRequest(this.loggedUser.getId(), this.userDTO.getId());
         addBtn.setVisible(false);
         cancelBtn.setVisible(true);
+        cancelRequestLabel.setVisible(true);
+        sendRequestLabel.setVisible(false);
     }
 
     /**
@@ -87,5 +99,7 @@ public class SearchItemController {
         service.friendshipRequestRemove(new TupleOne<>(this.loggedUser.getId(), this.userDTO.getId()));
         addBtn.setVisible(true);
         cancelBtn.setVisible(false);
+        cancelRequestLabel.setVisible(false);
+        sendRequestLabel.setVisible(true);
     }
 }

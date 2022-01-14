@@ -62,12 +62,14 @@ public class SearchController{
         if ((service.friendshipDate(this.loggedUser.getId(), user.getId()) != null) || (user.getId().equals(this.loggedUser.getId()))){
             searchItemController.hideAddBtn();
             searchItemController.hideCancelBtn();
+            searchItemController.hideCancelLabel();
+            searchItemController.hideSendLabel();
         }
 
         if (service.friendshipRequestDate(this.loggedUser.getId(), user.getId()) != null)
-        {searchItemController.hideAddBtn();}
+        {searchItemController.hideAddBtn(); searchItemController.hideSendLabel();}
         else
-        {searchItemController.hideCancelBtn();}
+        {searchItemController.hideCancelBtn(); searchItemController.hideCancelLabel();}
         gridPane.addRow(row++, item);
     }
 
