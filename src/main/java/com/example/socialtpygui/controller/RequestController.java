@@ -2,17 +2,14 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.FriendShipDTO;
-import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
 import com.example.socialtpygui.service.validators.NonExistingException;
-import com.example.socialtpygui.utils.events.ViewItemEvent;
+import com.example.socialtpygui.utils.events.ChangeEventType;
+import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observer;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -20,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestController implements Observer<ViewItemEvent> {
+public class RequestController implements Observer<EventCustom> {
     UserDTO loggedUser;
     SuperService service;
 
@@ -78,8 +75,10 @@ public class RequestController implements Observer<ViewItemEvent> {
 
 
     @Override
-    public void update(ViewItemEvent viewItemEvent) {
-        gridPane.getChildren().remove(requests.indexOf(viewItemEvent.getUserDTO()));
-        requests.remove(viewItemEvent.getUserDTO());
+    public void update(EventCustom viewItemEvent) {
+        if(viewItemEvent.getType().equals(ChangeEventType.REMOVE)) {
+            gridPane.getChildren().remove(requests.indexOf(viewItemEvent.getUserDTO()));
+            requests.remove(viewItemEvent.getUserDTO());
+        }
     }
 }

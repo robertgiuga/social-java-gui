@@ -2,10 +2,10 @@ package com.example.socialtpygui.controller;
 
 import com.example.socialtpygui.LogInApplication;
 import com.example.socialtpygui.domain.FriendShipDTO;
-import com.example.socialtpygui.domain.User;
 import com.example.socialtpygui.domain.UserDTO;
 import com.example.socialtpygui.service.SuperService;
-import com.example.socialtpygui.utils.events.ViewItemEvent;
+import com.example.socialtpygui.utils.events.ChangeEventType;
+import com.example.socialtpygui.utils.events.EventCustom;
 import com.example.socialtpygui.utils.observer.Observer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FriendsController implements Observer<ViewItemEvent> {
+public class FriendsController implements Observer<EventCustom> {
 
     public ScrollPane scrollPaneFriendsView;
     @FXML
@@ -27,7 +27,7 @@ public class FriendsController implements Observer<ViewItemEvent> {
 
     private SuperService service;
     private UserDTO loggedUser;
-    private List<UserDTO> friends;
+    private List<UserDTO> friends=new ArrayList<>();;
     private int pageId=0;
 
     /**
@@ -72,7 +72,6 @@ public class FriendsController implements Observer<ViewItemEvent> {
      * loads new friends in the UI (paginated)
      */
     private void nextPage(){
-        friends=new ArrayList<>();
         service.getFriends(loggedUser.getId(),pageId++).forEach(friendShipDTO -> {
             try {
                 Pane item= createItem(friendShipDTO);
@@ -85,9 +84,11 @@ public class FriendsController implements Observer<ViewItemEvent> {
     }
 
     @Override
-    public void update(ViewItemEvent viewItemEvent) {
-        gridPane.getChildren().remove(friends.indexOf(viewItemEvent.getUserDTO()));
-        friends.remove(viewItemEvent.getUserDTO());
+    public void update(EventCustom viewItemEvent) {
+        if(viewItemEvent.getType().equals(ChangeEventType.DELETE)) {
+            gridPane.getChildren().remove(friends.indexOf(viewItemEvent.getUserDTO()));
+            friends.remove(viewItemEvent.getUserDTO());
+        }
     }
     /**
      * loads new data in UI when scroll bar hit a value
