@@ -267,7 +267,7 @@ public class MainWindowController implements Observer<EventCustom> {
                     System.out.println(now);
                     if(event.getTime().equals(now)){
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setContentText("you got"+ event.getName() +" (event) going in " +userEventDTO.getNotifyTime() +" min !");
+                        alert.setContentText("you got '"+ event.getName() +"' (event) going in " +userEventDTO.getNotifyTime() +" min !");
                         alert.show();
                         service.updateNotificationEvent(event.getId(),loggedUser.getId(),null);
                     }

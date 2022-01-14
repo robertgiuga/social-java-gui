@@ -260,9 +260,9 @@ public class ShowConvController implements Observer<EventCustom> {
                             node.setId(String.valueOf(replyMessage.getId()));
                     });
                     if (replyMessage.getFrom().equals(loggedUser.getId())) {
-                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
-                    } else {
                         gridShowMessages.add(item, 0, gridShowMessages.getRowCount());
+                    } else {
+                        gridShowMessages.add(item, 1, gridShowMessages.getRowCount());
                     }
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
