@@ -64,6 +64,8 @@ public class MainWindowController implements Observer<EventCustom> {
     private Button statisticsBtn;
     @FXML
     private Label countNewRequests, countNewEvents, countNewMessage;
+    @FXML
+    private Label firstNameLabel, lastNameLabel;
 
     Pane friendsView=null;
 
@@ -80,12 +82,13 @@ public class MainWindowController implements Observer<EventCustom> {
         this.loggedUser=loggedUser;
         this.udpThread= udpThread;
         this.pageDTO = pageDTO;
+
+        firstNameLabel.setText(pageDTO.getUserDTO().getFirstName());
+        lastNameLabel.setText(pageDTO.getUserDTO().getLastName());
         loadNotification();
         service.addObserver(this);
         handlerFeedBtn();
-
     }
-
 
     @FXML
     private void handlerFriendsButton() throws IOException {
@@ -108,6 +111,7 @@ public class MainWindowController implements Observer<EventCustom> {
             searchController.setLoggedUser(this.loggedUser);
             try{searchController.load(searchbar.getText());} catch (ValidationException ignored){}
             borderPane.setCenter(view);
+            searchbar.clear();
         }
     }
 

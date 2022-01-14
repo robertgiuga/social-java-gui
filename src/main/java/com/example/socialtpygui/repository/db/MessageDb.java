@@ -497,7 +497,7 @@ public class MessageDb implements Repository<Integer, MessageDTO> {
     public List<ReplyMessage> getGroupMessages(int groupId, int pageId)
     {
         List<ReplyMessage> returnList = new ArrayList<>();
-        String sql = "select distinct * from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.date desc, message.id desc offset ? limit ?";
+        String sql = "select distinct * , message.date as date2, message.id as id2 from message inner join message_group on message.id = message_group.id_message where message_group.id_group = ? order by message.date desc, message.id desc offset ? limit ?";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, groupId);

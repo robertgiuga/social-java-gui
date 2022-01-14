@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 
 public class PostItemController {
     @FXML
-    private Label fromPostLabel, labelLike, unlikeLabel, numberOfLikesLabel;
+    private Label fromPostLabel, numberOfLikesLabel, datePostLabel;
 
     @FXML
     private ImageView likePostClickImageView, likePostUnclickImageView;
@@ -24,7 +24,6 @@ public class PostItemController {
      * hide the unlike label and imageView
      */
     public void hideUnlike(){
-        unlikeLabel.setVisible(false);
         likePostUnclickImageView.setVisible(false);
     }
 
@@ -32,7 +31,6 @@ public class PostItemController {
      * hide the like label and imageView
      */
     public void hideLike(){
-        labelLike.setVisible(false);
         likePostClickImageView.setVisible(false);
     }
 
@@ -40,7 +38,6 @@ public class PostItemController {
      * show the unlike label and imageView
      */
     public void showUnlike(){
-        unlikeLabel.setVisible(true);
         likePostUnclickImageView.setVisible(true);
     }
 
@@ -48,7 +45,6 @@ public class PostItemController {
      * show the like label and imageView
      */
     public void showLike(){
-        labelLike.setVisible(true);
         likePostClickImageView.setVisible(true);
     }
 
@@ -59,6 +55,12 @@ public class PostItemController {
     public void setFromPostLabel(String fromPostLabel) {
         this.fromPostLabel.setText(fromPostLabel);
     }
+
+    /**
+     * Set the text from datePostLabel
+     *
+     */
+    public void setDatePostLabel(String datePostLabel) {this.datePostLabel.setText(datePostLabel);}
 
     /**
      * Set the text from post text label

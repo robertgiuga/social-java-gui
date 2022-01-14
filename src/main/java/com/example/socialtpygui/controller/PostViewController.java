@@ -67,6 +67,7 @@ public class PostViewController {
         controller.setFromPostLabel(post.getEmailUser());
         controller.setTextPost(post.getDescription());
         controller.setPost(post);
+        controller.setDatePostLabel(post.getDate().toString());
         if (service.isPostLike(post.getId(), loggedUser.getId())) {controller.hideUnlike();}
         else {controller.hideLike();}
         return item;
@@ -144,7 +145,8 @@ public class PostViewController {
         }
     }
     public void scrollHandler(ScrollEvent scrollEvent) {
-        if(scrollPanePostView.getVvalue()>0.48&&scrollPanePostView.getVvalue()<0.52){
+        System.out.println(scrollPanePostView.getVvalue());
+        if(scrollPanePostView.getVvalue()>0.45&&scrollPanePostView.getVvalue()<0.55){
             nextPage();
         }
     }

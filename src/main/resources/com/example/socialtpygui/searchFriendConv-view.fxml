@@ -7,9 +7,9 @@
 
 <AnchorPane prefHeight="459.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.SearchFriendConvController">
    <children>
-      <ScrollPane fx:id="scrollPaneSearchFriendConvView" hbarPolicy="NEVER" layoutX="-6.0" onScroll="#handlerScroll" prefHeight="459.0" prefWidth="656.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fx:id="scrollPaneSearchFriendConvView" hbarPolicy="NEVER" layoutX="-6.0" layoutY="7.0" onScroll="#handlerScroll" prefHeight="459.0" prefWidth="656.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <GridPane fx:id="gridPane" onScrollStarted="#handlerScroll" prefHeight="478.0" prefWidth="642.0">
+            <GridPane fx:id="gridPane" onScrollStarted="#handlerScroll" prefHeight="457.0" prefWidth="642.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>

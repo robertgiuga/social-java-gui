@@ -47,6 +47,7 @@ public class MessageController {
             try{searchFriendConvController.load(service,loggedUser,searchFriendBar.getText());} catch (NonExistingException ignored){}
 
             convPane.setCenter(item);
+            searchFriendBar.clear();
         }
     }
 

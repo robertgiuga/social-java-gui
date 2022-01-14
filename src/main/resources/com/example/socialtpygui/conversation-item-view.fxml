@@ -6,7 +6,7 @@
 
 <AnchorPane fx:id="anchorPaneConv" onMouseClicked="#handlerMouseClick" prefHeight="60.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.ConversationItemController">
    <children>
-      <Label fx:id="nameLabel" layoutX="21.0" layoutY="15.0" prefHeight="30.0" prefWidth="543.0" text="Label" textFill="WHITE">
+      <Label fx:id="nameLabel" layoutX="14.0" layoutY="-1.0" prefHeight="60.0" prefWidth="543.0" text="Label" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font></Label>

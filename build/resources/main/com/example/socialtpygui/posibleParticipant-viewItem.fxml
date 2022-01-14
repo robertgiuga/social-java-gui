@@ -5,12 +5,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="50.0" prefWidth="486.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.PossibleParticipantControler">
+<AnchorPane prefHeight="50.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialtpygui.controller.PossibleParticipantControler">
    <children>
       <Label fx:id="nameLbl" layoutX="29.0" layoutY="14.0" text="Label" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Label>
-      <CheckBox fx:id="check" layoutX="431.0" layoutY="16.0" mnemonicParsing="false" />
+      <CheckBox fx:id="check" layoutX="425.0" layoutY="16.0" mnemonicParsing="false" />
    </children>
 </AnchorPane>
